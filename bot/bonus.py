@@ -12,8 +12,15 @@ from __future__ import annotations
 from collections import OrderedDict
 
 
-def bonus_from_bps(bps_rows: list[dict]) -> dict[int, int]:
-    """[{'element': id, 'value': bps}, ...] -> {element_id: bonus}"""
+def bonus_from_bps(bps_rows: list[dict], min_bps: int = 0) -> dict[int, int]:
+    """[{'element': id, 'value': bps}, ...] -> {element_id: bonus}
+
+    min_bps — shu qiymatdan past BPS to'plaganlar umuman hisobga olinmaydi.
+    O'yin boshida hamma 3 BPS bilan teng bo'ladi va "3-o'rinda tenglik"
+    qoidasi butun jamoani ro'yxatga qo'shib yuboradi — shu buni oldini oladi.
+    """
+    if min_bps:
+        bps_rows = [r for r in bps_rows if int(r["value"]) >= min_bps]
     if not bps_rows:
         return {}
 
@@ -58,7 +65,7 @@ def bonus_from_bps(bps_rows: list[dict]) -> dict[int, int]:
     return result
 
 
-def fixture_bonus(fixture: dict) -> tuple[dict[int, int], bool]:
+def fixture_bonus(fixture: dict, min_bps: int = 0) -> tuple[dict[int, int], bool]:
     """O'yin uchun bonuslarni qaytaradi.
 
     Qaytaradi: ({element_id: bonus}, official) —
@@ -69,4 +76,8 @@ def fixture_bonus(fixture: dict) -> tuple[dict[int, int], bool]:
     official = [r for r in fixture_stat(fixture, "bonus") if int(r["value"]) > 0]
     if official:
         return {int(r["element"]): int(r["value"]) for r in official}, True
-    return bonus_from_bps(fixture_stat(fixture, "bps")), False
+
+    # O'yin tugagach chegara qo'ymaymiz: o'shanda BPS allaqachon yuqori bo'ladi
+    # va rasmiy bonus kelgunga qadar to'liq ro'yxat ko'rsatilishi to'g'ri.
+    finished = bool(fixture.get("finished") or fixture.get("finished_provisional"))
+    return bonus_from_bps(fixture_stat(fixture, "bps"), 0 if finished else min_bps), False

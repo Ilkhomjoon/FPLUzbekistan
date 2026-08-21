@@ -60,6 +60,9 @@ LIVE_STATE_FILE = DATA_DIR / "live_message.json"
 LIVE_HASHTAG = os.getenv("LIVE_HASHTAG", "#BonusPoints")
 SHOW_BPS = _bool("SHOW_BPS", True)                   # bonus yonida BPS ham ko'rsatilsinmi
 SHOW_DEFCON = _bool("SHOW_DEFCON", True)             # DefCon oluvchilar qatori chiqsinmi
+BONUS_MIN_BPS = _int("BONUS_MIN_BPS", 5)             # shundan past BPS hisobga olinmaydi
+                                                     # (o'yinga chiqqani uchun 3, 60-daqiqadan keyin 6 beriladi)
+BONUS_MAX_PLAYERS = _int("BONUS_MAX_PLAYERS", 6)     # bitta o'yinda ko'pi bilan nechta qator
 DEFCON_TTL = _int("DEFCON_TTL", 120)                 # DefCon ma'lumoti necha soniyada bir yangilanadi
 LIVE_INTERVAL = _int("LIVE_INTERVAL", 60)            # necha soniyada bir yangilanadi
 LIVE_MAX_MINUTES = _int("LIVE_MAX_MINUTES", 300)     # bitta jarayon maksimal necha daqiqa ishlaydi

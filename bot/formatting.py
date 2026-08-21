@@ -50,7 +50,8 @@ def _player_label(element_id: int, players: dict, teams: dict) -> str:
     return f"{name} ({esc(short)})" if short else name
 
 
-def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] | None = None) -> list[str]:
+def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] | None = None,
+                   compact: bool = False) -> list[str]:
     from .bonus import fixture_bonus
     from .fpl_api import fixture_stat
 
@@ -71,7 +72,7 @@ def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] 
     score = f"{hs if hs is not None else 0}:{aws if aws is not None else 0}"
     header = f"{emoji} {esc(home)} {score} {esc(away)}"
 
-    bonuses, official = fixture_bonus(fx)
+    bonuses, official = fixture_bonus(fx, config.BONUS_MIN_BPS)
     bps_map = {int(r["element"]): int(r["value"]) for r in fixture_stat(fx, "bps")}
 
     lines = [header]
@@ -81,10 +82,15 @@ def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] 
             bonuses.items(),
             key=lambda kv: (-kv[1], -bps_map.get(kv[0], 0), players.get(kv[0], {}).get("web_name", "")),
         )
-        for element_id, pts in ranked:
+        limit = 3 if compact else max(1, config.BONUS_MAX_PLAYERS)
+        for element_id, pts in ranked[:limit]:
             bps = bps_map.get(element_id)
-            bps_txt = f" · {bps} BPS" if config.SHOW_BPS and bps is not None else ""
+            show_bps = config.SHOW_BPS and not compact and bps is not None
+            bps_txt = f" · {bps} BPS" if show_bps else ""
             lines.append(f"{pts} | {_player_label(element_id, players, teams)}{bps_txt}")
+        hidden = len(ranked) - limit
+        if hidden > 0:
+            lines.append(f"<i>… yana {hidden} ta teng natija</i>")
     elif not finished:
         lines.append("<i>hali bonus yo'q</i>")
 
@@ -98,12 +104,35 @@ def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] 
     return lines
 
 
+TELEGRAM_LIMIT = 4096
+SAFE_LIMIT = 3900
+
+
 def live_bonus_post(
     fixtures: list[dict],
     players: dict,
     teams: dict,
     gw: int | None = None,
     defcon: dict[int, dict[int, int]] | None = None,
+) -> str:
+    """Ko'p o'yinli kunlarda matn Telegram limitidan oshib ketmasligi kerak:
+    oshsa, qisqartirilgan ko'rinishda qayta yig'iladi."""
+    text = _live_post(fixtures, players, teams, gw, defcon, compact=False)
+    if len(text) <= SAFE_LIMIT:
+        return text
+    text = _live_post(fixtures, players, teams, gw, defcon, compact=True)
+    if len(text) <= TELEGRAM_LIMIT:
+        return text
+    return text[: TELEGRAM_LIMIT - 2] + "…"
+
+
+def _live_post(
+    fixtures: list[dict],
+    players: dict,
+    teams: dict,
+    gw: int | None = None,
+    defcon: dict[int, dict[int, int]] | None = None,
+    compact: bool = False,
 ) -> str:
     stamp = now_local().strftime("%H:%M:%S")
     head = f"🔄 So'ngi yangilanish: {stamp}"
@@ -114,7 +143,7 @@ def live_bonus_post(
     ordered = sorted(fixtures, key=lambda f: (f.get("kickoff_time") or "", f.get("id", 0)))
     for fx in ordered:
         fx_defcon = (defcon or {}).get(fx.get("id"), {})
-        blocks.append("\n".join(_fixture_block(fx, players, teams, fx_defcon)))
+        blocks.append("\n".join(_fixture_block(fx, players, teams, fx_defcon, compact)))
 
     all_done = all(f.get("finished") or f.get("finished_provisional") for f in fixtures) and fixtures
     if all_done:

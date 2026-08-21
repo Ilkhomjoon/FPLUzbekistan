@@ -58,6 +58,9 @@ jobs:
           TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
           TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
           DRY_RUN: ${{ inputs.dry_run }}
+          # Bonus ro'yxatiga tushish uchun eng kam BPS. O'yinga chiqqani uchun 3,
+          # 60-daqiqadan keyin 6 beriladi — chegarani shu yerdan sozlaysiz.
+          BONUS_MIN_BPS: "5"
           LIVE_INTERVAL: "60"
           LIVE_MAX_MINUTES: "320"
           # Cron har 30 daqiqada uyg'onadi. "35 daqiqa oldindan" degani —
