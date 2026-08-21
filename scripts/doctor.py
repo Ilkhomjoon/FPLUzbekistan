@@ -95,6 +95,15 @@ def _check_settings(problems: list[str]) -> int:
     line(OK if config.ADMIN_CHAT_ID else WARN, "TELEGRAM_ADMIN_CHAT_ID",
          config.ADMIN_CHAT_ID or "(bo'sh — ixtiyoriy, lekin --send uchun kerak)")
 
+    where = "GitHub Secrets" if IN_CI else ".env fayl"
+    if not config.BOT_TOKEN:
+        problems.append(f"TELEGRAM_BOT_TOKEN bo'sh — {where}ni tekshiring.")
+    if not config.CHANNEL_ID:
+        problems.append(
+            f"TELEGRAM_CHANNEL_ID bo'sh — {where}ni tekshiring.\n"
+            "     Busiz kanalga yuborish ishlamaydi."
+        )
+
     if config.BOT_TOKEN:
         if config.BOT_TOKEN.startswith(("'", '"')) or config.BOT_TOKEN.endswith(("'", '"')):
             problems.append("Token qo'shtirnoq ichida yozilgan — qo'shtirnoqni olib tashlang.")

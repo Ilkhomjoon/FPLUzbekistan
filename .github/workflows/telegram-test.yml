@@ -50,7 +50,14 @@ jobs:
           TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
         run: |
           if [ "${{ inputs.target }}" = "kanalga" ]; then
+            if [ -z "$TELEGRAM_CHANNEL_ID" ]; then
+              echo "::error::TELEGRAM_CHANNEL_ID secret'i bo'sh — kanalga yuborib bo'lmaydi."
+              echo "Settings -> Secrets and variables -> Actions -> TELEGRAM_CHANNEL_ID ni qayta saqlang."
+              exit 1
+            fi
+            echo "Qabul qiluvchi: KANAL"
             python -m tests.mock_demo --send --to "$TELEGRAM_CHANNEL_ID" --pause "${{ inputs.pause }}"
           else
+            echo "Qabul qiluvchi: ADMIN (shaxsiy chat)"
             python -m tests.mock_demo --send --pause "${{ inputs.pause }}"
           fi

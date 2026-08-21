@@ -257,7 +257,18 @@ def main() -> int:
         show()
         return 0
 
-    target = args.to or config.ADMIN_CHAT_ID
+    if args.to is not None:
+        # --to berilgan bo'lsa, jimgina adminga tushib ketmasligi kerak
+        target = args.to.strip()
+        if not target:
+            print("XATO: --to bo'sh qiymat bilan berildi.\n")
+            print("  GitHub Actions'da bu TELEGRAM_CHANNEL_ID secret'i bo'sh")
+            print("  ekanini bildiradi. Settings → Secrets and variables →")
+            print("  Actions → TELEGRAM_CHANNEL_ID ni qayta saqlang (@FPLUzbekistan).\n")
+            return 1
+    else:
+        target = config.ADMIN_CHAT_ID
+
     if not target:
         print("XATO: qabul qiluvchi topilmadi.\n")
         print(f"  .env holati: {config.DOTENV_STATUS}")
