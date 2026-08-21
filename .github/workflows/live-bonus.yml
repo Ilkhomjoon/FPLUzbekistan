@@ -2,10 +2,12 @@ name: Jonli bonus ochkolar
 
 on:
   schedule:
-    # Har 30 daqiqada uyg'onadi. Agar o'sha kuni o'yin bo'lmasa yoki hali
+    # Har 15 daqiqada uyg'onadi. Agar o'sha kuni o'yin bo'lmasa yoki hali
     # boshlanmagan bo'lsa — skript darhol chiqadi (bir necha soniya sarflanadi).
-    # 11:00–22:59 UTC oralig'i Premier League o'yin vaqtlarini qoplaydi.
-    - cron: "0,30 11-22 * * *"
+    # 10:00–22:59 UTC oralig'i Premier League o'yin vaqtlarini qoplaydi.
+    # Daqiqalar 5/20/35/50 — :00 GitHub'da eng band daqiqa, o'sha paytda
+    # cron 15-25 daqiqagacha kechikadi. Chetroq daqiqalarda kechikish kamroq.
+    - cron: "5,20,35,50 10-22 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -44,6 +46,8 @@ jobs:
         env:
           CRON_SCHEDULE: ${{ github.event.schedule }}
           CRON_WORKFLOW: "Jonli bonus"
+          # 15 daqiqalik jadvalda kichik kechikish xabar vaqtiga ta'sir qilmaydi
+          CRON_ALERT_MINUTES: "30"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
         run: python -m scripts.cron_delay
