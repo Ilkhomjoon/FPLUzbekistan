@@ -2,7 +2,7 @@
 # data/ papkadagi holat fayllarini repoga commit qiladi (GitHub Actions ichida).
 set -uo pipefail
 
-MSG="${1:-holat yangilandi}"
+MSG="${1:-update state}"
 
 git config user.name  "fpl-uz-bot"
 git config user.email "actions@users.noreply.github.com"

@@ -51,4 +51,4 @@ jobs:
         run: python -m bot.price_changes
 
       - name: Holatni saqlash (commit)
-        run: bash scripts/commit_state.sh "narx snapshot yangilandi"
+        run: bash scripts/commit_state.sh "update price snapshot"

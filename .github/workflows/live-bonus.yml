@@ -56,9 +56,9 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run }}
           LIVE_INTERVAL: "60"
           LIVE_MAX_MINUTES: "320"
-          STATE_COMMIT_CMD: 'bash scripts/commit_state.sh "live xabar holati"'
+          STATE_COMMIT_CMD: 'bash scripts/commit_state.sh "update live message state"'
         run: python -m bot.live_bonus ${{ inputs.once && '--once' || '' }}
 
       - name: Holatni saqlash (commit)
         if: always()
-        run: bash scripts/commit_state.sh "live xabar holati"
+        run: bash scripts/commit_state.sh "update live message state"
