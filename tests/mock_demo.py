@@ -86,14 +86,16 @@ def _fixtures(stage: int) -> list[dict]:
         "team_h_score": 1, "team_a_score": 1,
         "kickoff_time": iso(-50), "started": True,
         "finished": False, "finished_provisional": False, "minutes": 50,
-        "stats": [stat("bps", [(6, 24), (5, 21)], [(4, 22)]), stat("bonus", [], [])],
+        "stats": [stat("bps", [(6, 24), (5, 21)], [(4, 22)]), stat("bonus", [], []),
+                  stat("goals_scored", [(5, 1)], [(4, 1)]), stat("assists", [(1, 1)], [])],
     }
     done = {
         "id": 102, "event": 3, "team_h": 3, "team_a": 4,
         "team_h_score": 0, "team_a_score": 3,
         "kickoff_time": iso(-170), "started": True,
         "finished": True, "finished_provisional": True, "minutes": 90,
-        "stats": [stat("bps", [(2, 12)], [(7, 41), (3, 33)]), stat("bonus", [], [(7, 3), (3, 2)])],
+        "stats": [stat("bps", [(2, 12)], [(7, 41), (3, 33)]), stat("bonus", [], [(7, 3), (3, 2)]),
+                  stat("goals_scored", [], [(7, 2), (3, 1)]), stat("assists", [], [(3, 1)])],
     }
     later = {
         "id": 103, "event": 3, "team_h": 4, "team_a": 1,
@@ -108,7 +110,9 @@ def _fixtures(stage: int) -> list[dict]:
 
     if stage == 2:  # Haaland gol urdi, BPS o'zgardi
         live = dict(live, team_h_score=2, minutes=71,
-                    stats=[stat("bps", [(5, 38), (6, 30)], [(4, 22)]), stat("bonus", [], [])])
+                    stats=[stat("bps", [(5, 38), (6, 30)], [(4, 22)]), stat("bonus", [], []),
+                           stat("goals_scored", [(5, 2)], [(4, 1)]),
+                           stat("assists", [(1, 1), (6, 1)], [])])
         return [done, live, later]
 
     # stage 3 — hammasi tugadi

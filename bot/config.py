@@ -60,6 +60,8 @@ LIVE_STATE_FILE = DATA_DIR / "live_message.json"
 LIVE_HASHTAG = os.getenv("LIVE_HASHTAG", "#BonusPoints")
 SHOW_BPS = _bool("SHOW_BPS", True)                   # bonus yonida BPS ham ko'rsatilsinmi
 SHOW_DEFCON = _bool("SHOW_DEFCON", True)             # DefCon oluvchilar qatori chiqsinmi
+SHOW_GOALS = _bool("SHOW_GOALS", True)               # gol va assistlar qatori chiqsinmi
+GOALS_SHOW_TEAM = _bool("GOALS_SHOW_TEAM", False)    # "Saka (ARS, 1)" ko'rinishi
 BONUS_MIN_BPS = _int("BONUS_MIN_BPS", 5)             # shundan past BPS hisobga olinmaydi
                                                      # (o'yinga chiqqani uchun 3, 60-daqiqadan keyin 6 beriladi)
 BONUS_MAX_PLAYERS = _int("BONUS_MAX_PLAYERS", 6)     # bitta o'yinda ko'pi bilan nechta qator

@@ -50,8 +50,31 @@ def _player_label(element_id: int, players: dict, teams: dict) -> str:
     return f"{name} ({esc(short)})" if short else name
 
 
+def _scorer_line(rows: list[dict], players: dict, teams: dict) -> str:
+    """[{'element','value','side'}] -> "Saka (1), Havertz (2)"
+
+    Uy egalari oldin, keyin mehmonlar; ichida ko'p gol urgan tepada.
+    """
+    ordered = sorted(
+        rows,
+        key=lambda r: (r.get("side") != "h", -int(r["value"]),
+                       players.get(r["element"], {}).get("web_name", "")),
+    )
+    parts = []
+    for r in ordered:
+        p = players.get(r["element"], {})
+        name = esc(p.get("web_name", f"#{r['element']}"))
+        if config.GOALS_SHOW_TEAM:
+            short = teams.get(p.get("team"), {}).get("short_name", "")
+            parts.append(f"{name} ({esc(short)}, {int(r['value'])})" if short
+                         else f"{name} ({int(r['value'])})")
+        else:
+            parts.append(f"{name} ({int(r['value'])})")
+    return ", ".join(parts)
+
+
 def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] | None = None,
-                   compact: bool = False) -> list[str]:
+                   level: int = 0) -> list[str]:
     from .bonus import fixture_bonus
     from .fpl_api import fixture_stat
 
@@ -70,28 +93,41 @@ def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] 
     hs = fx.get("team_h_score")
     aws = fx.get("team_a_score")
     score = f"{hs if hs is not None else 0}:{aws if aws is not None else 0}"
-    header = f"{emoji} {esc(home)} {score} {esc(away)}"
+    header = f"<b>{emoji} {esc(home)} {score} {esc(away)}</b>"
 
     bonuses, official = fixture_bonus(fx, config.BONUS_MIN_BPS)
     bps_map = {int(r["element"]): int(r["value"]) for r in fixture_stat(fx, "bps")}
 
     lines = [header]
+
+    if config.SHOW_GOALS:
+        events = []
+        for identifier, marker in (("goals_scored", "⚽️"), ("assists", "🅰️"), ("own_goals", "🥅")):
+            rows = [r for r in fixture_stat(fx, identifier) if int(r["value"]) > 0]
+            if rows:
+                events.append(f"{marker}: {_scorer_line(rows, players, teams)}")
+        if events:
+            lines.append("")
+            lines.extend(events)
+
     if bonuses:
+        lines.append("")
         # teng bonusda BPS yuqorisi tepada tursin
         ranked = sorted(
             bonuses.items(),
             key=lambda kv: (-kv[1], -bps_map.get(kv[0], 0), players.get(kv[0], {}).get("web_name", "")),
         )
-        limit = 3 if compact else max(1, config.BONUS_MAX_PLAYERS)
+        limit = max(1, config.BONUS_MAX_PLAYERS) if level == 0 else 3
         for element_id, pts in ranked[:limit]:
             bps = bps_map.get(element_id)
-            show_bps = config.SHOW_BPS and not compact and bps is not None
+            show_bps = config.SHOW_BPS and level < 2 and bps is not None
             bps_txt = f" · {bps} BPS" if show_bps else ""
             lines.append(f"{pts} | {_player_label(element_id, players, teams)}{bps_txt}")
         hidden = len(ranked) - limit
         if hidden > 0:
             lines.append(f"<i>… yana {hidden} ta teng natija</i>")
     elif not finished:
+        lines.append("")
         lines.append("<i>hali bonus yo'q</i>")
 
     if config.SHOW_DEFCON and defcon:
@@ -117,13 +153,12 @@ def live_bonus_post(
 ) -> str:
     """Ko'p o'yinli kunlarda matn Telegram limitidan oshib ketmasligi kerak:
     oshsa, qisqartirilgan ko'rinishda qayta yig'iladi."""
-    text = _live_post(fixtures, players, teams, gw, defcon, compact=False)
-    if len(text) <= SAFE_LIMIT:
-        return text
-    text = _live_post(fixtures, players, teams, gw, defcon, compact=True)
-    if len(text) <= TELEGRAM_LIMIT:
-        return text
-    return text[: TELEGRAM_LIMIT - 2] + "…"
+    # 0 = to'liq, 1 = ro'yxat qisqaradi, 2 = BPS raqamlari ham olib tashlanadi
+    for level in (0, 1, 2):
+        text = _live_post(fixtures, players, teams, gw, defcon, level)
+        if len(text) <= SAFE_LIMIT:
+            return text
+    return text if len(text) <= TELEGRAM_LIMIT else text[: TELEGRAM_LIMIT - 2] + "…"
 
 
 def _live_post(
@@ -132,7 +167,7 @@ def _live_post(
     teams: dict,
     gw: int | None = None,
     defcon: dict[int, dict[int, int]] | None = None,
-    compact: bool = False,
+    level: int = 0,
 ) -> str:
     stamp = now_local().strftime("%H:%M:%S")
     head = f"🔄 So'ngi yangilanish: {stamp}"
@@ -143,7 +178,7 @@ def _live_post(
     ordered = sorted(fixtures, key=lambda f: (f.get("kickoff_time") or "", f.get("id", 0)))
     for fx in ordered:
         fx_defcon = (defcon or {}).get(fx.get("id"), {})
-        blocks.append("\n".join(_fixture_block(fx, players, teams, fx_defcon, compact)))
+        blocks.append("\n".join(_fixture_block(fx, players, teams, fx_defcon, level)))
 
     all_done = all(f.get("finished") or f.get("finished_provisional") for f in fixtures) and fixtures
     if all_done:
