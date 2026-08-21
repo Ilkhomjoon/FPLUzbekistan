@@ -107,7 +107,7 @@ def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] 
             if rows:
                 events.append(f"{marker}: {_scorer_line(rows, players, teams)}")
         if events:
-            lines.append("")
+            # sarlavhaga yopishib tursin — orada bo'sh qator kerak emas
             lines.extend(events)
 
     if bonuses:
