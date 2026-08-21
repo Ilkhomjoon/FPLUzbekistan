@@ -1,0 +1,3001 @@
+{
+  "event": 1,
+  "players": {
+    "1": {
+      "cost": 60,
+      "name": "Raya",
+      "team": "ARS"
+    },
+    "10": {
+      "cost": 55,
+      "name": "White",
+      "team": "ARS"
+    },
+    "100": {
+      "cost": 50,
+      "name": "Carvalho",
+      "team": "BRE"
+    },
+    "101": {
+      "cost": 50,
+      "name": "Henderson",
+      "team": "CHE"
+    },
+    "102": {
+      "cost": 50,
+      "name": "Yarmoliuk",
+      "team": "BRE"
+    },
+    "103": {
+      "cost": 50,
+      "name": "Dasilva",
+      "team": "BRE"
+    },
+    "104": {
+      "cost": 50,
+      "name": "Onyeka",
+      "team": "COV"
+    },
+    "105": {
+      "cost": 60,
+      "name": "Anthony",
+      "team": "BRE"
+    },
+    "106": {
+      "cost": 80,
+      "name": "Thiago",
+      "team": "BRE"
+    },
+    "107": {
+      "cost": 45,
+      "name": "Furo",
+      "team": "BRE"
+    },
+    "108": {
+      "cost": 55,
+      "name": "Wilson",
+      "team": "BRE"
+    },
+    "109": {
+      "cost": 45,
+      "name": "Verbruggen",
+      "team": "BHA"
+    },
+    "11": {
+      "cost": 55,
+      "name": "Mosquera",
+      "team": "ARS"
+    },
+    "110": {
+      "cost": 45,
+      "name": "Rushworth",
+      "team": "COV"
+    },
+    "111": {
+      "cost": 40,
+      "name": "Steele",
+      "team": "BHA"
+    },
+    "112": {
+      "cost": 50,
+      "name": "Van Hecke",
+      "team": "TOT"
+    },
+    "113": {
+      "cost": 45,
+      "name": "F.Kadıoğlu",
+      "team": "BHA"
+    },
+    "114": {
+      "cost": 45,
+      "name": "Boscagli",
+      "team": "BHA"
+    },
+    "115": {
+      "cost": 45,
+      "name": "De Cuyper",
+      "team": "BHA"
+    },
+    "116": {
+      "cost": 45,
+      "name": "Dunk",
+      "team": "BHA"
+    },
+    "117": {
+      "cost": 45,
+      "name": "Coppola",
+      "team": "BHA"
+    },
+    "118": {
+      "cost": 45,
+      "name": "Igor",
+      "team": "BHA"
+    },
+    "119": {
+      "cost": 45,
+      "name": "Costinha",
+      "team": "BHA"
+    },
+    "12": {
+      "cost": 95,
+      "name": "Saka",
+      "team": "ARS"
+    },
+    "120": {
+      "cost": 50,
+      "name": "Svoboda",
+      "team": "BHA"
+    },
+    "121": {
+      "cost": 60,
+      "name": "Mitoma",
+      "team": "BHA"
+    },
+    "122": {
+      "cost": 60,
+      "name": "Minteh",
+      "team": "BHA"
+    },
+    "123": {
+      "cost": 60,
+      "name": "Hinshelwood",
+      "team": "BHA"
+    },
+    "124": {
+      "cost": 55,
+      "name": "Groß",
+      "team": "BHA"
+    },
+    "125": {
+      "cost": 55,
+      "name": "Georginio",
+      "team": "BHA"
+    },
+    "126": {
+      "cost": 55,
+      "name": "O'Riley",
+      "team": "BHA"
+    },
+    "127": {
+      "cost": 50,
+      "name": "Gomez",
+      "team": "BHA"
+    },
+    "128": {
+      "cost": 50,
+      "name": "Buonanotte",
+      "team": "BHA"
+    },
+    "129": {
+      "cost": 55,
+      "name": "Ayari",
+      "team": "BHA"
+    },
+    "13": {
+      "cost": 75,
+      "name": "Rice",
+      "team": "ARS"
+    },
+    "130": {
+      "cost": 50,
+      "name": "Wieffer",
+      "team": "BHA"
+    },
+    "131": {
+      "cost": 50,
+      "name": "Baleba",
+      "team": "BHA"
+    },
+    "132": {
+      "cost": 45,
+      "name": "Howell",
+      "team": "BHA"
+    },
+    "133": {
+      "cost": 50,
+      "name": "Watson",
+      "team": "BHA"
+    },
+    "134": {
+      "cost": 45,
+      "name": "Oriola",
+      "team": "BHA"
+    },
+    "135": {
+      "cost": 50,
+      "name": "Yohanna",
+      "team": "BHA"
+    },
+    "136": {
+      "cost": 60,
+      "name": "Welbeck",
+      "team": "CHE"
+    },
+    "137": {
+      "cost": 55,
+      "name": "Tzimas",
+      "team": "BHA"
+    },
+    "138": {
+      "cost": 55,
+      "name": "Kostoulas",
+      "team": "BHA"
+    },
+    "139": {
+      "cost": 50,
+      "name": "Ferguson",
+      "team": "BHA"
+    },
+    "14": {
+      "cost": 65,
+      "name": "Eze",
+      "team": "ARS"
+    },
+    "140": {
+      "cost": 50,
+      "name": "Sánchez",
+      "team": "CHE"
+    },
+    "141": {
+      "cost": 50,
+      "name": "Jörgensen",
+      "team": "CHE"
+    },
+    "142": {
+      "cost": 55,
+      "name": "James",
+      "team": "CHE"
+    },
+    "143": {
+      "cost": 55,
+      "name": "Chalobah",
+      "team": "CHE"
+    },
+    "144": {
+      "cost": 50,
+      "name": "Gusto",
+      "team": "CHE"
+    },
+    "145": {
+      "cost": 50,
+      "name": "Fofana",
+      "team": "CHE"
+    },
+    "146": {
+      "cost": 45,
+      "name": "B.Badiashile",
+      "team": "CHE"
+    },
+    "147": {
+      "cost": 45,
+      "name": "Tosin",
+      "team": "CHE"
+    },
+    "148": {
+      "cost": 45,
+      "name": "Hato",
+      "team": "CHE"
+    },
+    "149": {
+      "cost": 50,
+      "name": "Colwill",
+      "team": "CHE"
+    },
+    "15": {
+      "cost": 65,
+      "name": "Ødegaard",
+      "team": "ARS"
+    },
+    "150": {
+      "cost": 45,
+      "name": "M.Sarr",
+      "team": "CHE"
+    },
+    "151": {
+      "cost": 45,
+      "name": "Acheampong",
+      "team": "CHE"
+    },
+    "152": {
+      "cost": 55,
+      "name": "Palestra",
+      "team": "CHE"
+    },
+    "153": {
+      "cost": 45,
+      "name": "Disasi",
+      "team": "CHE"
+    },
+    "154": {
+      "cost": 95,
+      "name": "Palmer",
+      "team": "CHE"
+    },
+    "155": {
+      "cost": 70,
+      "name": "Enzo",
+      "team": "CHE"
+    },
+    "156": {
+      "cost": 65,
+      "name": "Neto",
+      "team": "CHE"
+    },
+    "157": {
+      "cost": 65,
+      "name": "Estêvão",
+      "team": "CHE"
+    },
+    "158": {
+      "cost": 60,
+      "name": "Gittens",
+      "team": "CHE"
+    },
+    "159": {
+      "cost": 55,
+      "name": "Caicedo",
+      "team": "CHE"
+    },
+    "16": {
+      "cost": 65,
+      "name": "Madueke",
+      "team": "ARS"
+    },
+    "160": {
+      "cost": 60,
+      "name": "Garnacho",
+      "team": "AVL"
+    },
+    "161": {
+      "cost": 50,
+      "name": "Lavia",
+      "team": "CHE"
+    },
+    "162": {
+      "cost": 50,
+      "name": "Andrey Santos",
+      "team": "MUN"
+    },
+    "163": {
+      "cost": 45,
+      "name": "D.Essugo",
+      "team": "CHE"
+    },
+    "164": {
+      "cost": 55,
+      "name": "Quenda",
+      "team": "CHE"
+    },
+    "165": {
+      "cost": 75,
+      "name": "João Pedro",
+      "team": "CHE"
+    },
+    "166": {
+      "cost": 65,
+      "name": "N.Jackson",
+      "team": "CHE"
+    },
+    "167": {
+      "cost": 55,
+      "name": "Delap",
+      "team": "CHE"
+    },
+    "168": {
+      "cost": 50,
+      "name": "Marc Guiu",
+      "team": "CHE"
+    },
+    "169": {
+      "cost": 45,
+      "name": "Mheuka",
+      "team": "CHE"
+    },
+    "17": {
+      "cost": 60,
+      "name": "Merino",
+      "team": "ARS"
+    },
+    "170": {
+      "cost": 50,
+      "name": "Emegha",
+      "team": "CHE"
+    },
+    "171": {
+      "cost": 40,
+      "name": "Dovin",
+      "team": "COV"
+    },
+    "172": {
+      "cost": 45,
+      "name": "Wilson",
+      "team": "COV"
+    },
+    "173": {
+      "cost": 40,
+      "name": "Thomas",
+      "team": "COV"
+    },
+    "174": {
+      "cost": 40,
+      "name": "Kitching",
+      "team": "COV"
+    },
+    "175": {
+      "cost": 40,
+      "name": "van Ewijk",
+      "team": "COV"
+    },
+    "176": {
+      "cost": 40,
+      "name": "Dasilva",
+      "team": "COV"
+    },
+    "177": {
+      "cost": 40,
+      "name": "Kesler-Hayden",
+      "team": "COV"
+    },
+    "178": {
+      "cost": 40,
+      "name": "Bidwell",
+      "team": "COV"
+    },
+    "179": {
+      "cost": 40,
+      "name": "Latibeaudiere",
+      "team": "COV"
+    },
+    "18": {
+      "cost": 65,
+      "name": "Martinelli",
+      "team": "ARS"
+    },
+    "180": {
+      "cost": 40,
+      "name": "Woolfenden",
+      "team": "COV"
+    },
+    "181": {
+      "cost": 40,
+      "name": "Brau",
+      "team": "COV"
+    },
+    "182": {
+      "cost": 40,
+      "name": "Amenda",
+      "team": "COV"
+    },
+    "183": {
+      "cost": 50,
+      "name": "Rudoni",
+      "team": "COV"
+    },
+    "184": {
+      "cost": 50,
+      "name": "Grimes",
+      "team": "COV"
+    },
+    "185": {
+      "cost": 50,
+      "name": "Sakamoto",
+      "team": "COV"
+    },
+    "186": {
+      "cost": 55,
+      "name": "Mason-Clark",
+      "team": "COV"
+    },
+    "187": {
+      "cost": 50,
+      "name": "Eccles",
+      "team": "COV"
+    },
+    "188": {
+      "cost": 55,
+      "name": "Torp",
+      "team": "COV"
+    },
+    "189": {
+      "cost": 45,
+      "name": "Shepherd",
+      "team": "COV"
+    },
+    "19": {
+      "cost": 55,
+      "name": "Zubimendi",
+      "team": "ARS"
+    },
+    "190": {
+      "cost": 55,
+      "name": "Tchaouna",
+      "team": "COV"
+    },
+    "191": {
+      "cost": 45,
+      "name": "Borges Rodrigues",
+      "team": "COV"
+    },
+    "192": {
+      "cost": 45,
+      "name": "Andrews",
+      "team": "COV"
+    },
+    "193": {
+      "cost": 55,
+      "name": "Wright",
+      "team": "COV"
+    },
+    "194": {
+      "cost": 50,
+      "name": "Thomas-Asante",
+      "team": "COV"
+    },
+    "195": {
+      "cost": 50,
+      "name": "Simms",
+      "team": "COV"
+    },
+    "196": {
+      "cost": 50,
+      "name": "Markelo",
+      "team": "COV"
+    },
+    "197": {
+      "cost": 45,
+      "name": "Bassette",
+      "team": "COV"
+    },
+    "198": {
+      "cost": 50,
+      "name": "Henderson",
+      "team": "CRY"
+    },
+    "199": {
+      "cost": 45,
+      "name": "Benitez",
+      "team": "CRY"
+    },
+    "2": {
+      "cost": 50,
+      "name": "Arrizabalaga",
+      "team": "ARS"
+    },
+    "20": {
+      "cost": 55,
+      "name": "Dowman",
+      "team": "ARS"
+    },
+    "200": {
+      "cost": 60,
+      "name": "Lacroix",
+      "team": "CHE"
+    },
+    "201": {
+      "cost": 55,
+      "name": "Muñoz",
+      "team": "CRY"
+    },
+    "202": {
+      "cost": 50,
+      "name": "Richards",
+      "team": "CRY"
+    },
+    "203": {
+      "cost": 50,
+      "name": "Canvot",
+      "team": "CRY"
+    },
+    "204": {
+      "cost": 45,
+      "name": "Mitchell",
+      "team": "CRY"
+    },
+    "205": {
+      "cost": 45,
+      "name": "Sosa",
+      "team": "CRY"
+    },
+    "206": {
+      "cost": 45,
+      "name": "Chadi Riad",
+      "team": "CRY"
+    },
+    "207": {
+      "cost": 45,
+      "name": "Mingueza",
+      "team": "CRY"
+    },
+    "208": {
+      "cost": 65,
+      "name": "Sarr",
+      "team": "CRY"
+    },
+    "209": {
+      "cost": 60,
+      "name": "Johnson",
+      "team": "EVE"
+    },
+    "21": {
+      "cost": 50,
+      "name": "Nørgaard",
+      "team": "EVE"
+    },
+    "210": {
+      "cost": 55,
+      "name": "Wharton",
+      "team": "CRY"
+    },
+    "211": {
+      "cost": 55,
+      "name": "Yeremy",
+      "team": "CRY"
+    },
+    "212": {
+      "cost": 45,
+      "name": "Hughes",
+      "team": "CRY"
+    },
+    "213": {
+      "cost": 50,
+      "name": "Lerma",
+      "team": "CRY"
+    },
+    "214": {
+      "cost": 50,
+      "name": "Kamada",
+      "team": "CRY"
+    },
+    "215": {
+      "cost": 50,
+      "name": "Devenny",
+      "team": "CRY"
+    },
+    "216": {
+      "cost": 50,
+      "name": "Esse",
+      "team": "CRY"
+    },
+    "217": {
+      "cost": 50,
+      "name": "M.França",
+      "team": "CRY"
+    },
+    "218": {
+      "cost": 50,
+      "name": "Doucouré",
+      "team": "CRY"
+    },
+    "219": {
+      "cost": 50,
+      "name": "J.Rak-Sakyi",
+      "team": "CRY"
+    },
+    "22": {
+      "cost": 55,
+      "name": "Nwaneri",
+      "team": "ARS"
+    },
+    "220": {
+      "cost": 45,
+      "name": "Cardines",
+      "team": "CRY"
+    },
+    "221": {
+      "cost": 45,
+      "name": "Drakes-Thomas",
+      "team": "CRY"
+    },
+    "222": {
+      "cost": 60,
+      "name": "Strand Larsen",
+      "team": "CRY"
+    },
+    "223": {
+      "cost": 65,
+      "name": "Mateta",
+      "team": "CRY"
+    },
+    "224": {
+      "cost": 55,
+      "name": "Nketiah",
+      "team": "CRY"
+    },
+    "225": {
+      "cost": 50,
+      "name": "Uche",
+      "team": "CRY"
+    },
+    "226": {
+      "cost": 55,
+      "name": "Pickford",
+      "team": "EVE"
+    },
+    "227": {
+      "cost": 50,
+      "name": "Travers",
+      "team": "EVE"
+    },
+    "228": {
+      "cost": 45,
+      "name": "King",
+      "team": "EVE"
+    },
+    "229": {
+      "cost": 60,
+      "name": "Tarkowski",
+      "team": "EVE"
+    },
+    "23": {
+      "cost": 55,
+      "name": "Fábio Vieira",
+      "team": "ARS"
+    },
+    "230": {
+      "cost": 55,
+      "name": "Branthwaite",
+      "team": "EVE"
+    },
+    "231": {
+      "cost": 50,
+      "name": "Keane",
+      "team": "EVE"
+    },
+    "232": {
+      "cost": 50,
+      "name": "O'Brien",
+      "team": "EVE"
+    },
+    "233": {
+      "cost": 45,
+      "name": "Mykolenko",
+      "team": "EVE"
+    },
+    "234": {
+      "cost": 45,
+      "name": "Patterson",
+      "team": "EVE"
+    },
+    "235": {
+      "cost": 40,
+      "name": "Aznou",
+      "team": "EVE"
+    },
+    "236": {
+      "cost": 65,
+      "name": "Dewsbury-Hall",
+      "team": "EVE"
+    },
+    "237": {
+      "cost": 60,
+      "name": "Ndiaye",
+      "team": "EVE"
+    },
+    "238": {
+      "cost": 65,
+      "name": "Grealish",
+      "team": "MCI"
+    },
+    "239": {
+      "cost": 60,
+      "name": "Garner",
+      "team": "EVE"
+    },
+    "24": {
+      "cost": 55,
+      "name": "Nelson",
+      "team": "ARS"
+    },
+    "240": {
+      "cost": 50,
+      "name": "Iroegbunam",
+      "team": "EVE"
+    },
+    "241": {
+      "cost": 55,
+      "name": "McNeil",
+      "team": "CRY"
+    },
+    "242": {
+      "cost": 55,
+      "name": "George",
+      "team": "EVE"
+    },
+    "243": {
+      "cost": 50,
+      "name": "Alcaraz",
+      "team": "EVE"
+    },
+    "244": {
+      "cost": 50,
+      "name": "Armstrong",
+      "team": "EVE"
+    },
+    "245": {
+      "cost": 55,
+      "name": "Dibling",
+      "team": "EVE"
+    },
+    "246": {
+      "cost": 50,
+      "name": "Röhl",
+      "team": "EVE"
+    },
+    "247": {
+      "cost": 55,
+      "name": "Hackney",
+      "team": "EVE"
+    },
+    "248": {
+      "cost": 55,
+      "name": "Beto",
+      "team": "EVE"
+    },
+    "249": {
+      "cost": 55,
+      "name": "Barry",
+      "team": "EVE"
+    },
+    "25": {
+      "cost": 75,
+      "name": "Gyökeres",
+      "team": "ARS"
+    },
+    "250": {
+      "cost": 45,
+      "name": "Leno",
+      "team": "FUL"
+    },
+    "251": {
+      "cost": 40,
+      "name": "Lecomte",
+      "team": "FUL"
+    },
+    "252": {
+      "cost": 40,
+      "name": "McNally",
+      "team": "FUL"
+    },
+    "253": {
+      "cost": 50,
+      "name": "Andersen",
+      "team": "FUL"
+    },
+    "254": {
+      "cost": 45,
+      "name": "Robinson",
+      "team": "FUL"
+    },
+    "255": {
+      "cost": 45,
+      "name": "J.Cuenca",
+      "team": "FUL"
+    },
+    "256": {
+      "cost": 45,
+      "name": "Tete",
+      "team": "FUL"
+    },
+    "257": {
+      "cost": 45,
+      "name": "Bassey",
+      "team": "FUL"
+    },
+    "258": {
+      "cost": 45,
+      "name": "Castagne",
+      "team": "FUL"
+    },
+    "259": {
+      "cost": 40,
+      "name": "Diop",
+      "team": "IPS"
+    },
+    "26": {
+      "cost": 75,
+      "name": "Havertz",
+      "team": "ARS"
+    },
+    "260": {
+      "cost": 65,
+      "name": "Wilson",
+      "team": "LEE"
+    },
+    "261": {
+      "cost": 55,
+      "name": "Iwobi",
+      "team": "FUL"
+    },
+    "262": {
+      "cost": 55,
+      "name": "Smith Rowe",
+      "team": "FUL"
+    },
+    "263": {
+      "cost": 55,
+      "name": "Kevin",
+      "team": "FUL"
+    },
+    "264": {
+      "cost": 55,
+      "name": "Bobb",
+      "team": "FUL"
+    },
+    "265": {
+      "cost": 50,
+      "name": "Berge",
+      "team": "FUL"
+    },
+    "266": {
+      "cost": 50,
+      "name": "Cairney",
+      "team": "FUL"
+    },
+    "267": {
+      "cost": 50,
+      "name": "Lukić",
+      "team": "IPS"
+    },
+    "268": {
+      "cost": 55,
+      "name": "King",
+      "team": "FUL"
+    },
+    "269": {
+      "cost": 45,
+      "name": "Sessegnon",
+      "team": "FUL"
+    },
+    "27": {
+      "cost": 60,
+      "name": "G.Jesus",
+      "team": "ARS"
+    },
+    "270": {
+      "cost": 45,
+      "name": "Reed",
+      "team": "FUL"
+    },
+    "271": {
+      "cost": 55,
+      "name": "Muniz",
+      "team": "FUL"
+    },
+    "272": {
+      "cost": 45,
+      "name": "Kusi-Asare",
+      "team": "FUL"
+    },
+    "273": {
+      "cost": 40,
+      "name": "Phillips",
+      "team": "HUL"
+    },
+    "274": {
+      "cost": 45,
+      "name": "Butland",
+      "team": "HUL"
+    },
+    "275": {
+      "cost": 40,
+      "name": "Cartwright",
+      "team": "HUL"
+    },
+    "276": {
+      "cost": 40,
+      "name": "Lo-Tutala",
+      "team": "HUL"
+    },
+    "277": {
+      "cost": 40,
+      "name": "Egan",
+      "team": "HUL"
+    },
+    "278": {
+      "cost": 40,
+      "name": "Hughes",
+      "team": "HUL"
+    },
+    "279": {
+      "cost": 40,
+      "name": "Ajayi",
+      "team": "HUL"
+    },
+    "28": {
+      "cost": 50,
+      "name": "Martinez",
+      "team": "AVL"
+    },
+    "280": {
+      "cost": 40,
+      "name": "Coyle",
+      "team": "HUL"
+    },
+    "281": {
+      "cost": 40,
+      "name": "Drameh",
+      "team": "HUL"
+    },
+    "282": {
+      "cost": 40,
+      "name": "Giles",
+      "team": "HUL"
+    },
+    "283": {
+      "cost": 40,
+      "name": "Jacob",
+      "team": "HUL"
+    },
+    "284": {
+      "cost": 40,
+      "name": "McCarthy",
+      "team": "HUL"
+    },
+    "285": {
+      "cost": 40,
+      "name": "McNair",
+      "team": "HUL"
+    },
+    "286": {
+      "cost": 50,
+      "name": "Belloumi",
+      "team": "HUL"
+    },
+    "287": {
+      "cost": 50,
+      "name": "Millar",
+      "team": "HUL"
+    },
+    "288": {
+      "cost": 45,
+      "name": "Dowell",
+      "team": "HUL"
+    },
+    "289": {
+      "cost": 45,
+      "name": "Crooks",
+      "team": "HUL"
+    },
+    "29": {
+      "cost": 45,
+      "name": "M.Bizot",
+      "team": "AVL"
+    },
+    "290": {
+      "cost": 45,
+      "name": "Slater",
+      "team": "HUL"
+    },
+    "291": {
+      "cost": 45,
+      "name": "Matazo",
+      "team": "HUL"
+    },
+    "292": {
+      "cost": 50,
+      "name": "Ömür",
+      "team": "HUL"
+    },
+    "293": {
+      "cost": 50,
+      "name": "Kamara",
+      "team": "HUL"
+    },
+    "294": {
+      "cost": 45,
+      "name": "Zambrano",
+      "team": "HUL"
+    },
+    "295": {
+      "cost": 55,
+      "name": "McBurnie",
+      "team": "HUL"
+    },
+    "296": {
+      "cost": 50,
+      "name": "Akintola",
+      "team": "HUL"
+    },
+    "297": {
+      "cost": 45,
+      "name": "Gyabi",
+      "team": "HUL"
+    },
+    "298": {
+      "cost": 45,
+      "name": "Destan",
+      "team": "HUL"
+    },
+    "299": {
+      "cost": 45,
+      "name": "Burstow",
+      "team": "HUL"
+    },
+    "3": {
+      "cost": 50,
+      "name": "Meslier",
+      "team": "ARS"
+    },
+    "30": {
+      "cost": 45,
+      "name": "Digne",
+      "team": "AVL"
+    },
+    "300": {
+      "cost": 45,
+      "name": "Walton",
+      "team": "IPS"
+    },
+    "301": {
+      "cost": 40,
+      "name": "Palmer",
+      "team": "IPS"
+    },
+    "302": {
+      "cost": 40,
+      "name": "Button",
+      "team": "IPS"
+    },
+    "303": {
+      "cost": 40,
+      "name": "Kipré",
+      "team": "IPS"
+    },
+    "304": {
+      "cost": 40,
+      "name": "O'Shea",
+      "team": "IPS"
+    },
+    "305": {
+      "cost": 40,
+      "name": "Davis",
+      "team": "IPS"
+    },
+    "306": {
+      "cost": 40,
+      "name": "Greaves",
+      "team": "IPS"
+    },
+    "307": {
+      "cost": 40,
+      "name": "Johnson",
+      "team": "IPS"
+    },
+    "308": {
+      "cost": 40,
+      "name": "Furlong",
+      "team": "IPS"
+    },
+    "309": {
+      "cost": 50,
+      "name": "Núñez",
+      "team": "IPS"
+    },
+    "31": {
+      "cost": 45,
+      "name": "Konsa",
+      "team": "AVL"
+    },
+    "310": {
+      "cost": 50,
+      "name": "Matusiwa",
+      "team": "IPS"
+    },
+    "311": {
+      "cost": 50,
+      "name": "Burns",
+      "team": "IPS"
+    },
+    "312": {
+      "cost": 45,
+      "name": "Taylor",
+      "team": "IPS"
+    },
+    "313": {
+      "cost": 55,
+      "name": "Clarke",
+      "team": "IPS"
+    },
+    "314": {
+      "cost": 50,
+      "name": "Ogbene",
+      "team": "IPS"
+    },
+    "315": {
+      "cost": 55,
+      "name": "Fatawu",
+      "team": "IPS"
+    },
+    "316": {
+      "cost": 55,
+      "name": "Emersonn",
+      "team": "IPS"
+    },
+    "317": {
+      "cost": 50,
+      "name": "Hirst",
+      "team": "IPS"
+    },
+    "318": {
+      "cost": 55,
+      "name": "Philogene",
+      "team": "IPS"
+    },
+    "319": {
+      "cost": 50,
+      "name": "Szmodics",
+      "team": "IPS"
+    },
+    "32": {
+      "cost": 45,
+      "name": "Cash",
+      "team": "AVL"
+    },
+    "320": {
+      "cost": 50,
+      "name": "Akpom",
+      "team": "IPS"
+    },
+    "321": {
+      "cost": 45,
+      "name": "Walle Egeli",
+      "team": "IPS"
+    },
+    "322": {
+      "cost": 50,
+      "name": "Al-Hamadi",
+      "team": "IPS"
+    },
+    "323": {
+      "cost": 45,
+      "name": "McAteer",
+      "team": "IPS"
+    },
+    "324": {
+      "cost": 50,
+      "name": "Mehmeti",
+      "team": "IPS"
+    },
+    "325": {
+      "cost": 45,
+      "name": "Darlow",
+      "team": "MUN"
+    },
+    "326": {
+      "cost": 45,
+      "name": "Perri",
+      "team": "LEE"
+    },
+    "327": {
+      "cost": 50,
+      "name": "Bijol",
+      "team": "LEE"
+    },
+    "328": {
+      "cost": 50,
+      "name": "Struijk",
+      "team": "BHA"
+    },
+    "329": {
+      "cost": 45,
+      "name": "Rodon",
+      "team": "LEE"
+    },
+    "33": {
+      "cost": 45,
+      "name": "Mings",
+      "team": "AVL"
+    },
+    "330": {
+      "cost": 45,
+      "name": "Bogle",
+      "team": "LEE"
+    },
+    "331": {
+      "cost": 45,
+      "name": "Gudmundsson",
+      "team": "LEE"
+    },
+    "332": {
+      "cost": 45,
+      "name": "Justin",
+      "team": "LEE"
+    },
+    "333": {
+      "cost": 45,
+      "name": "Bornauw",
+      "team": "LEE"
+    },
+    "334": {
+      "cost": 50,
+      "name": "Muharemović",
+      "team": "LEE"
+    },
+    "335": {
+      "cost": 60,
+      "name": "Stach",
+      "team": "LEE"
+    },
+    "336": {
+      "cost": 60,
+      "name": "Okafor",
+      "team": "LEE"
+    },
+    "337": {
+      "cost": 55,
+      "name": "Aaronson",
+      "team": "LEE"
+    },
+    "338": {
+      "cost": 55,
+      "name": "Ampadu",
+      "team": "LEE"
+    },
+    "339": {
+      "cost": 50,
+      "name": "Longstaff",
+      "team": "LEE"
+    },
+    "34": {
+      "cost": 45,
+      "name": "Pau",
+      "team": "AVL"
+    },
+    "340": {
+      "cost": 50,
+      "name": "Gelhardt",
+      "team": "HUL"
+    },
+    "341": {
+      "cost": 50,
+      "name": "Gnonto",
+      "team": "LEE"
+    },
+    "342": {
+      "cost": 50,
+      "name": "Harrison",
+      "team": "LEE"
+    },
+    "343": {
+      "cost": 50,
+      "name": "James",
+      "team": "LEE"
+    },
+    "344": {
+      "cost": 50,
+      "name": "Gruev",
+      "team": "LEE"
+    },
+    "345": {
+      "cost": 50,
+      "name": "Tanaka",
+      "team": "LEE"
+    },
+    "346": {
+      "cost": 60,
+      "name": "Calvert-Lewin",
+      "team": "LEE"
+    },
+    "347": {
+      "cost": 55,
+      "name": "Nmecha",
+      "team": "LEE"
+    },
+    "348": {
+      "cost": 50,
+      "name": "Piroe",
+      "team": "LEE"
+    },
+    "349": {
+      "cost": 45,
+      "name": "Mateo Joseph",
+      "team": "LEE"
+    },
+    "35": {
+      "cost": 50,
+      "name": "Bogarde",
+      "team": "AVL"
+    },
+    "350": {
+      "cost": 55,
+      "name": "A.Becker",
+      "team": "LIV"
+    },
+    "351": {
+      "cost": 50,
+      "name": "Mamardashvili",
+      "team": "LIV"
+    },
+    "352": {
+      "cost": 40,
+      "name": "Woodman",
+      "team": "LIV"
+    },
+    "353": {
+      "cost": 40,
+      "name": "Pecsi",
+      "team": "LIV"
+    },
+    "354": {
+      "cost": 40,
+      "name": "Jaros",
+      "team": "LIV"
+    },
+    "355": {
+      "cost": 40,
+      "name": "Davies",
+      "team": "LIV"
+    },
+    "356": {
+      "cost": 65,
+      "name": "Virgil",
+      "team": "LIV"
+    },
+    "357": {
+      "cost": 55,
+      "name": "Frimpong",
+      "team": "LIV"
+    },
+    "358": {
+      "cost": 55,
+      "name": "Kerkez",
+      "team": "LIV"
+    },
+    "359": {
+      "cost": 50,
+      "name": "Gomez",
+      "team": "LIV"
+    },
+    "36": {
+      "cost": 45,
+      "name": "Maatsen",
+      "team": "AVL"
+    },
+    "360": {
+      "cost": 50,
+      "name": "Bradley",
+      "team": "LIV"
+    },
+    "361": {
+      "cost": 40,
+      "name": "Lucky",
+      "team": "LIV"
+    },
+    "362": {
+      "cost": 50,
+      "name": "Jacquet",
+      "team": "LIV"
+    },
+    "363": {
+      "cost": 40,
+      "name": "Leoni",
+      "team": "LIV"
+    },
+    "364": {
+      "cost": 50,
+      "name": "Tsimikas",
+      "team": "LIV"
+    },
+    "365": {
+      "cost": 40,
+      "name": "Ramsay",
+      "team": "LIV"
+    },
+    "366": {
+      "cost": 75,
+      "name": "Wirtz",
+      "team": "LIV"
+    },
+    "367": {
+      "cost": 70,
+      "name": "Gakpo",
+      "team": "LIV"
+    },
+    "368": {
+      "cost": 70,
+      "name": "Szoboszlai",
+      "team": "LIV"
+    },
+    "369": {
+      "cost": 60,
+      "name": "Ngumoha",
+      "team": "LIV"
+    },
+    "37": {
+      "cost": 45,
+      "name": "Lindelöf",
+      "team": "AVL"
+    },
+    "370": {
+      "cost": 55,
+      "name": "Chiesa",
+      "team": "LIV"
+    },
+    "371": {
+      "cost": 60,
+      "name": "Gravenberch",
+      "team": "LIV"
+    },
+    "372": {
+      "cost": 55,
+      "name": "Mac Allister",
+      "team": "LIV"
+    },
+    "373": {
+      "cost": 55,
+      "name": "C.Jones",
+      "team": "LIV"
+    },
+    "374": {
+      "cost": 50,
+      "name": "Endo",
+      "team": "LIV"
+    },
+    "375": {
+      "cost": 50,
+      "name": "Nyoni",
+      "team": "LIV"
+    },
+    "376": {
+      "cost": 50,
+      "name": "Bajcetic",
+      "team": "LIV"
+    },
+    "377": {
+      "cost": 65,
+      "name": "Munoz",
+      "team": "LIV"
+    },
+    "378": {
+      "cost": 45,
+      "name": "McConnell",
+      "team": "LIV"
+    },
+    "379": {
+      "cost": 90,
+      "name": "Isak",
+      "team": "LIV"
+    },
+    "38": {
+      "cost": 40,
+      "name": "A.García",
+      "team": "AVL"
+    },
+    "380": {
+      "cost": 75,
+      "name": "Ekitiké",
+      "team": "LIV"
+    },
+    "381": {
+      "cost": 50,
+      "name": "Koumas",
+      "team": "LIV"
+    },
+    "382": {
+      "cost": 45,
+      "name": "Danns",
+      "team": "LIV"
+    },
+    "383": {
+      "cost": 55,
+      "name": "Elliott",
+      "team": "LIV"
+    },
+    "384": {
+      "cost": 55,
+      "name": "Donnarumma",
+      "team": "MCI"
+    },
+    "385": {
+      "cost": 50,
+      "name": "Trafford",
+      "team": "LEE"
+    },
+    "386": {
+      "cost": 45,
+      "name": "Bettinelli",
+      "team": "MCI"
+    },
+    "387": {
+      "cost": 65,
+      "name": "O'Reilly",
+      "team": "MCI"
+    },
+    "388": {
+      "cost": 60,
+      "name": "Guéhi",
+      "team": "MCI"
+    },
+    "389": {
+      "cost": 60,
+      "name": "Matheus N.",
+      "team": "MCI"
+    },
+    "39": {
+      "cost": 40,
+      "name": "Nedeljkovic",
+      "team": "AVL"
+    },
+    "390": {
+      "cost": 55,
+      "name": "Rúben",
+      "team": "MCI"
+    },
+    "391": {
+      "cost": 55,
+      "name": "Gvardiol",
+      "team": "MCI"
+    },
+    "392": {
+      "cost": 55,
+      "name": "Aït-Nouri",
+      "team": "MCI"
+    },
+    "393": {
+      "cost": 55,
+      "name": "Khusanov",
+      "team": "MCI"
+    },
+    "394": {
+      "cost": 50,
+      "name": "Alleyne",
+      "team": "MCI"
+    },
+    "395": {
+      "cost": 45,
+      "name": "Lewis",
+      "team": "MCI"
+    },
+    "396": {
+      "cost": 45,
+      "name": "Vitor Reis",
+      "team": "MCI"
+    },
+    "397": {
+      "cost": 85,
+      "name": "Semenyo",
+      "team": "MCI"
+    },
+    "398": {
+      "cost": 70,
+      "name": "Foden",
+      "team": "MCI"
+    },
+    "399": {
+      "cost": 75,
+      "name": "Cherki",
+      "team": "MCI"
+    },
+    "4": {
+      "cost": 80,
+      "name": "Gabriel",
+      "team": "ARS"
+    },
+    "40": {
+      "cost": 75,
+      "name": "Rogers",
+      "team": "CHE"
+    },
+    "400": {
+      "cost": 75,
+      "name": "Doku",
+      "team": "MCI"
+    },
+    "401": {
+      "cost": 70,
+      "name": "Marmoush",
+      "team": "MCI"
+    },
+    "402": {
+      "cost": 65,
+      "name": "Rodrigo",
+      "team": "MCI"
+    },
+    "403": {
+      "cost": 65,
+      "name": "Savinho",
+      "team": "MCI"
+    },
+    "404": {
+      "cost": 60,
+      "name": "Reijnders",
+      "team": "MCI"
+    },
+    "405": {
+      "cost": 55,
+      "name": "N.Gonzalez",
+      "team": "MCI"
+    },
+    "406": {
+      "cost": 55,
+      "name": "Kovačić",
+      "team": "MCI"
+    },
+    "407": {
+      "cost": 50,
+      "name": "Echeverri",
+      "team": "MCI"
+    },
+    "408": {
+      "cost": 50,
+      "name": "Phillips",
+      "team": "MCI"
+    },
+    "409": {
+      "cost": 45,
+      "name": "Mukasa",
+      "team": "MCI"
+    },
+    "41": {
+      "cost": 60,
+      "name": "Buendía",
+      "team": "AVL"
+    },
+    "410": {
+      "cost": 50,
+      "name": "Monga",
+      "team": "MCI"
+    },
+    "411": {
+      "cost": 155,
+      "name": "Haaland",
+      "team": "MCI"
+    },
+    "412": {
+      "cost": 50,
+      "name": "Lammens",
+      "team": "MUN"
+    },
+    "413": {
+      "cost": 45,
+      "name": "Bayindir",
+      "team": "MUN"
+    },
+    "414": {
+      "cost": 40,
+      "name": "Heaton",
+      "team": "MUN"
+    },
+    "415": {
+      "cost": 60,
+      "name": "Dorgu",
+      "team": "MUN"
+    },
+    "416": {
+      "cost": 50,
+      "name": "De Ligt",
+      "team": "MUN"
+    },
+    "417": {
+      "cost": 50,
+      "name": "Dalot",
+      "team": "MUN"
+    },
+    "418": {
+      "cost": 50,
+      "name": "Maguire",
+      "team": "MUN"
+    },
+    "419": {
+      "cost": 50,
+      "name": "Martinez",
+      "team": "MUN"
+    },
+    "42": {
+      "cost": 55,
+      "name": "Guessand",
+      "team": "CRY"
+    },
+    "420": {
+      "cost": 50,
+      "name": "Yoro",
+      "team": "MUN"
+    },
+    "421": {
+      "cost": 45,
+      "name": "Heaven",
+      "team": "MUN"
+    },
+    "422": {
+      "cost": 45,
+      "name": "Mazraoui",
+      "team": "MUN"
+    },
+    "423": {
+      "cost": 45,
+      "name": "Shaw",
+      "team": "MUN"
+    },
+    "424": {
+      "cost": 40,
+      "name": "Amass",
+      "team": "MUN"
+    },
+    "425": {
+      "cost": 40,
+      "name": "Fredricson",
+      "team": "MUN"
+    },
+    "426": {
+      "cost": 120,
+      "name": "B.Fernandes",
+      "team": "MUN"
+    },
+    "427": {
+      "cost": 80,
+      "name": "Mbeumo",
+      "team": "MUN"
+    },
+    "428": {
+      "cost": 80,
+      "name": "Cunha",
+      "team": "MUN"
+    },
+    "429": {
+      "cost": 70,
+      "name": "Rashford",
+      "team": "MUN"
+    },
+    "43": {
+      "cost": 60,
+      "name": "Tielemans",
+      "team": "MUN"
+    },
+    "430": {
+      "cost": 55,
+      "name": "Mount",
+      "team": "MUN"
+    },
+    "431": {
+      "cost": 60,
+      "name": "Amad",
+      "team": "MUN"
+    },
+    "432": {
+      "cost": 55,
+      "name": "Mainoo",
+      "team": "MUN"
+    },
+    "433": {
+      "cost": 50,
+      "name": "Ugarte",
+      "team": "MUN"
+    },
+    "434": {
+      "cost": 50,
+      "name": "J.Fletcher",
+      "team": "MUN"
+    },
+    "435": {
+      "cost": 50,
+      "name": "Lacey",
+      "team": "MUN"
+    },
+    "436": {
+      "cost": 50,
+      "name": "Collyer",
+      "team": "MUN"
+    },
+    "437": {
+      "cost": 45,
+      "name": "Bendito Mantato",
+      "team": "MUN"
+    },
+    "438": {
+      "cost": 45,
+      "name": "Fletcher",
+      "team": "MUN"
+    },
+    "439": {
+      "cost": 70,
+      "name": "Šeško",
+      "team": "MUN"
+    },
+    "44": {
+      "cost": 55,
+      "name": "Bailey",
+      "team": "AVL"
+    },
+    "440": {
+      "cost": 55,
+      "name": "Zirkzee",
+      "team": "MUN"
+    },
+    "441": {
+      "cost": 45,
+      "name": "Obi",
+      "team": "MUN"
+    },
+    "442": {
+      "cost": 50,
+      "name": "Pope",
+      "team": "NEW"
+    },
+    "443": {
+      "cost": 45,
+      "name": "Gillespie",
+      "team": "NEW"
+    },
+    "444": {
+      "cost": 45,
+      "name": "Jaouen",
+      "team": "NEW"
+    },
+    "445": {
+      "cost": 50,
+      "name": "Thiaw",
+      "team": "NEW"
+    },
+    "446": {
+      "cost": 50,
+      "name": "Schär",
+      "team": "NEW"
+    },
+    "447": {
+      "cost": 50,
+      "name": "Botman",
+      "team": "NEW"
+    },
+    "448": {
+      "cost": 50,
+      "name": "Burn",
+      "team": "NEW"
+    },
+    "449": {
+      "cost": 50,
+      "name": "Hall",
+      "team": "NEW"
+    },
+    "45": {
+      "cost": 55,
+      "name": "McGinn",
+      "team": "AVL"
+    },
+    "450": {
+      "cost": 50,
+      "name": "Livramento",
+      "team": "NEW"
+    },
+    "451": {
+      "cost": 40,
+      "name": "A.Murphy",
+      "team": "NEW"
+    },
+    "452": {
+      "cost": 70,
+      "name": "Bruno G.",
+      "team": "ARS"
+    },
+    "453": {
+      "cost": 60,
+      "name": "Barnes",
+      "team": "NEW"
+    },
+    "454": {
+      "cost": 60,
+      "name": "Elanga",
+      "team": "NEW"
+    },
+    "455": {
+      "cost": 55,
+      "name": "Tonali",
+      "team": "TOT"
+    },
+    "456": {
+      "cost": 50,
+      "name": "J.Ramsey",
+      "team": "NEW"
+    },
+    "457": {
+      "cost": 60,
+      "name": "J.Murphy",
+      "team": "NEW"
+    },
+    "458": {
+      "cost": 55,
+      "name": "Joelinton",
+      "team": "NEW"
+    },
+    "459": {
+      "cost": 55,
+      "name": "L.Miley",
+      "team": "NEW"
+    },
+    "46": {
+      "cost": 50,
+      "name": "Barkley",
+      "team": "AVL"
+    },
+    "460": {
+      "cost": 50,
+      "name": "Willock",
+      "team": "NEW"
+    },
+    "461": {
+      "cost": 60,
+      "name": "Touré",
+      "team": "NEW"
+    },
+    "462": {
+      "cost": 50,
+      "name": "Steur",
+      "team": "NEW"
+    },
+    "463": {
+      "cost": 60,
+      "name": "Woltemade",
+      "team": "NEW"
+    },
+    "464": {
+      "cost": 60,
+      "name": "Wissa",
+      "team": "NEW"
+    },
+    "465": {
+      "cost": 60,
+      "name": "Osula",
+      "team": "NEW"
+    },
+    "466": {
+      "cost": 45,
+      "name": "Neave",
+      "team": "NEW"
+    },
+    "467": {
+      "cost": 50,
+      "name": "Sels",
+      "team": "NFO"
+    },
+    "468": {
+      "cost": 45,
+      "name": "John",
+      "team": "NFO"
+    },
+    "469": {
+      "cost": 50,
+      "name": "N.Williams",
+      "team": "NFO"
+    },
+    "47": {
+      "cost": 50,
+      "name": "Kamara",
+      "team": "AVL"
+    },
+    "470": {
+      "cost": 50,
+      "name": "Morato",
+      "team": "NFO"
+    },
+    "471": {
+      "cost": 55,
+      "name": "Milenković",
+      "team": "NFO"
+    },
+    "472": {
+      "cost": 55,
+      "name": "Murillo",
+      "team": "NFO"
+    },
+    "473": {
+      "cost": 45,
+      "name": "Aina",
+      "team": "NFO"
+    },
+    "474": {
+      "cost": 45,
+      "name": "Jair Cunha",
+      "team": "NFO"
+    },
+    "475": {
+      "cost": 45,
+      "name": "Savona",
+      "team": "NFO"
+    },
+    "476": {
+      "cost": 40,
+      "name": "O.Richards",
+      "team": "NFO"
+    },
+    "477": {
+      "cost": 40,
+      "name": "Abbott",
+      "team": "NFO"
+    },
+    "478": {
+      "cost": 45,
+      "name": "Netz",
+      "team": "NFO"
+    },
+    "479": {
+      "cost": 40,
+      "name": "Bindon",
+      "team": "NFO"
+    },
+    "48": {
+      "cost": 50,
+      "name": "Onana",
+      "team": "AVL"
+    },
+    "480": {
+      "cost": 80,
+      "name": "Gibbs-White",
+      "team": "NFO"
+    },
+    "481": {
+      "cost": 65,
+      "name": "Anderson",
+      "team": "MCI"
+    },
+    "482": {
+      "cost": 60,
+      "name": "Hudson-Odoi",
+      "team": "NFO"
+    },
+    "483": {
+      "cost": 55,
+      "name": "Ndoye",
+      "team": "NFO"
+    },
+    "484": {
+      "cost": 55,
+      "name": "Hutchinson",
+      "team": "NFO"
+    },
+    "485": {
+      "cost": 55,
+      "name": "Bakwa",
+      "team": "NFO"
+    },
+    "486": {
+      "cost": 55,
+      "name": "McAtee",
+      "team": "NFO"
+    },
+    "487": {
+      "cost": 50,
+      "name": "Dominguez",
+      "team": "NFO"
+    },
+    "488": {
+      "cost": 50,
+      "name": "Sangaré",
+      "team": "NFO"
+    },
+    "489": {
+      "cost": 45,
+      "name": "Yates",
+      "team": "NFO"
+    },
+    "49": {
+      "cost": 50,
+      "name": "Iling Jr",
+      "team": "AVL"
+    },
+    "490": {
+      "cost": 60,
+      "name": "Wood",
+      "team": "NFO"
+    },
+    "491": {
+      "cost": 60,
+      "name": "Igor Jesus",
+      "team": "NFO"
+    },
+    "492": {
+      "cost": 55,
+      "name": "Awoniyi",
+      "team": "COV"
+    },
+    "493": {
+      "cost": 55,
+      "name": "Kalimuendo",
+      "team": "NFO"
+    },
+    "494": {
+      "cost": 45,
+      "name": "Vicario",
+      "team": "TOT"
+    },
+    "495": {
+      "cost": 40,
+      "name": "Austin",
+      "team": "TOT"
+    },
+    "496": {
+      "cost": 45,
+      "name": "Kinsky",
+      "team": "TOT"
+    },
+    "497": {
+      "cost": 40,
+      "name": "Dubravka",
+      "team": "TOT"
+    },
+    "498": {
+      "cost": 60,
+      "name": "Senesi",
+      "team": "TOT"
+    },
+    "499": {
+      "cost": 55,
+      "name": "Pedro Porro",
+      "team": "TOT"
+    },
+    "5": {
+      "cost": 65,
+      "name": "J.Timber",
+      "team": "ARS"
+    },
+    "50": {
+      "cost": 45,
+      "name": "Burrowes",
+      "team": "AVL"
+    },
+    "500": {
+      "cost": 50,
+      "name": "Romero",
+      "team": "TOT"
+    },
+    "501": {
+      "cost": 50,
+      "name": "Danso",
+      "team": "TOT"
+    },
+    "502": {
+      "cost": 45,
+      "name": "Robertson",
+      "team": "TOT"
+    },
+    "503": {
+      "cost": 50,
+      "name": "Van de Ven",
+      "team": "TOT"
+    },
+    "504": {
+      "cost": 50,
+      "name": "Vuskovic",
+      "team": "BHA"
+    },
+    "505": {
+      "cost": 45,
+      "name": "Spence",
+      "team": "TOT"
+    },
+    "506": {
+      "cost": 45,
+      "name": "Udogie",
+      "team": "TOT"
+    },
+    "507": {
+      "cost": 45,
+      "name": "Phillips",
+      "team": "TOT"
+    },
+    "508": {
+      "cost": 40,
+      "name": "Davies",
+      "team": "TOT"
+    },
+    "509": {
+      "cost": 40,
+      "name": "Byfield",
+      "team": "TOT"
+    },
+    "51": {
+      "cost": 45,
+      "name": "George Hemmings",
+      "team": "AVL"
+    },
+    "510": {
+      "cost": 40,
+      "name": "Rowswell",
+      "team": "TOT"
+    },
+    "511": {
+      "cost": 40,
+      "name": "Souza",
+      "team": "TOT"
+    },
+    "512": {
+      "cost": 65,
+      "name": "Kudus",
+      "team": "TOT"
+    },
+    "513": {
+      "cost": 60,
+      "name": "Xavi",
+      "team": "TOT"
+    },
+    "514": {
+      "cost": 60,
+      "name": "Tel",
+      "team": "TOT"
+    },
+    "515": {
+      "cost": 65,
+      "name": "Maddison",
+      "team": "TOT"
+    },
+    "516": {
+      "cost": 55,
+      "name": "Bentancur",
+      "team": "TOT"
+    },
+    "517": {
+      "cost": 55,
+      "name": "Odobert",
+      "team": "TOT"
+    },
+    "518": {
+      "cost": 50,
+      "name": "P.M.Sarr",
+      "team": "TOT"
+    },
+    "519": {
+      "cost": 55,
+      "name": "Gallagher",
+      "team": "TOT"
+    },
+    "52": {
+      "cost": 50,
+      "name": "Alysson",
+      "team": "AVL"
+    },
+    "520": {
+      "cost": 55,
+      "name": "Bergvall",
+      "team": "TOT"
+    },
+    "521": {
+      "cost": 65,
+      "name": "Kulusevski",
+      "team": "TOT"
+    },
+    "522": {
+      "cost": 50,
+      "name": "Gray",
+      "team": "TOT"
+    },
+    "523": {
+      "cost": 50,
+      "name": "Moore",
+      "team": "TOT"
+    },
+    "524": {
+      "cost": 45,
+      "name": "Olusesi",
+      "team": "TOT"
+    },
+    "525": {
+      "cost": 60,
+      "name": "Fernandes",
+      "team": "TOT"
+    },
+    "526": {
+      "cost": 60,
+      "name": "Solanke",
+      "team": "TOT"
+    },
+    "527": {
+      "cost": 60,
+      "name": "Richarlison",
+      "team": "TOT"
+    },
+    "528": {
+      "cost": 45,
+      "name": "Scarlett",
+      "team": "TOT"
+    },
+    "529": {
+      "cost": 50,
+      "name": "Roefs",
+      "team": "SUN"
+    },
+    "53": {
+      "cost": 60,
+      "name": "Manzambi",
+      "team": "AVL"
+    },
+    "530": {
+      "cost": 40,
+      "name": "Patterson",
+      "team": "SUN"
+    },
+    "531": {
+      "cost": 45,
+      "name": "Ellborg",
+      "team": "SUN"
+    },
+    "532": {
+      "cost": 50,
+      "name": "Ballard",
+      "team": "SUN"
+    },
+    "533": {
+      "cost": 55,
+      "name": "Mukiele",
+      "team": "SUN"
+    },
+    "534": {
+      "cost": 45,
+      "name": "Hume",
+      "team": "SUN"
+    },
+    "535": {
+      "cost": 50,
+      "name": "Alderete",
+      "team": "SUN"
+    },
+    "536": {
+      "cost": 45,
+      "name": "Reinildo",
+      "team": "SUN"
+    },
+    "537": {
+      "cost": 45,
+      "name": "Seelt",
+      "team": "SUN"
+    },
+    "538": {
+      "cost": 40,
+      "name": "Hjelde",
+      "team": "SUN"
+    },
+    "539": {
+      "cost": 40,
+      "name": "O'Nien",
+      "team": "SUN"
+    },
+    "54": {
+      "cost": 55,
+      "name": "Gomes",
+      "team": "AVL"
+    },
+    "540": {
+      "cost": 40,
+      "name": "Masuaku",
+      "team": "SUN"
+    },
+    "541": {
+      "cost": 45,
+      "name": "Meunier",
+      "team": "SUN"
+    },
+    "542": {
+      "cost": 60,
+      "name": "E.Le Fée",
+      "team": "SUN"
+    },
+    "543": {
+      "cost": 55,
+      "name": "Diarra",
+      "team": "SUN"
+    },
+    "544": {
+      "cost": 55,
+      "name": "Xhaka",
+      "team": "SUN"
+    },
+    "545": {
+      "cost": 50,
+      "name": "Sadiki",
+      "team": "SUN"
+    },
+    "546": {
+      "cost": 50,
+      "name": "Adingra",
+      "team": "SUN"
+    },
+    "547": {
+      "cost": 50,
+      "name": "Mundle",
+      "team": "SUN"
+    },
+    "548": {
+      "cost": 50,
+      "name": "Rigg",
+      "team": "SUN"
+    },
+    "549": {
+      "cost": 55,
+      "name": "Talbi",
+      "team": "SUN"
+    },
+    "55": {
+      "cost": 80,
+      "name": "Watkins",
+      "team": "AVL"
+    },
+    "550": {
+      "cost": 50,
+      "name": "Jocelin.T",
+      "team": "SUN"
+    },
+    "551": {
+      "cost": 50,
+      "name": "Angulo",
+      "team": "SUN"
+    },
+    "552": {
+      "cost": 60,
+      "name": "Brobbey",
+      "team": "SUN"
+    },
+    "553": {
+      "cost": 55,
+      "name": "Isidor",
+      "team": "SUN"
+    },
+    "554": {
+      "cost": 45,
+      "name": "Van Oevelen",
+      "team": "IPS"
+    },
+    "555": {
+      "cost": 40,
+      "name": "Matthews",
+      "team": "CRY"
+    },
+    "556": {
+      "cost": 40,
+      "name": "Targett",
+      "team": "HUL"
+    },
+    "557": {
+      "cost": 65,
+      "name": "Tzolis",
+      "team": "ARS"
+    },
+    "558": {
+      "cost": 50,
+      "name": "Schlager",
+      "team": "NFO"
+    },
+    "559": {
+      "cost": 50,
+      "name": "Bamba",
+      "team": "NEW"
+    },
+    "56": {
+      "cost": 55,
+      "name": "Abraham",
+      "team": "AVL"
+    },
+    "560": {
+      "cost": 45,
+      "name": "Penders",
+      "team": "CHE"
+    },
+    "561": {
+      "cost": 45,
+      "name": "Anselmino",
+      "team": "CHE"
+    },
+    "562": {
+      "cost": 55,
+      "name": "Maeda",
+      "team": "IPS"
+    },
+    "563": {
+      "cost": 50,
+      "name": "Morita",
+      "team": "HUL"
+    },
+    "564": {
+      "cost": 45,
+      "name": "Scherpen",
+      "team": "IPS"
+    },
+    "565": {
+      "cost": 55,
+      "name": "Sangaré",
+      "team": "BRE"
+    },
+    "566": {
+      "cost": 50,
+      "name": "Silva",
+      "team": "BOU"
+    },
+    "567": {
+      "cost": 50,
+      "name": "Horníček",
+      "team": "NEW"
+    },
+    "568": {
+      "cost": 55,
+      "name": "Barco",
+      "team": "CHE"
+    },
+    "569": {
+      "cost": 60,
+      "name": "Gonzalo",
+      "team": "FUL"
+    },
+    "57": {
+      "cost": 45,
+      "name": "Petrović",
+      "team": "BOU"
+    },
+    "570": {
+      "cost": 55,
+      "name": "Palacios",
+      "team": "FUL"
+    },
+    "571": {
+      "cost": 50,
+      "name": "Florentino",
+      "team": "IPS"
+    },
+    "572": {
+      "cost": 45,
+      "name": "Tzolakis",
+      "team": "HUL"
+    },
+    "573": {
+      "cost": 45,
+      "name": "Sanchez",
+      "team": "BOU"
+    },
+    "574": {
+      "cost": 50,
+      "name": "Hjertø-Dahl",
+      "team": "HUL"
+    },
+    "575": {
+      "cost": 50,
+      "name": "Yirenkyi",
+      "team": "COV"
+    },
+    "576": {
+      "cost": 50,
+      "name": "Stroud",
+      "team": "HUL"
+    },
+    "577": {
+      "cost": 45,
+      "name": "Tomiyasu",
+      "team": "CRY"
+    },
+    "578": {
+      "cost": 55,
+      "name": "Mudryk",
+      "team": "CHE"
+    },
+    "579": {
+      "cost": 55,
+      "name": "Araujo",
+      "team": "LIV"
+    },
+    "58": {
+      "cost": 40,
+      "name": "Forster",
+      "team": "BOU"
+    },
+    "580": {
+      "cost": 50,
+      "name": "Charles",
+      "team": "FUL"
+    },
+    "581": {
+      "cost": 55,
+      "name": "Diomande",
+      "team": "NFO"
+    },
+    "582": {
+      "cost": 55,
+      "name": "Madjo",
+      "team": "AVL"
+    },
+    "583": {
+      "cost": 50,
+      "name": "Chavarria",
+      "team": "CHE"
+    },
+    "584": {
+      "cost": 55,
+      "name": "Hamer",
+      "team": "COV"
+    },
+    "585": {
+      "cost": 40,
+      "name": "Herrington",
+      "team": "HUL"
+    },
+    "586": {
+      "cost": 40,
+      "name": "Mendy",
+      "team": "HUL"
+    },
+    "587": {
+      "cost": 50,
+      "name": "Rulli",
+      "team": "MCI"
+    },
+    "588": {
+      "cost": 50,
+      "name": "Khalaili",
+      "team": "CRY"
+    },
+    "589": {
+      "cost": 50,
+      "name": "Gourna-Douath",
+      "team": "HUL"
+    },
+    "59": {
+      "cost": 40,
+      "name": "Dennis",
+      "team": "BOU"
+    },
+    "590": {
+      "cost": 45,
+      "name": "Benda",
+      "team": "NFO"
+    },
+    "591": {
+      "cost": 55,
+      "name": "Enciso",
+      "team": "IPS"
+    },
+    "592": {
+      "cost": 40,
+      "name": "Ouattara",
+      "team": "IPS"
+    },
+    "593": {
+      "cost": 45,
+      "name": "Dedić",
+      "team": "NEW"
+    },
+    "594": {
+      "cost": 60,
+      "name": "David",
+      "team": "BHA"
+    },
+    "595": {
+      "cost": 50,
+      "name": "Gozo",
+      "team": "CRY"
+    },
+    "596": {
+      "cost": 45,
+      "name": "Ruggeri",
+      "team": "AVL"
+    },
+    "597": {
+      "cost": 50,
+      "name": "Suzuki",
+      "team": "AVL"
+    },
+    "598": {
+      "cost": 45,
+      "name": "Elvedi",
+      "team": "LEE"
+    },
+    "599": {
+      "cost": 50,
+      "name": "Cherif",
+      "team": "COV"
+    },
+    "6": {
+      "cost": 60,
+      "name": "Saliba",
+      "team": "ARS"
+    },
+    "60": {
+      "cost": 55,
+      "name": "Hill",
+      "team": "BOU"
+    },
+    "61": {
+      "cost": 55,
+      "name": "Truffert",
+      "team": "BOU"
+    },
+    "62": {
+      "cost": 50,
+      "name": "Diakité",
+      "team": "BOU"
+    },
+    "63": {
+      "cost": 50,
+      "name": "Milosavljević",
+      "team": "BOU"
+    },
+    "64": {
+      "cost": 45,
+      "name": "Smith",
+      "team": "BOU"
+    },
+    "65": {
+      "cost": 45,
+      "name": "J.Araujo",
+      "team": "BOU"
+    },
+    "66": {
+      "cost": 40,
+      "name": "Soler",
+      "team": "BOU"
+    },
+    "67": {
+      "cost": 65,
+      "name": "Rayan",
+      "team": "BOU"
+    },
+    "68": {
+      "cost": 60,
+      "name": "Tavernier",
+      "team": "BOU"
+    },
+    "69": {
+      "cost": 60,
+      "name": "Scott",
+      "team": "BOU"
+    },
+    "7": {
+      "cost": 55,
+      "name": "Lewis-Skelly",
+      "team": "ARS"
+    },
+    "70": {
+      "cost": 60,
+      "name": "Kluivert",
+      "team": "BOU"
+    },
+    "71": {
+      "cost": 50,
+      "name": "Cook",
+      "team": "BOU"
+    },
+    "72": {
+      "cost": 50,
+      "name": "Gannon-Doak",
+      "team": "BOU"
+    },
+    "73": {
+      "cost": 50,
+      "name": "Adams",
+      "team": "BOU"
+    },
+    "74": {
+      "cost": 50,
+      "name": "Brooks",
+      "team": "BOU"
+    },
+    "75": {
+      "cost": 50,
+      "name": "Christie",
+      "team": "BOU"
+    },
+    "76": {
+      "cost": 50,
+      "name": "Tóth.A",
+      "team": "BOU"
+    },
+    "77": {
+      "cost": 50,
+      "name": "Adli",
+      "team": "BOU"
+    },
+    "78": {
+      "cost": 75,
+      "name": "Kroupi.Jr",
+      "team": "BOU"
+    },
+    "79": {
+      "cost": 60,
+      "name": "Evanilson",
+      "team": "BOU"
+    },
+    "8": {
+      "cost": 55,
+      "name": "Calafiori",
+      "team": "ARS"
+    },
+    "80": {
+      "cost": 55,
+      "name": "Enes Ünal",
+      "team": "BOU"
+    },
+    "81": {
+      "cost": 60,
+      "name": "Rodríguez",
+      "team": "BOU"
+    },
+    "82": {
+      "cost": 50,
+      "name": "Kelleher",
+      "team": "BRE"
+    },
+    "83": {
+      "cost": 45,
+      "name": "Valdimarsson",
+      "team": "BRE"
+    },
+    "84": {
+      "cost": 55,
+      "name": "Collins",
+      "team": "BRE"
+    },
+    "85": {
+      "cost": 50,
+      "name": "Van den Berg",
+      "team": "BRE"
+    },
+    "86": {
+      "cost": 55,
+      "name": "Lewis-Potter",
+      "team": "BRE"
+    },
+    "87": {
+      "cost": 45,
+      "name": "Ajer",
+      "team": "BRE"
+    },
+    "88": {
+      "cost": 45,
+      "name": "Kayode",
+      "team": "BRE"
+    },
+    "89": {
+      "cost": 45,
+      "name": "Henry",
+      "team": "BRE"
+    },
+    "9": {
+      "cost": 55,
+      "name": "Hincapie",
+      "team": "ARS"
+    },
+    "90": {
+      "cost": 45,
+      "name": "Hickey",
+      "team": "BRE"
+    },
+    "91": {
+      "cost": 45,
+      "name": "Pinnock",
+      "team": "BRE"
+    },
+    "92": {
+      "cost": 45,
+      "name": "Ji-soo",
+      "team": "BRE"
+    },
+    "93": {
+      "cost": 45,
+      "name": "Schuster",
+      "team": "BRE"
+    },
+    "94": {
+      "cost": 60,
+      "name": "Schade",
+      "team": "BRE"
+    },
+    "95": {
+      "cost": 65,
+      "name": "O.Dango",
+      "team": "BRE"
+    },
+    "96": {
+      "cost": 55,
+      "name": "Damsgaard",
+      "team": "BRE"
+    },
+    "97": {
+      "cost": 55,
+      "name": "Jensen",
+      "team": "BRE"
+    },
+    "98": {
+      "cost": 50,
+      "name": "Janelt",
+      "team": "BRE"
+    },
+    "99": {
+      "cost": 50,
+      "name": "Milambo",
+      "team": "BRE"
+    }
+  },
+  "taken_at": "2026-08-21T04:01:43+00:00"
+}
