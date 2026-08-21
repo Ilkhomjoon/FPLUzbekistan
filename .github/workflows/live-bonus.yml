@@ -56,6 +56,10 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run }}
           LIVE_INTERVAL: "60"
           LIVE_MAX_MINUTES: "320"
+          # Cron har 30 daqiqada uyg'onadi. "35 daqiqa oldindan" degani —
+          # o'yindan oldingi oxirgi uyg'onishda jarayon chiqib ketmaydi,
+          # boshlanishini kutib turadi va xabarni aynan o'sha daqiqada yuboradi.
+          LIVE_START_LEAD: "35"
           STATE_COMMIT_CMD: 'bash scripts/commit_state.sh "update live message state"'
         run: python -m bot.live_bonus ${{ inputs.once && '--once' || '' }}
 
