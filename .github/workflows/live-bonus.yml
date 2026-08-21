@@ -12,6 +12,10 @@ on:
         description: "Telegramga yubormasdan sinash"
         type: boolean
         default: false
+      once:
+        description: "Faqat bir marta yangilab chiqsin (qo'lda sinash uchun)"
+        type: boolean
+        default: false
 
 concurrency:
   group: fpl-live-bonus
@@ -53,7 +57,7 @@ jobs:
           LIVE_INTERVAL: "60"
           LIVE_MAX_MINUTES: "320"
           STATE_COMMIT_CMD: 'bash scripts/commit_state.sh "live xabar holati"'
-        run: python -m bot.live_bonus
+        run: python -m bot.live_bonus ${{ inputs.once && '--once' || '' }}
 
       - name: Holatni saqlash (commit)
         if: always()

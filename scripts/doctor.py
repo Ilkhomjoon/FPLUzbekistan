@@ -5,6 +5,7 @@ Ishlatish:
 """
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -13,6 +14,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from bot import config  # noqa: E402
 
 OK, BAD, WARN = "✓", "✗", "!"
+
+# GitHub Actions ichida .env fayl bo'lmaydi — sozlamalar Secrets orqali keladi
+IN_CI = bool(os.getenv("GITHUB_ACTIONS") or os.getenv("CI"))
 
 
 def mask(value: str, keep: int = 6) -> str:
@@ -32,6 +36,11 @@ def main() -> int:
     # 1. Papka va .env
     print("Fayllar:")
     line(OK, "Loyiha papkasi", str(config.ROOT))
+
+    if IN_CI:
+        line(OK, "Muhit", "GitHub Actions — sozlamalar Secrets orqali keladi, .env kerak emas")
+        return _check_settings(problems)
+
     exists = config.ENV_FILE.is_file()
     line(OK if exists else BAD, ".env fayl", str(config.ENV_FILE) if exists else f"topilmadi: {config.ENV_FILE}")
     if not exists:
@@ -75,6 +84,10 @@ def main() -> int:
     if "python-dotenv" in config.DOTENV_STATUS:
         problems.append("python-dotenv o'rnatilmagan:  pip install -r requirements.txt")
 
+    return _check_settings(problems)
+
+
+def _check_settings(problems: list[str]) -> int:
     # 2. Sozlamalar
     print("\nSozlamalar:")
     line(OK if config.BOT_TOKEN else BAD, "TELEGRAM_BOT_TOKEN", mask(config.BOT_TOKEN))
@@ -135,8 +148,11 @@ def main() -> int:
         print()
         return 1
 
-    print("Hammasi joyida. Endi sinab ko'ring:")
-    print("   python -m tests.mock_demo --send\n")
+    if IN_CI:
+        print("Hammasi joyida — Secrets to'g'ri o'qildi.\n")
+    else:
+        print("Hammasi joyida. Endi sinab ko'ring:")
+        print("   python -m tests.mock_demo --send\n")
     return 0
 
 

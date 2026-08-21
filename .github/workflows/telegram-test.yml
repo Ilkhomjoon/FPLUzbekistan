@@ -1,0 +1,56 @@
+name: Telegram sinovi
+
+# Faqat qo'lda ishga tushiriladi. Secrets to'g'ri saqlanganini va bot
+# Telegramga yozа olishini tekshiradi — cron bo'yicha hech qachon ishlamaydi.
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Kimga yuborilsin"
+        type: choice
+        options:
+          - "faqat tekshirish (hech narsa yuborilmaydi)"
+          - "menga (admin)"
+          - "kanalga"
+        default: "faqat tekshirish (hech narsa yuborilmaydi)"
+      pause:
+        description: "Jonli xabar yangilanishlari orasidagi kutish (soniya)"
+        type: string
+        default: "8"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Sozlamalarni tekshirish
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+        run: python -m scripts.doctor
+
+      - name: Sinov xabarlarini yuborish
+        if: inputs.target != 'faqat tekshirish (hech narsa yuborilmaydi)'
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+        run: |
+          if [ "${{ inputs.target }}" = "kanalga" ]; then
+            python -m tests.mock_demo --send --to "$TELEGRAM_CHANNEL_ID" --pause "${{ inputs.pause }}"
+          else
+            python -m tests.mock_demo --send --pause "${{ inputs.pause }}"
+          fi
