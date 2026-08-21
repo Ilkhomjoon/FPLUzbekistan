@@ -1,0 +1,60 @@
+name: Jonli bonus ochkolar
+
+on:
+  schedule:
+    # Har 30 daqiqada uyg'onadi. Agar o'sha kuni o'yin bo'lmasa yoki hali
+    # boshlanmagan bo'lsa — skript darhol chiqadi (bir necha soniya sarflanadi).
+    # 11:00–22:59 UTC oralig'i Premier League o'yin vaqtlarini qoplaydi.
+    - cron: "0,30 11-22 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Telegramga yubormasdan sinash"
+        type: boolean
+        default: false
+
+concurrency:
+  group: fpl-live-bonus
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    # GitHub bitta job uchun maksimum 6 soat beradi; biz 5.5 soatda to'xtaymiz,
+    # keyingi cron ishni davom ettiradi (xabar id'si data/live_message.json da).
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Cron kechikishini o'lchash
+        env:
+          CRON_SCHEDULE: ${{ github.event.schedule }}
+          CRON_WORKFLOW: "Jonli bonus"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+        run: python -m scripts.cron_delay
+
+      - name: Jonli bonusni kuzatish
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          LIVE_INTERVAL: "60"
+          LIVE_MAX_MINUTES: "320"
+          STATE_COMMIT_CMD: 'bash scripts/commit_state.sh "live xabar holati"'
+        run: python -m bot.live_bonus
+
+      - name: Holatni saqlash (commit)
+        if: always()
+        run: bash scripts/commit_state.sh "live xabar holati"

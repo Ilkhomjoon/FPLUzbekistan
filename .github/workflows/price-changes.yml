@@ -1,0 +1,54 @@
+name: Narx o'zgarishlari
+
+on:
+  schedule:
+    # FPL narxlarni Britaniya vaqti bilan 01:30 da o'zgartiradi:
+    #   yozda (BST) = 00:30 UTC, qishda (GMT) = 01:30 UTC
+    - cron: "0 1 * * *"    # 06:00 Toshkent — yozgi vaqtda narxlar allaqachon o'zgargan bo'ladi
+    - cron: "45 1 * * *"   # 06:45 Toshkent — qishgi vaqt uchun zaxira (o'zgarish bo'lmasa post yo'q)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Telegramga yubormasdan sinash"
+        type: boolean
+        default: false
+
+concurrency:
+  group: fpl-price-changes
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  prices:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Cron kechikishini o'lchash
+        env:
+          CRON_SCHEDULE: ${{ github.event.schedule }}
+          CRON_WORKFLOW: "Narx o'zgarishlari"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+        run: python -m scripts.cron_delay
+
+      - name: Narxlarni tekshirish
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: python -m bot.price_changes
+
+      - name: Holatni saqlash (commit)
+        run: bash scripts/commit_state.sh "narx snapshot yangilandi"
