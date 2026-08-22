@@ -1174,7 +1174,7 @@
     "31": {
       "cost": 45,
       "name": "Konsa",
-      "team": "AVL"
+      "team": "ARS"
     },
     "310": {
       "cost": 50,
@@ -2158,7 +2158,7 @@
     },
     "488": {
       "cost": 50,
-      "name": "Sangaré",
+      "name": "I.Sangaré",
       "team": "NFO"
     },
     "489": {
@@ -2588,7 +2588,7 @@
     },
     "565": {
       "cost": 55,
-      "name": "Sangaré",
+      "name": "M.Sangaré",
       "team": "BRE"
     },
     "566": {
@@ -2785,6 +2785,11 @@
       "cost": 55,
       "name": "Hill",
       "team": "BOU"
+    },
+    "600": {
+      "cost": 50,
+      "name": "Osman",
+      "team": "BHA"
     },
     "61": {
       "cost": 55,
@@ -2997,5 +3002,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-08-21T04:01:43+00:00"
+  "taken_at": "2026-08-22T02:06:49+00:00"
 }
