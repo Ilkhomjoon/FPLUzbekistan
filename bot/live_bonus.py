@@ -59,17 +59,26 @@ def is_done(fx: dict) -> bool:
     return bool(fx.get("finished") or fx.get("finished_provisional"))
 
 
-def fetch_defcon(event_ids: list[int], fixtures: list[dict], players: dict) -> dict[int, dict[int, int]]:
-    """Har bir o'yin uchun DefCon oluvchilarni yig'adi: {fixture_id: {element_id: ochko}}"""
+def fetch_defcon(event_ids: list[int], fixtures: list[dict], players: dict,
+                 previous: dict[int, dict[int, int]] | None = None) -> dict[int, dict[int, int]]:
+    """Har bir o'yin uchun DefCon oluvchilarni yig'adi: {fixture_id: {element_id: ochko}}
+
+    DefCon bir marta berilgach qaytib olinmaydi, shuning uchun natija avvalgisi
+    bilan birlashtiriladi. Aks holda API bir yangilanishda bo'sh javob qaytarsa,
+    xabardan DefCon qatori yo'qolib qolardi.
+    """
     from . import defcon as defcon_mod
 
-    out: dict[int, dict[int, int]] = {}
+    out: dict[int, dict[int, int]] = {fid: dict(v) for fid, v in (previous or {}).items()}
     for ev in event_ids:
         fids = [f["id"] for f in fixtures if f.get("started") and f.get("event") == ev]
         if not fids:
             continue
         live = fpl_api.get_live(ev)
-        out.update(defcon_mod.by_fixture(live, fids, players))
+        for fid, awarded in defcon_mod.by_fixture(live, fids, players).items():
+            merged = out.setdefault(fid, {})
+            for element_id, points in awarded.items():
+                merged[element_id] = max(merged.get(element_id, 0), points)
     return out
 
 
@@ -140,7 +149,9 @@ def run(once: bool = False) -> int:
     deadline = time.monotonic() + config.LIVE_MAX_MINUTES * 60
     all_done_since: float | None = None
     defcon_cache: dict[int, dict[int, int]] = {}
-    defcon_at = 0.0
+    # -inf: birinchi aylanishda albatta olinsin. 0.0 bo'lsa yangi ishga tushgan
+    # serverda time.monotonic() kichik bo'lib, DefCon bir necha daqiqa kechikardi.
+    defcon_at = float("-inf")
 
     while True:
         try:
@@ -162,9 +173,10 @@ def run(once: bool = False) -> int:
 
             if any_started and config.SHOW_DEFCON and time.monotonic() - defcon_at > config.DEFCON_TTL:
                 try:
-                    defcon_cache = fetch_defcon(event_ids or [gw], today, players)
+                    defcon_cache = fetch_defcon(event_ids or [gw], today, players, defcon_cache)
                     defcon_at = time.monotonic()
-                    log.debug("DefCon yangilandi: %d o'yin", len(defcon_cache))
+                    log.info("DefCon yangilandi: %d o'yin, jami %d futbolchi",
+                             len(defcon_cache), sum(len(v) for v in defcon_cache.values()))
                 except Exception as exc:
                     # DefCon olinmasa ham bonus posti to'xtamasligi kerak
                     log.warning("DefCon ma'lumotini olib bo'lmadi: %s", exc)
