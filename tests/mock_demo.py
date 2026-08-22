@@ -87,7 +87,9 @@ def _fixtures(stage: int) -> list[dict]:
         "kickoff_time": iso(-50), "started": True,
         "finished": False, "finished_provisional": False, "minutes": 50,
         "stats": [stat("bps", [(6, 24), (5, 21)], [(4, 22)]), stat("bonus", [], []),
-                  stat("goals_scored", [(5, 1)], [(4, 1)]), stat("assists", [(1, 1)], [])],
+                  stat("goals_scored", [(5, 1)], [(4, 1)]), stat("assists", [(1, 1)], []),
+                  stat("penalties_saved", [], [(2, 1)]), stat("penalties_missed", [(3, 1)], []),
+                  stat("yellow_cards", [(6, 1)], [(4, 1)]), stat("red_cards", [], [(2, 1)])],
     }
     done = {
         "id": 102, "event": 3, "team_h": 3, "team_a": 4,

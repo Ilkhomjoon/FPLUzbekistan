@@ -50,10 +50,13 @@ def _player_label(element_id: int, players: dict, teams: dict) -> str:
     return f"{name} ({esc(short)})" if short else name
 
 
-def _scorer_line(rows: list[dict], players: dict, teams: dict) -> str:
+def _scorer_line(rows: list[dict], players: dict, teams: dict,
+                 always_count: bool = True) -> str:
     """[{'element','value','side'}] -> "Saka (1), Havertz (2)"
 
     Uy egalari oldin, keyin mehmonlar; ichida ko'p gol urgan tepada.
+    always_count=False bo'lsa son faqat 1 dan katta bo'lganda yoziladi —
+    kartochkalarda "(1)" ortiqcha ko'rinadi.
     """
     ordered = sorted(
         rows,
@@ -64,13 +67,32 @@ def _scorer_line(rows: list[dict], players: dict, teams: dict) -> str:
     for r in ordered:
         p = players.get(r["element"], {})
         name = esc(p.get("web_name", f"#{r['element']}"))
-        if config.GOALS_SHOW_TEAM:
-            short = teams.get(p.get("team"), {}).get("short_name", "")
-            parts.append(f"{name} ({esc(short)}, {int(r['value'])})" if short
-                         else f"{name} ({int(r['value'])})")
+        value = int(r["value"])
+        show = always_count or value > 1
+        short = teams.get(p.get("team"), {}).get("short_name", "") if config.GOALS_SHOW_TEAM else ""
+
+        if short and show:
+            parts.append(f"{name} ({esc(short)}, {value})")
+        elif short:
+            parts.append(f"{name} ({esc(short)})")
+        elif show:
+            parts.append(f"{name} ({value})")
         else:
-            parts.append(f"{name} ({int(r['value'])})")
+            parts.append(name)
     return ", ".join(parts)
+
+
+# (identifikator, belgi, sonini doim yozamizmi)
+FIXTURE_EVENTS = (
+    ("goals_scored", "⚽️", True),
+    ("assists", "🅰️", True),
+    ("penalties_saved", "🧤", True),
+    ("penalties_missed", "❌", True),
+    ("own_goals", "🥅", True),
+    ("yellow_cards", "🟨", False),
+    ("red_cards", "🟥", False),
+)
+CARD_EVENTS = {"yellow_cards", "red_cards"}
 
 
 def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] | None = None,
@@ -102,10 +124,16 @@ def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] 
 
     if config.SHOW_GOALS:
         events = []
-        for identifier, marker in (("goals_scored", "⚽️"), ("assists", "🅰️"), ("own_goals", "🥅")):
+        for identifier, marker, always_count in FIXTURE_EVENTS:
+            if identifier in CARD_EVENTS:
+                if not config.SHOW_CARDS:
+                    continue
+                # matn Telegram limitiga yaqinlashsa, birinchi bo'lib kartochkalar olinadi
+                if level >= 1:
+                    continue
             rows = [r for r in fixture_stat(fx, identifier) if int(r["value"]) > 0]
             if rows:
-                events.append(f"{marker}: {_scorer_line(rows, players, teams)}")
+                events.append(f"{marker}: {_scorer_line(rows, players, teams, always_count)}")
         if events:
             # sarlavhaga yopishib tursin — orada bo'sh qator kerak emas
             lines.extend(events)

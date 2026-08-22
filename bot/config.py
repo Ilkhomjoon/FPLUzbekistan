@@ -64,6 +64,7 @@ WAIT_LABEL = os.getenv("WAIT_LABEL", "⚪️ KUTILMOQDA")  # hali boshlanmagan
 SHOW_BPS = _bool("SHOW_BPS", True)                   # bonus yonida BPS ham ko'rsatilsinmi
 SHOW_DEFCON = _bool("SHOW_DEFCON", True)             # DefCon oluvchilar qatori chiqsinmi
 SHOW_GOALS = _bool("SHOW_GOALS", True)               # gol va assistlar qatori chiqsinmi
+SHOW_CARDS = _bool("SHOW_CARDS", True)               # sariq/qizil kartochkalar chiqsinmi
 GOALS_SHOW_TEAM = _bool("GOALS_SHOW_TEAM", False)    # "Saka (ARS, 1)" ko'rinishi
 BONUS_MIN_BPS = _int("BONUS_MIN_BPS", 5)             # shundan past BPS hisobga olinmaydi
                                                      # (o'yinga chiqqani uchun 3, 60-daqiqadan keyin 6 beriladi)
