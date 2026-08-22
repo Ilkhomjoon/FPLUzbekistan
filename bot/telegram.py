@@ -135,6 +135,33 @@ def get_chat_member(user_id: int, chat_id: str | None = None) -> dict:
     return _call("getChatMember", chat_id=chat_id or config.CHANNEL_ID, user_id=user_id)
 
 
+def pin_message(message_id: int, chat_id: str | None = None) -> bool:
+    """Xabarni kanal tepasiga qadaydi. Muvaffaqiyatli bo'lsa True."""
+    if config.DRY_RUN:
+        print(f"[DRY-RUN] xabar #{message_id} pin qilindi")
+        return True
+    try:
+        _call("pinChatMessage", chat_id=chat_id or config.CHANNEL_ID,
+              message_id=message_id, disable_notification=True)
+        return True
+    except TelegramError as exc:
+        log.warning("Pin qilib bo'lmadi: %s", exc)
+        return False
+
+
+def unpin_message(message_id: int, chat_id: str | None = None) -> bool:
+    """Xabarni tepadan olib tashlaydi."""
+    if config.DRY_RUN:
+        print(f"[DRY-RUN] xabar #{message_id} pindan olindi")
+        return True
+    try:
+        _call("unpinChatMessage", chat_id=chat_id or config.CHANNEL_ID, message_id=message_id)
+        return True
+    except TelegramError as exc:
+        log.warning("Pindan olib bo'lmadi: %s", exc)
+        return False
+
+
 def notify_admin(text: str) -> None:
     """Xatolik yuz berganda adminga (shaxsiy chatga) xabar. Bir xil xato spam qilmaydi."""
     if not config.ADMIN_CHAT_ID:

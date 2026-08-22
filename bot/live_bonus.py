@@ -156,6 +156,10 @@ def run(once: bool = False) -> int:
                     )
                     commit_state()  # xabar id'sini darhol saqlaymiz
                     log.info("Yangi jonli xabar yuborildi (id=%s)", message_id)
+                    if config.PIN_LIVE_MESSAGE and message_id:
+                        # kanalga boshqa postlar chiqsa ham tepada ko'rinib tursin
+                        if telegram.pin_message(message_id):
+                            log.info("Xabar kanal tepasiga qadaldi")
                 elif text != last_text:
                     try:
                         telegram.edit_message(message_id, text)
@@ -265,6 +269,10 @@ def final_sweep() -> int:
     else:
         telegram.edit_message(message_id, text)
         log.info("Yakuniy yangilanish yozildi (id=%s)", message_id)
+
+    if config.PIN_LIVE_MESSAGE and config.UNPIN_AFTER_FINAL:
+        if telegram.unpin_message(message_id):
+            log.info("Xabar kanal tepasidan olindi")
 
     state.update({"last_text": text, "swept": True})
     storage.save(config.LIVE_STATE_FILE, state)
