@@ -187,10 +187,16 @@ def run(once: bool = False) -> int:
                 elif time.monotonic() - all_done_since > config.LIVE_FINISH_GRACE * 60:
                     storage.save(
                         config.LIVE_STATE_FILE,
-                        {"date": day, "message_id": message_id, "last_text": last_text, "final": True},
+                        {
+                            "date": day, "message_id": message_id, "last_text": last_text,
+                            "final": True, "swept": False,
+                            # yakuniy yangilanish shu vaqtdan hisoblanadi
+                            "finished_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                        },
                     )
                     commit_state()
-                    log.info("Kun yakunlandi.")
+                    log.info("Kun yakunlandi. Yakuniy yangilanish ~%d daqiqadan keyin.",
+                             config.FINAL_SWEEP_MINUTES)
                     return 0
         except Exception as exc:
             log.exception("Sikl ichida xatolik (davom etamiz)")
@@ -209,10 +215,69 @@ def run(once: bool = False) -> int:
         time.sleep(config.LIVE_INTERVAL)
 
 
+def final_sweep() -> int:
+    """Kun tugagach, bir necha soatdan keyin xabarni oxirgi marta yangilaydi.
+
+    FPL rasmiy bonus va DefCon ma'lumotini o'yin tugagandan ancha keyin
+    yakunlaydi. Jonli jarayon o'shancha kutib o'tirmaydi — o'rniga tunda
+    alohida cron shu funksiyani chaqiradi.
+    """
+    config.require_telegram()
+    state = storage.load(config.LIVE_STATE_FILE, {}) or {}
+
+    message_id = state.get("message_id")
+    day = state.get("date")
+    if not message_id or not day:
+        log.info("Yangilanadigan xabar yo'q.")
+        return 0
+    if state.get("swept"):
+        log.info("%s uchun yakuniy yangilanish allaqachon qilingan.", day)
+        return 0
+    if not state.get("final"):
+        log.info("%s hali yakunlanmagan — yakuniy yangilanish erta.", day)
+        return 0
+
+    finished_at = state.get("finished_at")
+    if finished_at:
+        done = datetime.fromisoformat(finished_at)
+        waited = (datetime.now(timezone.utc) - done).total_seconds() / 60
+        if waited < config.FINAL_SWEEP_MINUTES:
+            log.info("Kun %.0f daqiqa oldin yakunlandi — %d daqiqa kutish kerak.",
+                     waited, config.FINAL_SWEEP_MINUTES)
+            return 0
+
+    bootstrap = fpl_api.get_bootstrap()
+    players = fpl_api.players_by_id(bootstrap)
+    teams = fpl_api.teams_by_id(bootstrap)
+
+    fixtures = todays_fixtures(fpl_api.get_fixtures(), day)
+    if not fixtures:
+        log.info("%s sanasida o'yin topilmadi.", day)
+        return 0
+
+    gw = next((f["event"] for f in fixtures if f.get("event")), None)
+    defcon = fetch_defcon(sorted({f["event"] for f in fixtures if f.get("event")}), fixtures, players) \
+        if config.SHOW_DEFCON else {}
+
+    text = live_bonus_post(fixtures, players, teams, gw, defcon=defcon)
+    if text == state.get("last_text"):
+        log.info("O'zgarish yo'q — xabar o'sha holicha qoldi.")
+    else:
+        telegram.edit_message(message_id, text)
+        log.info("Yakuniy yangilanish yozildi (id=%s)", message_id)
+
+    state.update({"last_text": text, "swept": True})
+    storage.save(config.LIVE_STATE_FILE, state)
+    commit_state()
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="FPL jonli bonus ochkolar")
     ap.add_argument("--dry-run", action="store_true", help="Telegramga yubormasdan terminalga chiqaradi")
     ap.add_argument("--once", action="store_true", help="Faqat bir marta yangilab chiqadi")
+    ap.add_argument("--final", action="store_true",
+                    help="Kun yakunlangach oxirgi marta yangilaydi (rasmiy bonus/DefCon uchun)")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
@@ -220,6 +285,8 @@ def main() -> int:
         config.DRY_RUN = True
 
     try:
+        if args.final:
+            return final_sweep()
         return run(once=args.once)
     except Exception as exc:
         log.exception("Live skriptida xatolik")

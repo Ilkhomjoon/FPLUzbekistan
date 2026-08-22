@@ -8,6 +8,9 @@ on:
     # Daqiqalar 5/20/35/50 — :00 GitHub'da eng band daqiqa, o'sha paytda
     # cron 15-25 daqiqagacha kechikadi. Chetroq daqiqalarda kechikish kamroq.
     - cron: "5,20,35,50 10-22 * * *"
+    # Yakuniy yangilanish: kun tugagach FPL rasmiy bonus va DefCon'ni
+    # bir necha soatdan keyin yakunlaydi. Bu uyg'onishlar shuni ushlaydi.
+    - cron: "25 0,2,4,6 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -16,6 +19,10 @@ on:
         default: false
       once:
         description: "Faqat bir marta yangilab chiqsin (qo'lda sinash uchun)"
+        type: boolean
+        default: false
+      final:
+        description: "Yakuniy yangilanish (kun tugagach rasmiy bonus/DefCon)"
         type: boolean
         default: false
 
@@ -68,7 +75,14 @@ jobs:
           # boshlanishini kutib turadi va xabarni aynan o'sha daqiqada yuboradi.
           LIVE_START_LEAD: "35"
           STATE_COMMIT_CMD: 'bash scripts/commit_state.sh "update live message state"'
-        run: python -m bot.live_bonus ${{ inputs.once && '--once' || '' }}
+        run: |
+          ARGS=""
+          # tungi cron -> yakuniy yangilanish, kunduzgisi -> jonli kuzatuv
+          if [ "${{ github.event.schedule }}" = "25 0,2,4,6 * * *" ]; then ARGS="--final"; fi
+          if [ "${{ inputs.final }}" = "true" ]; then ARGS="--final"; fi
+          if [ "${{ inputs.once }}" = "true" ]; then ARGS="--once"; fi
+          echo "Ishga tushirilmoqda: python -m bot.live_bonus $ARGS"
+          python -m bot.live_bonus $ARGS
 
       - name: Holatni saqlash (commit)
         if: always()
