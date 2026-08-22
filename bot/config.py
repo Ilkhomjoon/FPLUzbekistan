@@ -73,6 +73,7 @@ LIVE_INTERVAL = _int("LIVE_INTERVAL", 60)            # necha soniyada bir yangil
 LIVE_MAX_MINUTES = _int("LIVE_MAX_MINUTES", 300)     # bitta jarayon maksimal necha daqiqa ishlaydi
 LIVE_START_LEAD = _int("LIVE_START_LEAD", 5)         # o'yin boshlanishiga necha daqiqa qolganda uyg'onsin
 LIVE_FINISH_GRACE = _int("LIVE_FINISH_GRACE", 10)    # oxirgi o'yin tugagach yana necha daqiqa kuzatsin
+COLLAPSE_FINISHED = _bool("COLLAPSE_FINISHED", True)  # tugagan o'yinlar yig'ilgan holda tursinmi
 PIN_LIVE_MESSAGE = _bool("PIN_LIVE_MESSAGE", True)   # jonli xabar kanal tepasiga qadalsinmi
 UNPIN_AFTER_FINAL = _bool("UNPIN_AFTER_FINAL", True) # yakuniy yangilanishdan keyin olinsinmi
 FINAL_SWEEP_MINUTES = _int("FINAL_SWEEP_MINUTES", 150)  # kun yakunlangach necha daqiqadan so'ng

@@ -185,13 +185,19 @@ def _live_post(
     title = f"{status} · GW{gw} — Bonus ochkolar" if gw else f"{status} · Bonus ochkolar"
     head = f"<b>{title}</b>\n🔄 So'ngi yangilanish: {stamp}"
 
+    all_done = bool(fixtures) and all(_done(f) for f in fixtures)
+
     blocks: list[str] = [head]
     ordered = sorted(fixtures, key=lambda f: (f.get("kickoff_time") or "", f.get("id", 0)))
     for fx in ordered:
         fx_defcon = (defcon or {}).get(fx.get("id"), {})
-        blocks.append("\n".join(_fixture_block(fx, players, teams, fx_defcon, level)))
+        block = "\n".join(_fixture_block(fx, players, teams, fx_defcon, level))
+        # Tugagan o'yinlar yig'ib qo'yiladi — ketayotgan va kutilayotganlari
+        # ko'zga tashlanib tursin. Hammasi tugagach yig'ish shart emas.
+        if config.COLLAPSE_FINISHED and not all_done and _done(fx):
+            block = f"<blockquote expandable>{block}</blockquote>"
+        blocks.append(block)
 
-    all_done = all(f.get("finished") or f.get("finished_provisional") for f in fixtures) and fixtures
     if all_done:
         blocks.append("✅ Bugungi o'yinlar yakunlandi.")
 

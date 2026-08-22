@@ -73,6 +73,32 @@ def fetch_defcon(event_ids: list[int], fixtures: list[dict], players: dict) -> d
     return out
 
 
+def _parse_error(exc: Exception) -> bool:
+    """Telegram HTML'ni tushunmadimi (masalan blockquote'ni)?"""
+    text = str(exc).lower()
+    return "parse entities" in text or "unsupported" in text or "blockquote" in text
+
+
+def _send_or_edit(message_id, text_builder):
+    """Yuborish/tahrirlashda HTML xatosi chiqsa, yig'ishni o'chirib qayta urinamiz."""
+    text = text_builder()
+    try:
+        return (telegram.edit_message(message_id, text) if message_id
+                else telegram.send_message(text)), text
+    except telegram.TelegramError as exc:
+        if not (config.COLLAPSE_FINISHED and _parse_error(exc)):
+            raise
+        log.warning("Telegram <blockquote> ni qabul qilmadi — yig'ish o'chirildi: %s", exc)
+        telegram.notify_admin(
+            "⚠️ <b>FPL bot</b>\nTelegram <code>blockquote</code> ni qabul qilmadi, "
+            "tugagan o'yinlar yig'ilmasdan ko'rsatiladi."
+        )
+        config.COLLAPSE_FINISHED = False
+        text = text_builder()
+        return (telegram.edit_message(message_id, text) if message_id
+                else telegram.send_message(text)), text
+
+
 # ---------------- asosiy sikl ----------------
 
 def run(once: bool = False) -> int:
@@ -147,7 +173,8 @@ def run(once: bool = False) -> int:
                 text = live_bonus_post(today, players, teams, gw, defcon=defcon_cache)
 
                 if message_id is None:
-                    res = telegram.send_message(text)
+                    res, text = _send_or_edit(None, lambda: live_bonus_post(
+                        today, players, teams, gw, defcon=defcon_cache))
                     message_id = res.get("message_id")
                     last_text = text
                     storage.save(
@@ -162,7 +189,8 @@ def run(once: bool = False) -> int:
                             log.info("Xabar kanal tepasiga qadaldi")
                 elif text != last_text:
                     try:
-                        telegram.edit_message(message_id, text)
+                        _, text = _send_or_edit(message_id, lambda: live_bonus_post(
+                            today, players, teams, gw, defcon=defcon_cache))
                     except telegram.TelegramError as exc:
                         # xabar o'chirilgan bo'lsa — yangisini yuboramiz
                         if any(s in str(exc).lower() for s in ("message to edit not found", "message_id_invalid",
