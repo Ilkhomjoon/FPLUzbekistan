@@ -197,3 +197,71 @@ def _live_post(
 
     blocks.append(f"{config.LIVE_HASHTAG}\n\n{config.CHANNEL_TAG}")
     return "\n\n".join(blocks)
+
+
+# ---------------- deadline statistikasi ----------------
+
+CHIP_LABELS = {
+    "wildcard": "WC",
+    "freehit": "FH",
+    "bboost": "BB",
+    "3xc": "TC",
+    "manager": "AM",
+}
+
+
+def chip_label(name: str) -> str:
+    return CHIP_LABELS.get(name, name)
+
+
+def num(value: int) -> str:
+    """1234567 -> '1 234 567'"""
+    return f"{value:,}".replace(",", "\u00a0")
+
+
+def _captain_lines(counts, total: int, players: dict, teams: dict, top_n: int) -> list[str]:
+    if not counts or not total:
+        return ["<i>ma'lumot yo'q</i>"]
+    ranked = sorted(
+        counts.items(),
+        key=lambda kv: (-kv[1], players.get(kv[0], {}).get("web_name", "")),
+    )[:top_n]
+    lines = []
+    for i, (element_id, count) in enumerate(ranked, 1):
+        share = round(count * 100 / total)
+        lines.append(f"{i}. {_player_label(element_id, players, teams)} — {num(count)} ({share}%)")
+    return lines
+
+
+def _chip_line(counts) -> str:
+    if not counts:
+        return "yo'q"
+    ordered = sorted(counts.items(), key=lambda kv: -kv[1])
+    return " · ".join(f"{chip_label(name)} {num(count)}" for name, count in ordered)
+
+
+def deadline_stats_post(gw: int, scans, players: dict, teams: dict,
+                        overall_captain=None, overall_chip_counts=None) -> str:
+    """scans: [(label, LeagueScan), ...] — liga tartibida."""
+    top_n = config.STATS_TOP_N
+    blocks = [f"📊 <b>GW{gw} tarkiblari yakunlandi</b>"]
+
+    captain_block = ["👑 <b>Eng ko'p sardor qilinganlar</b>"]
+    for label, scan in scans:
+        captain_block.append("")
+        captain_block.append(f"{label} ({num(scan.scanned)} ta jamoa)")
+        captain_block.extend(_captain_lines(scan.captains, scan.scanned, players, teams, top_n))
+    if overall_captain:
+        captain_block.append("")
+        captain_block.append(f"🌍 Overall: {_player_label(overall_captain, players, teams)}")
+    blocks.append("\n".join(captain_block))
+
+    chip_block = ["🎴 <b>Chiplar</b>", ""]
+    for label, scan in scans:
+        chip_block.append(f"{label}: {_chip_line(scan.chips)}")
+    if overall_chip_counts:
+        chip_block.append(f"🌍 Overall: {_chip_line(overall_chip_counts)}")
+    blocks.append("\n".join(chip_block))
+
+    blocks.append(f"{config.STATS_HASHTAG}\n\n{config.CHANNEL_TAG}")
+    return "\n\n".join(blocks)

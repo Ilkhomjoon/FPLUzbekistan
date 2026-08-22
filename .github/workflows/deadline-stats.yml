@@ -1,0 +1,58 @@
+name: Deadline statistikasi
+
+on:
+  schedule:
+    # Har 15 daqiqada uyg'onadi. Skript o'zi tekshiradi: deadline o'tganmi va
+    # birinchi o'yingacha STATS_LEAD daqiqadan kam qoldimi. Aks holda darhol chiqadi.
+    - cron: "5,20,35,50 9-22 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Telegramga yubormasdan sinash"
+        type: boolean
+        default: false
+      force:
+        description: "Vaqt oynasini e'tiborsiz qoldirib, hoziroq chiqarish"
+        type: boolean
+        default: false
+
+concurrency:
+  group: fpl-deadline-stats
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Statistikani yig'ish va yuborish
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          # Ligalar: "id:yorliq" vergul bilan ajratilgan
+          STATS_LEAGUES: "137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan"
+          # Birinchi o'yingacha shuncha daqiqa qolganda ishga tushadi
+          STATS_LEAD: "40"
+          STATS_WORKERS: "6"
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          python -m bot.deadline_stats $ARGS
+
+      - name: Holatni saqlash (commit)
+        if: always()
+        run: bash scripts/commit_state.sh "update deadline stats state"

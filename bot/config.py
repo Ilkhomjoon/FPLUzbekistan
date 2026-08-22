@@ -79,6 +79,34 @@ FINAL_SWEEP_MINUTES = _int("FINAL_SWEEP_MINUTES", 150)  # kun yakunlangach necha
                                                      # oxirgi marta yangilansin (rasmiy DefCon uchun)
 
 
+# --- Deadline statistikasi (sardorlar va chiplar) ---
+STATS_STATE_FILE = DATA_DIR / "deadline_stats.json"
+STATS_HASHTAG = os.getenv("STATS_HASHTAG", "#GWStats")
+STATS_LEAD = _int("STATS_LEAD", 40)          # birinchi o'yingacha shuncha daqiqa qolganda boshlanadi
+STATS_MIN_LEAD = _int("STATS_MIN_LEAD", 3)   # bundan kam qolgan bo'lsa umuman chiqarmaymiz
+STATS_WORKERS = _int("STATS_WORKERS", 6)     # parallel so'rovlar soni (FPL API'ni bo'g'ib qo'ymaslik uchun)
+STATS_MAX_ENTRIES = _int("STATS_MAX_ENTRIES", 20000)  # xavfsizlik chegarasi
+STATS_TOP_N = _int("STATS_TOP_N", 3)         # nechta sardor ko'rsatilsin
+
+
+def _leagues() -> list[tuple[int, str]]:
+    """STATS_LEAGUES="137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan" ko'rinishida."""
+    raw = os.getenv("STATS_LEAGUES", "137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan")
+    out: list[tuple[int, str]] = []
+    for part in raw.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        league_id, _, label = part.partition(":")
+        try:
+            out.append((int(league_id), label.strip() or f"#{league_id}"))
+        except ValueError:
+            continue
+    return out
+
+
+STATS_LEAGUES = _leagues()
+
 def require_telegram() -> None:
     """Telegram sozlamalari borligini tekshiradi (DRY_RUN da shart emas)."""
     if DRY_RUN:
