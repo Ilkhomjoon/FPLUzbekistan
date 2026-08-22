@@ -48,12 +48,21 @@ class TestPost(unittest.TestCase):
         self.assertIn("3. Cherki (MCI) — 10 (10%)", text)
 
     def test_faqat_top_n(self):
-        scan = LeagueScan(1, "Test", scanned=100, captains=Counter({5: 40, 7: 25, 1: 10}))
-        self.assertNotIn("4.", self.build(scan))
+        many = Counter({i: 100 - i for i in range(1, 12)})
+        scan = LeagueScan(1, "Test", scanned=100, captains=many)
+        text = self.build(scan)
+        self.assertIn(f"{config.STATS_TOP_N}.", text)
+        self.assertNotIn(f"{config.STATS_TOP_N + 1}.", text)
+
+    def test_liga_nomi_qalin(self):
+        scan = LeagueScan(1, "Test", scanned=10, captains=Counter({5: 10}))
+        text = self.build(scan)
+        self.assertIn("<b>🏆 Test</b> (10 ta jamoa)", text)
+        self.assertIn("<b>🏆 Test:</b>", text)
 
     def test_chip_yoq(self):
         scan = LeagueScan(1, "Test", scanned=10, captains=Counter({5: 10}))
-        self.assertIn("🏆 Test: yo'q", self.build(scan))
+        self.assertIn("<b>🏆 Test:</b> yo'q", self.build(scan))
 
     def test_bosh_liga(self):
         scan = LeagueScan(1, "Test", scanned=0)

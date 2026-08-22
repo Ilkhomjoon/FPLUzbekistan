@@ -249,18 +249,18 @@ def deadline_stats_post(gw: int, scans, players: dict, teams: dict,
     captain_block = ["👑 <b>Eng ko'p sardor qilinganlar</b>"]
     for label, scan in scans:
         captain_block.append("")
-        captain_block.append(f"{label} ({num(scan.scanned)} ta jamoa)")
+        captain_block.append(f"<b>{label}</b> ({num(scan.scanned)} ta jamoa)")
         captain_block.extend(_captain_lines(scan.captains, scan.scanned, players, teams, top_n))
     if overall_captain:
         captain_block.append("")
-        captain_block.append(f"🌍 Overall: {_player_label(overall_captain, players, teams)}")
+        captain_block.append(f"<b>🌍 Overall:</b> {_player_label(overall_captain, players, teams)}")
     blocks.append("\n".join(captain_block))
 
     chip_block = ["🎴 <b>Chiplar</b>", ""]
     for label, scan in scans:
-        chip_block.append(f"{label}: {_chip_line(scan.chips)}")
+        chip_block.append(f"<b>{label}:</b> {_chip_line(scan.chips)}")
     if overall_chip_counts:
-        chip_block.append(f"🌍 Overall: {_chip_line(overall_chip_counts)}")
+        chip_block.append(f"<b>🌍 Overall:</b> {_chip_line(overall_chip_counts)}")
     blocks.append("\n".join(chip_block))
 
     blocks.append(f"{config.STATS_HASHTAG}\n\n{config.CHANNEL_TAG}")

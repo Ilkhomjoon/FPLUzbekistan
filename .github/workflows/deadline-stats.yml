@@ -48,6 +48,8 @@ jobs:
           # Birinchi o'yingacha shuncha daqiqa qolganda ishga tushadi
           STATS_LEAD: "40"
           STATS_WORKERS: "6"
+          # Har bir ligada nechta sardor ko'rsatilsin
+          STATS_TOP_N: "5"
         run: |
           ARGS=""
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
