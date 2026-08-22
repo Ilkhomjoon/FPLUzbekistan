@@ -192,9 +192,9 @@ def _live_post(
     for fx in ordered:
         fx_defcon = (defcon or {}).get(fx.get("id"), {})
         block = "\n".join(_fixture_block(fx, players, teams, fx_defcon, level))
-        # Tugagan o'yinlar yig'ib qo'yiladi — ketayotgan va kutilayotganlari
-        # ko'zga tashlanib tursin. Hammasi tugagach yig'ish shart emas.
-        if config.COLLAPSE_FINISHED and not all_done and _done(fx):
+        # Tugagan o'yinlar doim yig'ib qo'yiladi — ketayotgan va kutilayotganlari
+        # ko'zga tashlanib tursin, yakunlangan kunda esa xabar ixcham qolsin.
+        if config.COLLAPSE_FINISHED and _done(fx):
             block = f"<blockquote expandable>{block}</blockquote>"
         blocks.append(block)
 
