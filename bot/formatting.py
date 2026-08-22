@@ -170,9 +170,20 @@ def _live_post(
     level: int = 0,
 ) -> str:
     stamp = now_local().strftime("%H:%M:%S")
-    head = f"🔄 So'ngi yangilanish: {stamp}"
-    if gw:
-        head = f"<b>GW{gw} — Bonus ochkolar</b>\n{head}"
+
+    # Pin panelida xabarning birinchi qatori ko'rinadi — holat shu yerda tursin
+    def _done(f: dict) -> bool:
+        return bool(f.get("finished") or f.get("finished_provisional"))
+
+    if any(f.get("started") and not _done(f) for f in fixtures):
+        status = config.LIVE_LABEL
+    elif fixtures and all(_done(f) for f in fixtures):
+        status = config.DONE_LABEL
+    else:
+        status = config.WAIT_LABEL
+
+    title = f"{status} · GW{gw} — Bonus ochkolar" if gw else f"{status} · Bonus ochkolar"
+    head = f"<b>{title}</b>\n🔄 So'ngi yangilanish: {stamp}"
 
     blocks: list[str] = [head]
     ordered = sorted(fixtures, key=lambda f: (f.get("kickoff_time") or "", f.get("id", 0)))

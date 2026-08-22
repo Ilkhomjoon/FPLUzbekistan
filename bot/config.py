@@ -58,6 +58,9 @@ PRICE_SHOW_TEAM = _bool("PRICE_SHOW_TEAM", False)  # "Cherki (MCI) (£6.5M)" ko'
 # --- Live bonus ---
 LIVE_STATE_FILE = DATA_DIR / "live_message.json"
 LIVE_HASHTAG = os.getenv("LIVE_HASHTAG", "#BonusPoints")
+LIVE_LABEL = os.getenv("LIVE_LABEL", "🔴 LIVE")      # o'yin ketayotgandagi sarlavha belgisi
+DONE_LABEL = os.getenv("DONE_LABEL", "✅ YAKUNLANDI")  # hammasi tugagandagi belgi
+WAIT_LABEL = os.getenv("WAIT_LABEL", "⚪️ KUTILMOQDA")  # hali boshlanmagan
 SHOW_BPS = _bool("SHOW_BPS", True)                   # bonus yonida BPS ham ko'rsatilsinmi
 SHOW_DEFCON = _bool("SHOW_DEFCON", True)             # DefCon oluvchilar qatori chiqsinmi
 SHOW_GOALS = _bool("SHOW_GOALS", True)               # gol va assistlar qatori chiqsinmi
