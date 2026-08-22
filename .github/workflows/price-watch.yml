@@ -1,0 +1,58 @@
+name: Narx bashorati
+
+on:
+  schedule:
+    # 23:00 Toshkent = 18:00 UTC. Ikkinchisi zaxira: GitHub cron kechiksa ham
+    # post chiqadi, holat fayli tufayli ikki marta yuborilmaydi.
+    - cron: "5 18 * * *"
+    - cron: "40 18 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Telegramga yubormasdan sinash"
+        type: boolean
+        default: false
+      force:
+        description: "Bugun chiqarilgan bo'lsa ham qayta chiqarish"
+        type: boolean
+        default: false
+
+concurrency:
+  group: fpl-price-watch
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Bashoratni tekshirish va yuborish
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          # Ro'yxatga tushish uchun eng kam foiz
+          PRICE_WATCH_MIN: "85"
+          # Har tomonda ko'pi bilan nechta futbolchi
+          PRICE_WATCH_MAX: "8"
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          python -m bot.price_watch $ARGS
+
+      - name: Holatni saqlash (commit)
+        if: always()
+        run: bash scripts/commit_state.sh "update price watch state"

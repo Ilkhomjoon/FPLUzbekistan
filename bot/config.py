@@ -79,6 +79,13 @@ FINAL_SWEEP_MINUTES = _int("FINAL_SWEEP_MINUTES", 150)  # kun yakunlangach necha
                                                      # oxirgi marta yangilansin (rasmiy DefCon uchun)
 
 
+# --- Narx bashorati (kechqurungi post) ---
+PRICE_WATCH_STATE_FILE = DATA_DIR / "price_watch.json"
+PRICE_WATCH_HASHTAG = os.getenv("PRICE_WATCH_HASHTAG", "#PriceWatch")
+PRICE_WATCH_MIN = _int("PRICE_WATCH_MIN", 85)          # shu foizdan pastlari ro'yxatga tushmaydi
+PRICE_WATCH_MAX = _int("PRICE_WATCH_MAX", 8)           # har tomonda ko'pi bilan nechta futbolchi
+PRICE_WATCH_SURE = _int("PRICE_WATCH_SURE", 100)       # shundan oshgani "kutilmoqda" deb qalin yoziladi
+
 # --- Deadline statistikasi (sardorlar va chiplar) ---
 STATS_STATE_FILE = DATA_DIR / "deadline_stats.json"
 STATS_HASHTAG = os.getenv("STATS_HASHTAG", "#GWStats")

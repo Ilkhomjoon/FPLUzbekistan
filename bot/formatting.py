@@ -265,3 +265,32 @@ def deadline_stats_post(gw: int, scans, players: dict, teams: dict,
 
     blocks.append(f"{config.STATS_HASHTAG}\n\n{config.CHANNEL_TAG}")
     return "\n\n".join(blocks)
+
+
+# ---------------- narx bashorati ----------------
+
+def _watch_lines(rows: list[dict]) -> list[str]:
+    """rows: [{'label': 'Calafiori (ARS)', 'cost': 55, 'percent': 104.2}]"""
+    if not rows:
+        return ["<i>hozircha yo'q</i>"]
+    out = []
+    for r in rows:
+        pct = abs(r["percent"])
+        text = f"{r['label']} {price(r['cost'])} — {pct:.0f}%"
+        # chegaradan oshganlar ko'zga tashlanib tursin
+        out.append(f"<b>{text}</b>" if pct >= config.PRICE_WATCH_SURE else text)
+    return out
+
+
+def price_watch_post(rises: list[dict], falls: list[dict], stamp: str) -> str:
+    blocks = [f"💷 <b>Ertaga narx o'zgarishi mumkin</b>\n🕘 {stamp} holatiga ko'ra"]
+
+    blocks.append("\n".join(["📈 <b>Narxi ko'tarilishi mumkin</b>"] + _watch_lines(rises)))
+    blocks.append("\n".join(["📉 <b>Narxi tushishi mumkin</b>"] + _watch_lines(falls)))
+
+    blocks.append(
+        f"ℹ️ {config.PRICE_WATCH_SURE}% dan oshganlar o'zgarishi kutiladi. "
+        "Narxlar tunda yangilanadi — oxirgi soatlarda ko'rsatkich o'zgarishi mumkin."
+    )
+    blocks.append(f"{config.PRICE_WATCH_HASHTAG}\n\n{config.CHANNEL_TAG}")
+    return "\n\n".join(blocks)
