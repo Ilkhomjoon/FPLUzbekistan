@@ -283,7 +283,7 @@ def _watch_lines(rows: list[dict]) -> list[str]:
 
 
 def price_watch_post(rises: list[dict], falls: list[dict], stamp: str) -> str:
-    blocks = [f"💷 <b>Ertaga narx o'zgarishi mumkin</b>\n🕘 {stamp} holatiga ko'ra"]
+    blocks = [f"💷 <b>Ertaga narxi o'zgarishi mumkin bo'lgan futbolchilar</b>\n🕘 {stamp} holatiga ko'ra"]
 
     blocks.append("\n".join(["📈 <b>Narxi ko'tarilishi mumkin</b>"] + _watch_lines(rises)))
     blocks.append("\n".join(["📉 <b>Narxi tushishi mumkin</b>"] + _watch_lines(falls)))
