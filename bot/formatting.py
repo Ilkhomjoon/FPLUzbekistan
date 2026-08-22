@@ -244,7 +244,7 @@ def deadline_stats_post(gw: int, scans, players: dict, teams: dict,
                         overall_captain=None, overall_chip_counts=None) -> str:
     """scans: [(label, LeagueScan), ...] — liga tartibida."""
     top_n = config.STATS_TOP_N
-    blocks = [f"📊 <b>GW{gw} tarkiblari yakunlandi</b>"]
+    blocks = [f"📊 <b>GW{gw} Statistikasi</b>"]
 
     captain_block = ["👑 <b>Eng ko'p sardor qilinganlar</b>"]
     for label, scan in scans:
