@@ -2791,6 +2791,26 @@
       "name": "Osman",
       "team": "BHA"
     },
+    "601": {
+      "cost": 45,
+      "name": "Williams-Barnett",
+      "team": "TOT"
+    },
+    "602": {
+      "cost": 45,
+      "name": "Humphreys",
+      "team": "IPS"
+    },
+    "603": {
+      "cost": 40,
+      "name": "Lienou",
+      "team": "LEE"
+    },
+    "604": {
+      "cost": 45,
+      "name": "Cresswell",
+      "team": "LEE"
+    },
     "61": {
       "cost": 55,
       "name": "Truffert",
@@ -3002,5 +3022,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-08-22T02:39:38+00:00"
+  "taken_at": "2026-08-23T02:16:02+00:00"
 }
