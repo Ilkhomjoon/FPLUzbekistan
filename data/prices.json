@@ -2811,6 +2811,31 @@
       "name": "Cresswell",
       "team": "LEE"
     },
+    "605": {
+      "cost": 45,
+      "name": "Yalcouyé",
+      "team": "BHA"
+    },
+    "606": {
+      "cost": 40,
+      "name": "Rowe",
+      "team": "AVL"
+    },
+    "607": {
+      "cost": 45,
+      "name": "Lynch",
+      "team": "AVL"
+    },
+    "608": {
+      "cost": 50,
+      "name": "Jebbison",
+      "team": "BOU"
+    },
+    "609": {
+      "cost": 40,
+      "name": "Shahar",
+      "team": "NEW"
+    },
     "61": {
       "cost": 55,
       "name": "Truffert",
@@ -3022,5 +3047,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-08-23T02:49:06+00:00"
+  "taken_at": "2026-08-24T02:14:39+00:00"
 }
