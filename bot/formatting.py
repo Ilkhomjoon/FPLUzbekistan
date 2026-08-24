@@ -355,7 +355,7 @@ def _league_block(review, gw: int) -> str:
 
     if review.best:
         lines.append("")
-        lines.append(f"🔥 Turning eng zo'ri: {manager_link(review.best, gw)} — "
+        lines.append(f"🔥 Tur menejeri: {manager_link(review.best, gw)} — "
                      f"{num(review.best.event_total)} ochko")
 
     if review.top:
