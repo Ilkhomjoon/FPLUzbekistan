@@ -328,3 +328,74 @@ def price_watch_post(rises: list[dict], falls: list[dict], stamp: str) -> str:
     )
     blocks.append(f"{config.PRICE_WATCH_HASHTAG}\n\n{config.CHANNEL_TAG}")
     return "\n\n".join(blocks)
+
+
+# ---------------- tur yakunlari sharhi ----------------
+
+ENTRY_URL = "https://fantasy.premierleague.com/entry/{entry}/event/{gw}/"
+
+
+def manager_link(m, gw: int) -> str:
+    """Jamoa nomi — o'sha turdagi tarkibga havola, yonida menejer ismi."""
+    url = ENTRY_URL.format(entry=m.entry, gw=gw)
+    return f'<a href="{url}">{esc(m.team)}</a> ({esc(m.name)})'
+
+
+def _behind(value: int | None) -> str:
+    if value is None:
+        return ""
+    if value >= 0:
+        return "yetakchi" if value == 0 else f"+{num(value)}"
+    return f"−{num(abs(value))}"
+
+
+def _league_block(review, gw: int) -> str:
+    lines = [f"<b>{review.label} · {num(review.total_managers)} ta jamoa</b>",
+             f"O'rtacha: {review.average:.0f} ochko"]
+
+    if review.best:
+        lines.append("")
+        lines.append(f"🔥 Turning eng zo'ri: {manager_link(review.best, gw)} — "
+                     f"{num(review.best.event_total)} ochko")
+
+    if review.top:
+        lines.append("")
+        for i, m in enumerate(review.top, 1):
+            extra = []
+            if m.overall_rank:
+                extra.append(f"🌍 {num(m.overall_rank)}")
+            behind = _behind(m.behind_leader)
+            if behind:
+                extra.append(behind)
+            tail = f" ({' · '.join(extra)})" if extra else ""
+            lines.append(f"{i}. {manager_link(m, gw)} — {num(m.total)}{tail}")
+
+    if review.riser:
+        lines.append("")
+        lines.append(f"📈 Eng katta ko'tarilish: {manager_link(review.riser, gw)} — "
+                     f"{num(review.riser.last_rank)} → {num(review.riser.rank)} "
+                     f"(+{num(review.riser.climb)})")
+    return "\n".join(lines)
+
+
+def gw_review_post(gw: int, event: dict, players: dict, leader, reviews) -> str:
+    blocks = [f"📈 <b>GW{gw} yakunlari</b>"]
+
+    overall = ["<b>🌍 Overall</b>"]
+    if event.get("average_entry_score") is not None:
+        overall.append(f"O'rtacha: {num(int(event['average_entry_score']))} ochko")
+    if event.get("highest_score") is not None:
+        overall.append(f"Eng yuqori: {num(int(event['highest_score']))} ochko")
+    if leader:
+        overall.append(f"Yetakchi: {esc(leader[0])} — {num(leader[1])} ochko")
+    top_el = event.get("top_element_info") or {}
+    if top_el.get("id"):
+        star = players.get(top_el["id"], {}).get("web_name", "—")
+        overall.append(f"⭐️ Tur yulduzi: {esc(star)} — {num(int(top_el.get('points') or 0))} ochko")
+    blocks.append("\n".join(overall))
+
+    for review in reviews:
+        blocks.append(_league_block(review, gw))
+
+    blocks.append(f"{config.GW_REVIEW_HASHTAG}\n\n{config.CHANNEL_TAG}")
+    return "\n\n".join(blocks)

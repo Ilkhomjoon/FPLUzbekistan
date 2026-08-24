@@ -1,0 +1,57 @@
+name: Tur yakunlari sharhi
+
+on:
+  schedule:
+    # 10:00 Toshkent = 05:00 UTC. Skript o'zi tekshiradi: tur yakunlanganmi va
+    # oxirgi o'yin kunidan keyingi kun kelganmi. Aks holda darhol chiqadi.
+    - cron: "5 5 * * *"
+    - cron: "40 5 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Telegramga yubormasdan sinash"
+        type: boolean
+        default: false
+      force:
+        description: "Vaqt tekshiruvini e'tiborsiz qoldirib, hoziroq chiqarish"
+        type: boolean
+        default: false
+
+concurrency:
+  group: fpl-gw-review
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Sharhni tayyorlash va yuborish
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          # Birinchi liga "bizniki" — eng katta ko'tarilish faqat unda yoziladi
+          STATS_LEAGUES: "137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan"
+          GW_REVIEW_TOP_N: "5"
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          python -m bot.gw_review $ARGS
+
+      - name: Holatni saqlash (commit)
+        if: always()
+        run: bash scripts/commit_state.sh "update gw review state"

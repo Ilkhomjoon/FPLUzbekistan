@@ -98,6 +98,12 @@ STATS_MAX_ENTRIES = _int("STATS_MAX_ENTRIES", 20000)  # xavfsizlik chegarasi
 STATS_TOP_N = _int("STATS_TOP_N", 5)         # nechta sardor ko'rsatilsin
 
 
+# --- Tur yakunlari sharhi ---
+GW_REVIEW_STATE_FILE = DATA_DIR / "gw_review.json"
+GW_REVIEW_HASHTAG = os.getenv("GW_REVIEW_HASHTAG", "#GWReview")
+GW_REVIEW_TOP_N = _int("GW_REVIEW_TOP_N", 5)   # har ligada nechta menejer ko'rsatilsin
+
+
 def _leagues() -> list[tuple[int, str]]:
     """STATS_LEAGUES="137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan" ko'rinishida."""
     raw = os.getenv("STATS_LEAGUES", "137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan")
