@@ -171,86 +171,94 @@ Xato variantlar: `TELEGRAM_BOT_TOKEN="812..."` (qo'shtirnoq token ichiga kirib k
 
 ---
 
-## 3. Vaqt jadvali haqida muhim eslatma
+## 3. Vaqt jadvali — "erta uyg'on, ichida kut"
 
-FPL narxlarni **Britaniya vaqti bilan 01:30** da o'zgartiradi:
+### Muammo
 
-| Mavsum | Britaniya vaqti | UTC | Toshkent |
+GitHub Actions cron'ni **belgilangan daqiqada boshlashga kafolat bermaydi**. Bizning o'lchovlarimiz (78 ta ishga tushish):
+
+| Workflow | O'rtacha kechikish | Median | Eng yomon |
 |---|---|---|---|
-| Yozgi (BST, mart oxiri – oktabr oxiri) | 01:30 | **00:30** | 05:30 |
-| Qishgi (GMT, oktabr oxiri – mart oxiri) | 01:30 | **01:30** | 06:30 |
+| Jonli bonus | 17 daqiqa | 10 daqiqa | 102 daqiqa |
+| Narx o'zgarishlari | **66 daqiqa** | 65 daqiqa | 76 daqiqa |
 
-Shuning uchun workflow'da **ikkita cron** bor:
+Ya'ni "aniq 06:00 da uyg'on" degan cron postni 07:06 da chiqarardi.
 
-- `0 1 * * *` → **06:00 Toshkent** (yozgi vaqtda narxlar allaqachon o'zgargan)
-- `45 1 * * *` → **06:45 Toshkent** (qishgi vaqt uchun zaxira)
+### Yechim
 
-Ikki marta ishlashi xavfsiz: bot snapshot bilan solishtirgani uchun, birinchi ishga tushishda o'zgarish topilmasa hech narsa post qilmaydi, ikkinchisi esa o'zgarishlarni tutadi. Ya'ni **kuniga aniq bitta post** chiqadi.
+Cron'ning **aniqligiga** emas, **zaxirasiga** tayanamiz. Ish bir marta boshlangach, uning ichidagi vaqt aniq — `sleep` soniyagacha to'g'ri ishlaydi. Shuning uchun:
 
-> GitHub Actions cron'i kafolatlangan aniqlikda emas — yuklama ko'p bo'lganda 5–20 daqiqa kechikishi mumkin. Agar aniq 06:00 juda muhim bo'lsa, 3-bo'limdagi VPS variantiga qarang.
+```
+❌  aniq 06:00 da uyg'on        →  GitHub 07:06 da uyg'otadi  →  post kechikadi
+✅  04:07 da uyg'on, ichida kut  →  GitHub 05:13 da uyg'otsa ham,
+                                   jarayon 06:00:00 gacha kutib turadi
+```
 
-### Jonli bonus: 30 daqiqa va 1 daqiqa — bu ikki xil narsa
+Har bir workflow shu tamoyilda ishlaydi:
 
-Bu yerda ikkita alohida vaqt bor, ularni aralashtirmaslik kerak:
+| Post | Cron uyg'onadi | Jarayon ichida | Post chiqadi |
+|---|---|---|---|
+| Narx o'zgarishlari | 04:07 | narx o'zgarishini kuzatadi, so'ng `PRICE_POST_AT` gacha ushlab turadi | **06:00** |
+| Jonli bonus | o'yindan ≤115 daqiqa oldin | birinchi o'yin boshlanishini uxlab kutadi | **o'yin boshlanishida** |
+| Deadline statistikasi | o'yindan ≤200 daqiqa oldin | `T−40 daqiqa` gacha kutadi, so'ng ligalarni skanerlaydi | **T−40 daqiqa** |
+| Narx bashorati | 22:09 | `--post-at 23:00` | **23:00** |
+| Tur sharhi | 09:09 | `--post-at 10:00` | **10:00** |
+
+Har birida **zaxira cron** ham bor — GitHub ba'zan rejalashtirilgan run'ni umuman tashlab ketadi. Holat fayllari tufayli ikki marta post chiqmaydi.
+
+### Yon foyda: uyg'onishlar soni 5 barobar kamaydi
+
+| | Ilgari | Hozir |
+|---|---|---|
+| Jonli bonus | 56 ta/kun | 13 ta/kun |
+| Deadline statistikasi | 56 ta/kun | 5 ta/kun |
+| Qolganlari | 6 ta/kun | 6 ta/kun |
+| **Jami** | **~118 ta/kun** | **~24 ta/kun** |
+
+Bu o'z-o'zidan kechikishni kamaytiradi: GitHub bitta repodan kelayotgan so'rovlarni ham hisobga oladi. Ochiq (public) repoda daqiqalar cheksiz va tekin, shuning uchun "uxlab turgan" ish hech narsaga tushmaydi.
+
+Cron daqiqalari ham ataylab **g'alati** tanlangan (`:07`, `:11`, `:13`, `:23`, `:41`, `:44`): `:00`, `:15`, `:30`, `:45` — butun dunyo bo'yicha eng band daqiqalar, aynan o'sha paytda kechikish eng katta bo'ladi.
+
+### Jonli bonus: 115 daqiqa va 1 daqiqa — bu ikki xil narsa
 
 | Nima | Qanchada bir | Nima uchun |
 |---|---|---|
-| **Cron uyg'onishi** (tekshiruv) | har **30 daqiqada**, 11:00–22:59 UTC | Faqat "bugun o'yin bormi, boshlandimi?" deb qarash uchun |
-| **Bonus ochkolar yangilanishi** (post) | har **1 daqiqada** | Kanaldagi xabar shu tezlikda tahrirlanadi |
+| **Cron uyg'onishi** | har **90 daqiqada**, 08:11–21:41 UTC | "Bugun o'yin bormi?" deb qarash uchun |
+| **`LIVE_START_LEAD`** | **115 daqiqa** | O'yingacha shundan kam qolgan bo'lsa jarayon chiqmaydi, kutadi |
+| **Xabar yangilanishi** | har **1 daqiqada** | Kanaldagi post shu tezlikda tahrirlanadi |
 
-Ya'ni **bonus ochkolar kanalda har daqiqada yangilanadi** — 30 daqiqa bu bilan bog'liq emas.
+115 > 90 bo'lgani muhim: uyg'onishlar orasidagi masofadan kattaroq, shuning uchun **har bir o'yin albatta qamrab olinadi**.
 
-Nega shunday? GitHub Actions doimiy ishlab turadigan server emas — uni vaqti-vaqti bilan "uyg'otish" kerak. Shuning uchun:
+Yangilanish tezligini `LIVE_INTERVAL` (soniyada) bilan o'zgartirasiz. 60 soniyadan pastga tushirishni tavsiya qilmayman: FPL API'ni ortiqcha yuklaydi va Telegram tahrirlash limitiga yaqinlashadi.
 
-1. Har 30 daqiqada cron skriptni ishga tushiradi.
-2. Skript qaraydi: bugun o'yin bormi va boshlanganmi?
-   - **Yo'q** bo'lsa → bir necha soniyada chiqib ketadi, hech narsa post qilinmaydi.
-   - **Ha** bo'lsa → jarayon **ochiq qoladi** va 5+ soat davomida ichida `while` sikli aylanadi: har **60 soniyada** FPL API'dan BPS'ni olib, kanaldagi xabarni tahrirlaydi.
+### Kechikishni o'lchash
 
-Demak eng yomon holatda o'yin boshlanishi bilan post chiqishi orasida 30 daqiqagacha kechikish bo'lishi mumkin (cron hali uyg'onmagan bo'lsa). Buni kamaytirish uchun `live-bonus.yml` dagi cron'ni tez-tezroq qilsangiz bo'ladi:
-
-```yaml
-- cron: "0,15,30,45 11-22 * * *"   # har 15 daqiqada tekshiradi
-```
-
-Yangilanish tezligini o'zgartirish uchun esa `LIVE_INTERVAL` (soniyada) sozlamasini ishlating — masalan `30` qilsangiz, xabar yarim daqiqada bir yangilanadi. 60 soniyadan pastga tushirishni tavsiya qilmayman: FPL API'ni ortiqcha yuklaydi va Telegram tahrirlash limitiga yaqinlashadi.
-
-### Kechikishni o'lchash (GitHub Actions yetarlimi?)
-
-Har ishga tushishda bot "rejalashtirilgan vaqt" va "haqiqiy vaqt" farqini `data/cron_log.csv` ga yozib boradi. Hech narsa qilish shart emas — workflow'lar ichida avtomatik ishlaydi.
-
-Bir necha tur o'tgach hisobotni ko'ring:
+Har ishga tushishda bot `data/cron_log.csv` ga yozib boradi. Hisobot:
 
 ```bash
 git pull                              # Actions yozgan loglarni oling
 python -m scripts.cron_delay --report
 ```
 
-```
-Jami yozuv: 28 ta (2026-08-10 — 2026-08-23)
+Ikkita ustun bor va ular boshqa-boshqa narsa:
 
-Workflow                      Soni      O'rtacha        Median     Eng yomon
-----------------------------------------------------------------------------
-Jonli bonus                     14  1 daq 10 son       47 soniya  4 daq 05 son
-Narx o'zgarishlari              14  2 daq 14 son  1 daq 30 son  6 daq 50 son
+- **`delay_seconds`** — GitHub cron'ning haqiqiy kechikishi (run yaratilgan vaqt vs rejalashtirilgan vaqt).
+- **`queued_seconds`** — run yaratilgandan keyin job navbatda turgan vaqt. Bu cron aybi emas: masalan jonli bonus jarayoni 5 soat ishlab, `concurrency` guruhini band qilib turadi va keyingi uyg'onish navbatda kutadi.
 
-90% hollarda kechikish: 4 daq 05 son dan kam
-10 daqiqadan ortiq kechikkan: 0 marta (0%)
-
-Xulosa: GitHub Actions yetarli — kechikish sezilarli emas.
-```
-
-Xulosa uch xil bo'ladi:
-
-| Eng yomon kechikish | Tavsiya |
-|---|---|
-| 5 daqiqagacha | GitHub Actions yetarli, hech narsa o'zgartirmang |
-| 5–15 daqiqa | Narx posti uchun muammo emas; jonli bonus tez boshlanishi muhim bo'lsa cron'ni 15 daqiqaga tushiring |
-| 15 daqiqadan ko'p, tez-tez | VPS'ga o'tish vaqti keldi (7-bo'limga qarang) |
-
-Bundan tashqari, agar biror ishga tushish **20 daqiqadan ortiq** kechiksa, sizga darhol Telegram orqali ogohlantirish keladi (`TELEGRAM_ADMIN_CHAT_ID` o'rnatilgan bo'lsa). Chegarani `CRON_ALERT_MINUTES` bilan o'zgartirasiz.
+Ogohlantirish chegarasi endi **90 daqiqa** (`CRON_ALERT_MINUTES`) — kechikish post vaqtiga ta'sir qilmagani uchun har 20 daqiqalik kechikishda xabar kelishi shart emas.
 
 > Qo'lda ishga tushirilgan (`Run workflow`) holatlar hisobga olinmaydi — faqat cron bo'yicha ishga tushishlar yoziladi.
+
+### FPL narx o'zgarishi vaqti
+
+FPL narxlarni **Britaniya vaqti bilan 01:30** da o'zgartiradi:
+
+| Mavsum | Britaniya vaqti | UTC | Toshkent |
+|---|---|---|---|
+| Yozgi (BST) | 01:30 | 00:30 | 05:30 |
+| Qishgi (GMT) | 01:30 | 01:30 | 06:30 |
+
+Kuzatuv rejimi ikkalasini ham o'zi hal qiladi: o'zgarishni ko'rmaguncha `PRICE_WATCH_UNTIL` (07:30) gacha kutadi. Yozda o'zgarish 05:30 da topiladi va post 06:00 da chiqadi; qishda o'zgarish 06:30 da topiladi va post o'sha zahoti chiqadi.
 
 ---
 
@@ -265,6 +273,7 @@ bot/
   bonus.py          # BPS -> bonus ochko (teng holatlar qoidasi bilan)
   defcon.py         # Defensive Contribution ochkolari
   formatting.py     # post matnlarini yig'ish
+  waiter.py         # "erta uyg'on, ichida kut" — cron kechikishiga qarshi
   price_changes.py  # 1-vazifa: kunlik narx o'zgarishlari
   live_bonus.py     # 2-vazifa: jonli bonus ochkolar
 data/
@@ -292,6 +301,9 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `CHANNEL_TAG` | `@FPLUzbekistan` | Post oxiridagi taq |
 | `PRICE_HASHTAG` | `#PriceChanges` | Narx posti hashtagi |
 | `PRICE_SHOW_TEAM` | `false` | `true` — `Cherki (MCI) (£6.5M)` ko'rinishi |
+| `PRICE_POST_AT` | `06:00` | `--watch` rejimida post aynan shu vaqtda chiqadi |
+| `PRICE_WATCH_UNTIL` | `07:30` | Shu vaqtgacha o'zgarish bo'lmasa — post yo'q |
+| `PRICE_POLL` | `120` | `--watch` necha soniyada bir tekshiradi |
 | `LIVE_HASHTAG` | `#BonusPoints` | Jonli post hashtagi |
 | `SHOW_BPS` | `true` | Bonus yonida BPS ko'rsatilsinmi (`3 · 34 BPS`) |
 | `SHOW_DEFCON` | `true` | 🛡 DefCon qatori chiqsinmi |
@@ -299,6 +311,11 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `LIVE_INTERVAL` | `60` | Necha soniyada bir yangilanadi |
 | `LIVE_MAX_MINUTES` | `300` | Bitta jarayon maksimal ish vaqti |
 | `LIVE_FINISH_GRACE` | `10` | Oxirgi o'yin tugagach yana necha daqiqa kuzatadi (rasmiy bonus uchun) |
+| `LIVE_START_LEAD` | `5` (workflow'da `115`) | O'yingacha shundan kam qolsa jarayon chiqmaydi, kutadi |
+| `LIVE_PREKICK_POLL` | `60` | O'yingacha shuncha soniya qolganda uyqudan turadi |
+| `STATS_WAKE_LEAD` | `300` (workflow'da `200`) | `--wait` rejimida shundan kam qolsa kutib turadi |
+| `ERROR_ALERT_AFTER` | `3` | Necha marta ketma-ket xatodan keyin ogohlantirsin |
+| `CRON_ALERT_MINUTES` | `20` (workflow'da `90`) | Cron kechikishi haqida ogohlantirish chegarasi |
 | `LOCAL_TZ` | `Asia/Tashkent` | Xabardagi vaqtlar shu zonada ko'rsatiladi |
 | `MATCHDAY_TZ` | `Europe/London` | "O'yin kuni" shu zona bo'yicha aniqlanadi |
 

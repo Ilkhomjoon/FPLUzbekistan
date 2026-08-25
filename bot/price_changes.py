@@ -12,9 +12,10 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
-from datetime import datetime, timezone
+import time
+from datetime import datetime, timedelta, timezone
 
-from . import config, fpl_api, storage, telegram
+from . import config, fpl_api, storage, telegram, waiter
 from .formatting import price, price_change_post
 
 log = logging.getLogger("price_changes")
@@ -77,6 +78,12 @@ def run(force: bool = False) -> int:
         storage.save(config.PRICE_STATE_FILE, new_snap)
         return 0
 
+    publish(down, up, new_snap)
+    return 0
+
+
+def publish(down: list[dict], up: list[dict], new_snap: dict) -> None:
+    """Postlarni yuboradi va yangi snapshot'ni saqlaydi."""
     for row in down + up:
         log.info("  %s: %s -> %s", row["name"], price(row["old"]), price(row["new"]))
 
@@ -89,6 +96,49 @@ def run(force: bool = False) -> int:
             telegram.send_message(chunk)
 
     storage.save(config.PRICE_STATE_FILE, new_snap)
+
+
+def watch() -> int:
+    """Erta uyg'onib, narx o'zgarishini kutadi va PRICE_POST_AT da yuboradi.
+
+    GitHub cron'i bir soat kechikib uyg'otsa ham post o'z vaqtida chiqsin uchun:
+    cron ancha erta qo'yiladi, jarayon esa FPL narxlarni o'zgartirgunicha kutadi,
+    so'ng belgilangan daqiqagacha ushlab turadi.
+    """
+    config.require_telegram()
+
+    old_snap = storage.load(config.PRICE_STATE_FILE)
+    if not old_snap:
+        snap = build_snapshot(fpl_api.get_bootstrap())
+        storage.save(config.PRICE_STATE_FILE, snap)
+        log.info("Birinchi ishga tushirish: %d futbolchi saqlandi, post yo'q.", len(snap["players"]))
+        return 0
+
+    post_at = waiter.local_time_today(config.PRICE_POST_AT)
+    give_up = waiter.local_time_today(config.PRICE_WATCH_UNTIL)
+    if give_up <= post_at:
+        give_up = post_at + timedelta(minutes=90)
+    log.info("Kuzatuv boshlandi. Post vaqti: %s, kutish chegarasi: %s",
+             post_at.isoformat(), give_up.isoformat())
+
+    while True:
+        new_snap = build_snapshot(fpl_api.get_bootstrap())
+        down, up = diff(old_snap, new_snap)
+        if down or up:
+            log.info("O'zgarish topildi: %d tushgan, %d ko'tarilgan.", len(down), len(up))
+            break
+
+        now = waiter.now_utc()
+        if now >= give_up:
+            log.info("Kutish chegarasi keldi — o'zgarish topilmadi, post yo'q.")
+            storage.save(config.PRICE_STATE_FILE, new_snap)
+            return 0
+        wait = min(config.PRICE_POLL, max(1.0, (give_up - now).total_seconds()))
+        log.info("Hozircha o'zgarish yo'q — %.0f soniyadan keyin qayta tekshiramiz.", wait)
+        time.sleep(wait)
+
+    waiter.sleep_until(post_at, label="Post vaqtini kutyapmiz")
+    publish(down, up, new_snap)
     return 0
 
 
@@ -142,6 +192,8 @@ def main() -> int:
                     help="Haqiqiy ma'lumot bilan post namunasini ko'rsatadi (hech narsa yuborilmaydi)")
     ap.add_argument("--force", action="store_true", help="O'zgarish bo'lmasa ham postni ko'rsatadi (test uchun)")
     ap.add_argument("--reset", action="store_true", help="Snapshot'ni qaytadan oladi va postsiz chiqadi")
+    ap.add_argument("--watch", action="store_true",
+                    help="Narx o'zgarishini kutadi va PRICE_POST_AT da yuboradi (cron kechikishiga qarshi)")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
@@ -161,7 +213,7 @@ def main() -> int:
         return 0
 
     try:
-        return run(force=args.force)
+        return watch() if args.watch else run(force=args.force)
     except Exception as exc:
         log.exception("Narx skriptida xatolik")
         telegram.notify_admin(f"⚠️ <b>FPL bot xatoligi (narx)</b>\n<code>{telegram.esc(repr(exc))}</code>")

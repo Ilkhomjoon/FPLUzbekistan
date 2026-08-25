@@ -17,7 +17,7 @@ import time
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-from . import config, fpl_api, storage, telegram
+from . import config, fpl_api, storage, telegram, waiter
 from .formatting import live_bonus_post
 
 log = logging.getLogger("live_bonus")
@@ -113,6 +113,10 @@ def _send_or_edit(message_id, text_builder):
 def run(once: bool = False) -> int:
     config.require_telegram()
 
+    # Butun jarayonning vaqt byudjeti shu yerdan boshlanadi — o'yin boshlanishini
+    # kutib o'tkazilgan vaqt ham shunga kiradi, aks holda job timeout'idan oshib ketardi.
+    started = time.monotonic()
+
     bootstrap = fpl_api.get_bootstrap()
     bootstrap_at = time.monotonic()
     players = fpl_api.players_by_id(bootstrap)
@@ -136,6 +140,15 @@ def run(once: bool = False) -> int:
         log.info("Birinchi o'yin %s da boshlanadi — hali erta, chiqamiz.", first_ko.isoformat())
         return 0
 
+    # LIVE_START_LEAD oynasiga tushdik. GitHub cron kechikib uyg'otgan bo'lishi
+    # mumkin, lekin bu yerdan keyin vaqtni o'zimiz nazorat qilamiz: o'yin
+    # boshlanishini shu jarayonning ichida kutamiz. Bekorga so'rov yubormaslik
+    # uchun oxirgi daqiqagacha uxlab turamiz.
+    wake_at = first_ko - timedelta(seconds=config.LIVE_PREKICK_POLL)
+    if not once and now < wake_at:
+        waiter.sleep_until(wake_at, label="Birinchi o'yinni kutyapmiz",
+                           budget_end=started + config.LIVE_MAX_MINUTES * 60)
+
     if all(is_done(f) for f in today):
         state = storage.load(config.LIVE_STATE_FILE, {})
         if state.get("date") == day and state.get("final"):
@@ -146,7 +159,7 @@ def run(once: bool = False) -> int:
     message_id = state.get("message_id") if state.get("date") == day else None
     last_text = state.get("last_text") if state.get("date") == day else None
 
-    deadline = time.monotonic() + config.LIVE_MAX_MINUTES * 60
+    deadline = started + config.LIVE_MAX_MINUTES * 60
     all_done_since: float | None = None
     consecutive_errors = 0
     defcon_cache: dict[int, dict[int, int]] = {}

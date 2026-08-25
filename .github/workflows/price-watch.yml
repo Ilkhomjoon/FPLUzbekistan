@@ -2,10 +2,12 @@ name: Narx bashorati
 
 on:
   schedule:
-    # 23:00 Toshkent = 18:00 UTC. Ikkinchisi zaxira: GitHub cron kechiksa ham
-    # post chiqadi, holat fayli tufayli ikki marta yuborilmaydi.
-    - cron: "5 18 * * *"
-    - cron: "40 18 * * *"
+    # 22:09 Toshkent da uyg'onamiz, post esa --post-at bilan aniq 23:00 da
+    # chiqadi. Cron 50 daqiqa kechiksa ham post o'z vaqtida bo'ladi.
+    - cron: "9 17 * * *"
+    # Zaxira: birinchi run umuman ishga tushmasa. Holat fayli ikki marta
+    # yuborilishiga yo'l qo'ymaydi.
+    - cron: "44 18 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -27,7 +29,7 @@ permissions:
 jobs:
   watch:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
@@ -51,6 +53,9 @@ jobs:
         run: |
           ARGS=""
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          # cron bo'yicha ishga tushganda aniq 23:00 gacha kutamiz;
+          # qo'lda ishga tushirilganda darhol chiqaramiz
+          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="$ARGS --post-at 23:00"; fi
           python -m bot.price_watch $ARGS
 
       - name: Holatni saqlash (commit)

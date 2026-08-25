@@ -55,6 +55,11 @@ MATCHDAY_TZ = os.getenv("MATCHDAY_TZ", "Europe/London")  # "o'yin kuni" shu zona
 PRICE_STATE_FILE = DATA_DIR / "prices.json"
 PRICE_HASHTAG = os.getenv("PRICE_HASHTAG", "#PriceChanges")
 PRICE_SHOW_TEAM = _bool("PRICE_SHOW_TEAM", False)  # "Cherki (MCI) (£6.5M)" ko'rinishi
+# --watch rejimi: cron erta uyg'onadi, o'zgarishni kutadi va aynan PRICE_POST_AT
+# da yuboradi. Shu tufayli GitHub cron'i 1 soat kechiksa ham post o'z vaqtida chiqadi.
+PRICE_POST_AT = os.getenv("PRICE_POST_AT", "06:00")        # LOCAL_TZ bo'yicha
+PRICE_WATCH_UNTIL = os.getenv("PRICE_WATCH_UNTIL", "07:30")  # shu vaqtgacha kutamiz
+PRICE_POLL = _int("PRICE_POLL", 120)                       # necha soniyada bir tekshirilsin
 
 # --- Live bonus ---
 LIVE_STATE_FILE = DATA_DIR / "live_message.json"
@@ -74,6 +79,8 @@ DEFCON_TTL = _int("DEFCON_TTL", 120)                 # DefCon ma'lumoti necha so
 LIVE_INTERVAL = _int("LIVE_INTERVAL", 60)            # necha soniyada bir yangilanadi
 LIVE_MAX_MINUTES = _int("LIVE_MAX_MINUTES", 300)     # bitta jarayon maksimal necha daqiqa ishlaydi
 LIVE_START_LEAD = _int("LIVE_START_LEAD", 5)         # o'yin boshlanishiga necha daqiqa qolganda uyg'onsin
+LIVE_PREKICK_POLL = _int("LIVE_PREKICK_POLL", 60)    # o'yingacha shuncha soniya qolganda
+                                                     # tez-tez so'ray boshlaymiz (undan oldin uxlaymiz)
 LIVE_FINISH_GRACE = _int("LIVE_FINISH_GRACE", 10)    # oxirgi o'yin tugagach yana necha daqiqa kuzatsin
 COLLAPSE_FINISHED = _bool("COLLAPSE_FINISHED", True)  # tugagan o'yinlar yig'ilgan holda tursinmi
 PIN_LIVE_MESSAGE = _bool("PIN_LIVE_MESSAGE", True)   # jonli xabar kanal tepasiga qadalsinmi
@@ -94,6 +101,8 @@ STATS_STATE_FILE = DATA_DIR / "deadline_stats.json"
 STATS_HASHTAG = os.getenv("STATS_HASHTAG", "#GWStats")
 STATS_LEAD = _int("STATS_LEAD", 40)          # birinchi o'yingacha shuncha daqiqa qolganda boshlanadi
 STATS_MIN_LEAD = _int("STATS_MIN_LEAD", 3)   # bundan kam qolgan bo'lsa umuman chiqarmaymiz
+STATS_WAKE_LEAD = _int("STATS_WAKE_LEAD", 300)  # --wait rejimida: o'yingacha shuncha daqiqadan
+                                             # kam qolgan bo'lsa jarayon chiqmaydi, kutib turadi
 STATS_WORKERS = _int("STATS_WORKERS", 6)     # parallel so'rovlar soni (FPL API'ni bo'g'ib qo'ymaslik uchun)
 STATS_MAX_ENTRIES = _int("STATS_MAX_ENTRIES", 20000)  # xavfsizlik chegarasi
 STATS_TOP_N = _int("STATS_TOP_N", 5)         # nechta sardor ko'rsatilsin

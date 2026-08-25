@@ -2,10 +2,11 @@ name: Tur yakunlari sharhi
 
 on:
   schedule:
-    # 10:00 Toshkent = 05:00 UTC. Skript o'zi tekshiradi: tur yakunlanganmi va
-    # oxirgi o'yin kunidan keyingi kun kelganmi. Aks holda darhol chiqadi.
-    - cron: "5 5 * * *"
-    - cron: "40 5 * * *"
+    # 09:09 Toshkent da uyg'onamiz, post esa --post-at bilan aniq 10:00 da
+    # chiqadi. Cron 50 daqiqa kechiksa ham post o'z vaqtida bo'ladi.
+    - cron: "9 4 * * *"
+    # Zaxira: birinchi run umuman ishga tushmasa
+    - cron: "44 5 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -27,7 +28,7 @@ permissions:
 jobs:
   review:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
@@ -50,6 +51,9 @@ jobs:
         run: |
           ARGS=""
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          # cron bo'yicha ishga tushganda aniq 10:00 gacha kutamiz;
+          # qo'lda ishga tushirilganda darhol chiqaramiz
+          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="$ARGS --post-at 10:00"; fi
           python -m bot.gw_review $ARGS
 
       - name: Holatni saqlash (commit)

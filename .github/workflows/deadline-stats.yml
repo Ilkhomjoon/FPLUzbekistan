@@ -2,9 +2,12 @@ name: Deadline statistikasi
 
 on:
   schedule:
-    # Har 15 daqiqada uyg'onadi. Skript o'zi tekshiradi: deadline o'tganmi va
-    # birinchi o'yingacha STATS_LEAD daqiqadan kam qoldimi. Aks holda darhol chiqadi.
-    - cron: "5,20,35,50 9-22 * * *"
+    # STRATEGIYA: kuniga 5 marta uyg'onamiz (ilgari 56 marta edi).
+    # --wait rejimida jarayon chiqib ketmaydi: birinchi o'yingacha
+    # STATS_WAKE_LEAD (200) daqiqadan kam qolgan bo'lsa, u T-40 daqiqagacha
+    # uxlab kutadi va postni aynan o'sha daqiqada chiqaradi.
+    # Uyg'onishlar orasi 180 daqiqa < 200 — ya'ni hech bir tur o'tkazib yuborilmaydi.
+    - cron: "23 7,10,13,16,19 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -26,7 +29,8 @@ permissions:
 jobs:
   stats:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # kutish (200 daqiqagacha) + liga skaneri
+    timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
 
@@ -45,13 +49,15 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run }}
           # Ligalar: "id:yorliq" vergul bilan ajratilgan
           STATS_LEAGUES: "137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan"
-          # Birinchi o'yingacha shuncha daqiqa qolganda ishga tushadi
+          # Birinchi o'yingacha shuncha daqiqa qolganda post chiqadi
           STATS_LEAD: "40"
+          # shuncha daqiqadan kam qolgan bo'lsa jarayon kutib turadi
+          STATS_WAKE_LEAD: "200"
           STATS_WORKERS: "6"
           # Har bir ligada nechta sardor ko'rsatilsin
           STATS_TOP_N: "5"
         run: |
-          ARGS=""
+          ARGS="--wait"
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
           python -m bot.deadline_stats $ARGS
 

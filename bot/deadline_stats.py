@@ -21,7 +21,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 
-from . import config, fpl_api, storage, telegram
+from . import config, fpl_api, storage, telegram, waiter
 from .formatting import deadline_stats_post
 
 log = logging.getLogger("deadline_stats")
@@ -111,7 +111,7 @@ def first_kickoff(fixtures: list[dict]) -> datetime | None:
     return min(datetime.fromisoformat(t.replace("Z", "+00:00")) for t in times)
 
 
-def run(force: bool = False) -> int:
+def run(force: bool = False, wait: bool = False) -> int:
     config.require_telegram()
 
     bootstrap = fpl_api.get_bootstrap()
@@ -128,10 +128,6 @@ def run(force: bool = False) -> int:
 
     now = datetime.now(timezone.utc)
     deadline = datetime.fromisoformat(event["deadline_time"].replace("Z", "+00:00"))
-    if now < deadline:
-        log.info("Deadline hali o'tmagan (%s) — chiqamiz.", deadline.isoformat())
-        return 0
-
     fixtures = fpl_api.get_fixtures(event=gw)
     kickoff = first_kickoff(fixtures)
     if not kickoff:
@@ -139,6 +135,23 @@ def run(force: bool = False) -> int:
         return 0
 
     minutes_left = (kickoff - now).total_seconds() / 60
+
+    # --wait: cron kechikkan bo'lsa ham post o'z vaqtida chiqsin uchun jarayon
+    # chiqib ketmaydi, birinchi o'yingacha STATS_LEAD daqiqa qolgunicha kutadi.
+    if wait and not force and config.STATS_LEAD < minutes_left <= config.STATS_WAKE_LEAD:
+        target = kickoff - timedelta(minutes=config.STATS_LEAD)
+        log.info("Birinchi o'yingacha %.0f daqiqa — %s gacha kutamiz.",
+                 minutes_left, target.isoformat())
+        waiter.sleep_until(target, label="Deadline statistikasi")
+        now = datetime.now(timezone.utc)
+        minutes_left = (kickoff - now).total_seconds() / 60
+        bootstrap = fpl_api.get_bootstrap()
+        event = next((e for e in bootstrap["events"] if e.get("id") == gw), event)
+
+    if now < deadline:
+        log.info("Deadline hali o'tmagan (%s) — chiqamiz.", deadline.isoformat())
+        return 0
+
     if not force:
         if minutes_left > config.STATS_LEAD:
             log.info("Birinchi o'yingacha %.0f daqiqa — hali erta (chegara %d).",
@@ -192,6 +205,8 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true", help="Telegramga yubormasdan terminalga chiqaradi")
     ap.add_argument("--force", action="store_true",
                     help="Vaqt oynasini va 'allaqachon chiqarilgan' tekshiruvini e'tiborsiz qoldiradi")
+    ap.add_argument("--wait", action="store_true",
+                    help="Erta uyg'onib, kerakli daqiqagacha kutib turadi (cron kechikishiga qarshi)")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
@@ -199,7 +214,7 @@ def main() -> int:
         config.DRY_RUN = True
 
     try:
-        return run(force=args.force)
+        return run(force=args.force, wait=args.wait)
     except Exception as exc:
         log.exception("Statistika skriptida xatolik")
         telegram.notify_admin(f"⚠️ <b>FPL bot (deadline statistikasi)</b>\n<code>{telegram.esc(repr(exc))}</code>")

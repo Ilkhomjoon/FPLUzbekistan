@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from bot import config  # noqa: E402
 
 LOG_FILE = config.DATA_DIR / "cron_log.csv"
-HEADER = ["actual_utc", "workflow", "schedule", "expected_utc", "delay_seconds"]
+HEADER = ["actual_utc", "workflow", "schedule", "expected_utc", "delay_seconds", "queued_seconds"]
 ALERT_MINUTES = int(os.getenv("CRON_ALERT_MINUTES", "20"))
 
 
@@ -71,6 +71,51 @@ def expected_time(schedule: str, now: datetime, lookback_hours: int = 6) -> date
 
 # ---------------- yozish ----------------
 
+def _created_at() -> datetime | None:
+    """GitHub run yaratilgan vaqt (`github.run_started_at`).
+
+    Bu — cron'ning haqiqiy kechikishi. Undan keyingi vaqt (job navbatda turishi,
+    concurrency guruhi band bo'lishi, runner ko'tarilishi) GitHub cron'ining
+    aybi emas, shuning uchun alohida `queued_seconds` ustuniga yoziladi.
+    """
+    raw = os.getenv("CRON_RUN_CREATED_AT", "").strip()
+    if not raw:
+        return None
+    try:
+        return (datetime.fromisoformat(raw.replace("Z", "+00:00"))
+                .astimezone(timezone.utc).replace(microsecond=0))
+    except ValueError:
+        return None
+
+
+def _ensure_header() -> None:
+    """Eski (5 ustunli) log faylga yangi `queued_seconds` ustunini qo'shadi.
+
+    Bo'lmasa DictReader sarlavhani 5 ustun deb o'qib, 6-qiymatni yo'qotardi.
+    """
+    if not LOG_FILE.exists():
+        with open(LOG_FILE, "w", newline="", encoding="utf-8") as f:
+            csv.writer(f).writerow(HEADER)
+        return
+
+    with open(LOG_FILE, newline="", encoding="utf-8") as f:
+        rows = list(csv.reader(f))
+    if not rows:
+        with open(LOG_FILE, "w", newline="", encoding="utf-8") as f:
+            csv.writer(f).writerow(HEADER)
+        return
+    if rows[0] == HEADER:
+        return
+
+    width = len(HEADER)
+    with open(LOG_FILE, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(HEADER)
+        for row in rows[1:]:
+            w.writerow((row + [""] * width)[:width])
+    print("cron_log.csv sarlavhasi yangilandi (queued_seconds ustuni qo'shildi).")
+
+
 def record() -> int:
     schedule = os.getenv("CRON_SCHEDULE", "").strip()
     workflow = os.getenv("CRON_WORKFLOW", os.getenv("GITHUB_WORKFLOW", "noma'lum")).strip()
@@ -80,24 +125,25 @@ def record() -> int:
         print("Cron bo'yicha ishga tushmadi (qo'lda ishga tushirilgan) — yozilmadi.")
         return 0
 
-    expected = expected_time(schedule, now)
+    started = _created_at() or now
+    expected = expected_time(schedule, started)
     if expected is None:
         print(f"'{schedule}' bo'yicha kutilgan vaqt topilmadi — yozilmadi.")
         return 0
 
-    delay = int((now - expected).total_seconds())
+    delay = int((started - expected).total_seconds())
+    queued = max(0, int((now - started).total_seconds()))
     LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
-    new_file = not LOG_FILE.exists()
+    _ensure_header()
     with open(LOG_FILE, "a", newline="", encoding="utf-8") as f:
-        w = csv.writer(f)
-        if new_file:
-            w.writerow(HEADER)
-        w.writerow([now.isoformat(), workflow, schedule, expected.isoformat(), delay])
+        csv.writer(f).writerow(
+            [now.isoformat(), workflow, schedule, expected.isoformat(), delay, queued])
 
     local = ZoneInfo(config.LOCAL_TZ)
     print(
         f"[{workflow}] kutilgan: {expected.astimezone(local):%H:%M:%S} | "
-        f"haqiqiy: {now.astimezone(local):%H:%M:%S} | kechikish: {delay // 60} daq {delay % 60} son"
+        f"haqiqiy: {started.astimezone(local):%H:%M:%S} | "
+        f"kechikish: {delay // 60} daq {delay % 60} son | navbat: {queued // 60} daq"
     )
 
     if delay > ALERT_MINUTES * 60:
@@ -153,15 +199,20 @@ def report() -> int:
     print(f"\n90% hollarda kechikish: {_fmt(p90)} dan kam")
     print(f"10 daqiqadan ortiq kechikkan: {over_10} marta ({over_10 * 100 // len(all_delays)}%)")
 
+    queued = [int(r["queued_seconds"]) for r in rows if r.get("queued_seconds")]
+    if queued:
+        queued.sort()
+        print(f"Job navbatda turgan vaqt (cron aybi emas): median {_fmt(statistics.median(queued))}, "
+              f"eng yomoni {_fmt(queued[-1])}")
+
     print("\nXulosa:", end=" ")
     if worst_overall <= 300:
         print("GitHub Actions yetarli — kechikish sezilarli emas.")
-    elif worst_overall <= 900 and over_10 * 5 < len(all_delays):
-        print("GitHub Actions ishlayapti, lekin ba'zan kechikadi.\n"
-              "        Narx posti uchun muammo emas; jonli bonus tez boshlanishi muhim bo'lsa,\n"
-              "        live-bonus cron'ini har 15 daqiqaga o'zgartiring.")
     else:
-        print("Kechikish tez-tez va katta — VPS'ga o'tishni ko'rib chiqing (README, 7-bo'lim).")
+        print("Kechikish bor, lekin bu postlarning vaqtiga ta'sir qilmaydi:\n"
+              "        cron'lar ataylab erta qo'yilgan, kerakli daqiqani jarayonning\n"
+              "        o'zi kutadi (README, 3-bo'lim). Faqat kechikish muntazam\n"
+              "        2 soatdan oshsa VPS haqida o'ylash kerak.")
     print()
     return 0
 

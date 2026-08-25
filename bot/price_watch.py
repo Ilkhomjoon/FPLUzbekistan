@@ -20,7 +20,7 @@ import sys
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
-from . import config, fpl_api, storage, telegram
+from . import config, fpl_api, storage, telegram, waiter
 from .formatting import price_watch_post
 
 log = logging.getLogger("price_watch")
@@ -115,6 +115,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Ertangi narx o'zgarishi bashorati")
     ap.add_argument("--dry-run", action="store_true", help="Telegramga yubormasdan terminalga chiqaradi")
     ap.add_argument("--force", action="store_true", help="Bugun chiqarilgan bo'lsa ham qayta chiqaradi")
+    ap.add_argument("--post-at", default=None, metavar="HH:MM",
+                    help="Shu vaqtgacha kutib turadi (cron kechiksa ham post o'z vaqtida chiqadi)")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
@@ -122,6 +124,8 @@ def main() -> int:
         config.DRY_RUN = True
 
     try:
+        if not (args.force or args.dry_run):
+            waiter.hold_until(args.post_at, label="Narx bashorati")
         return run(force=args.force)
     except Exception as exc:
         log.exception("Narx bashorati skriptida xatolik")

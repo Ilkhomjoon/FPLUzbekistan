@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-from . import config, fpl_api, storage, telegram
+from . import config, fpl_api, storage, telegram, waiter
 from .formatting import gw_review_post
 
 log = logging.getLogger("gw_review")
@@ -218,6 +218,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Tur yakunlari sharhi")
     ap.add_argument("--dry-run", action="store_true", help="Telegramga yubormasdan terminalga chiqaradi")
     ap.add_argument("--force", action="store_true", help="Vaqt tekshiruvini e'tiborsiz qoldiradi")
+    ap.add_argument("--post-at", default=None, metavar="HH:MM",
+                    help="Shu vaqtgacha kutib turadi (cron kechiksa ham post o'z vaqtida chiqadi)")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
@@ -225,6 +227,8 @@ def main() -> int:
         config.DRY_RUN = True
 
     try:
+        if not (args.force or args.dry_run):
+            waiter.hold_until(args.post_at, label="Tur sharhi")
         return run(force=args.force)
     except Exception as exc:
         log.exception("Tur sharhi skriptida xatolik")
