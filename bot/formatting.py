@@ -378,6 +378,72 @@ def _league_block(review, gw: int) -> str:
     return "\n".join(lines)
 
 
+def differentials_post(gw: int, next_gw: int, picks, teams: dict) -> str:
+    """`bot.differentials.Picks` -> tur oralig'idagi differentiallar posti."""
+    blocks = [f"💎 <b>GW{next_gw} — differentiallar</b>\n"
+              f"<i>GW{gw} natijalari va egalik foizi asosida</i>"]
+
+    if picks.low_owned:
+        lines = [f"<b>🔥 Kam olingan, ko'p bergan</b>",
+                 f"<i>Egalik {config.DIFF_MAX_OWN:.0f}% dan past, "
+                 f"GW{gw} da {config.DIFF_MIN_POINTS}+ ochko</i>", ""]
+        for d in picks.low_owned:
+            lines.append(f"{d.points} | {d.label(teams)} {price(d.cost)} — {d.owned:.1f}%")
+        blocks.append("\n".join(lines))
+
+    if picks.top100:
+        lines = ["<b>👑 Top-100 ning yashirin qurollari</b>",
+                 "<i>Dunyo bo'yicha eng kuchli menejerlar nimani ushlab turibdi</i>", ""]
+        for d in picks.top100:
+            lines.append(f"{d.label(teams)} — top-100: <b>{d.elite:.0f}%</b> · "
+                         f"umumiy: {d.owned:.1f}% (+{d.elite - d.owned:.0f})")
+        blocks.append("\n".join(lines))
+
+    if picks.rising:
+        lines = ["<b>📈 Kech qolmang</b>",
+                 "<i>Hali differential, lekin tez template'ga aylanyapti</i>", ""]
+        for d in picks.rising:
+            lines.append(f"{d.label(teams)} — bu hafta <b>+{num(d.transfers_in)}</b> transfer "
+                         f"({d.owned:.1f}%)")
+        blocks.append("\n".join(lines))
+
+    if picks.calendar:
+        lines = [f"<b>📅 Keyingi {config.DIFF_FIXTURES} tur</b>", ""]
+        for d in picks.calendar:
+            lines.append(f"{d.label(teams)}: {d.fixtures_text}")
+        blocks.append("\n".join(lines))
+
+    if picks.local:
+        lines = [f"<b>🇺🇿 {picks.local_label}</b>",
+                 f"<i>{num(picks.local_scanned)} ta jamoa tekshirildi</i>", ""]
+        for d in picks.local:
+            lines.append(f"{d.label(teams)} — {num(d.local_count)} ta jamoada "
+                         f"({d.local:.1f}%) · dunyoda {d.owned:.1f}%")
+        blocks.append("\n".join(lines))
+
+    blocks.append(f"{config.DIFF_HASHTAG}\n\n{config.CHANNEL_TAG}")
+    return "\n\n".join(blocks)
+
+
+def differentials_poll(next_gw: int, picks, teams: dict) -> tuple[str, list[str]]:
+    """So'rovnoma: savol va variantlar (oddiy matn, HTML emas)."""
+    question = f"GW{next_gw} ga kimni olasiz?"
+    options: list[str] = []
+    seen: set[int] = set()
+    for d in list(picks.low_owned) + list(picks.top100):
+        if d.element_id in seen:
+            continue
+        seen.add(d.element_id)
+        short = teams.get(d.team, {}).get("short_name", "")
+        name = f"{d.name} ({short})" if short else d.name
+        options.append(f"{name} {price(d.cost)}")
+        if len(options) >= config.DIFF_POLL_OPTIONS:
+            break
+    if options:
+        options.append("Hech kimni — jamoam tayyor")
+    return question, options
+
+
 def gw_review_post(gw: int, event: dict, players: dict, leader, reviews) -> str:
     blocks = [f"📈 <b>GW{gw} yakunlari</b>"]
 

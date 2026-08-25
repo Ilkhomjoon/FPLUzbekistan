@@ -37,6 +37,13 @@ def _int(name: str, default: int) -> int:
         return default
 
 
+def _float(name: str, default: float) -> float:
+    try:
+        return float(os.getenv(name, "").strip() or default)
+    except ValueError:
+        return default
+
+
 DATA_DIR = Path(os.getenv("DATA_DIR", ROOT / "data"))
 
 # --- Telegram ---
@@ -112,6 +119,25 @@ STATS_TOP_N = _int("STATS_TOP_N", 5)         # nechta sardor ko'rsatilsin
 GW_REVIEW_STATE_FILE = DATA_DIR / "gw_review.json"
 GW_REVIEW_HASHTAG = os.getenv("GW_REVIEW_HASHTAG", "#GWReview")
 GW_REVIEW_TOP_N = _int("GW_REVIEW_TOP_N", 5)   # har ligada nechta menejer ko'rsatilsin
+
+
+# --- Differentiallar (tur oralig'idagi post) ---
+DIFF_STATE_FILE = DATA_DIR / "differentials.json"
+DIFF_HASHTAG = os.getenv("DIFF_HASHTAG", "#Differentials")
+DIFF_POST_AT = os.getenv("DIFF_POST_AT", "20:00")     # LOCAL_TZ bo'yicha
+DIFF_LATEST = os.getenv("DIFF_LATEST", "23:00")       # bundan kech bo'lsa ertaga chiqadi
+DIFF_MAX_OWN = _float("DIFF_MAX_OWN", 10.0)           # "differential" chegarasi, %
+DIFF_MIN_POINTS = _int("DIFF_MIN_POINTS", 7)          # o'tgan turda shundan kam olgani chiqmaydi
+DIFF_TOP_N = _int("DIFF_TOP_N", 5)                    # har bo'limda nechta qator
+DIFF_TOP100_SIZE = _int("DIFF_TOP100_SIZE", 100)      # dunyo bo'yicha nechta menejer skanerlansin
+DIFF_TOP100_MIN = _float("DIFF_TOP100_MIN", 12.0)     # top-100 da shundan ko'p bo'lsa qiziq
+DIFF_RISING_N = _int("DIFF_RISING_N", 3)              # "kech qolmang" bo'limidagi qatorlar
+DIFF_FIXTURES = _int("DIFF_FIXTURES", 3)              # kalendar necha turni ko'rsatsin
+DIFF_CALENDAR_N = _int("DIFF_CALENDAR_N", 3)          # nechta futbolchi uchun kalendar
+DIFF_LOCAL_LEAGUE = _bool("DIFF_LOCAL_LEAGUE", True)  # "bizning ligada" bo'limi chiqsinmi
+DIFF_POLL = _bool("DIFF_POLL", True)                  # so'rovnoma yuborilsinmi
+DIFF_POLL_OPTIONS = _int("DIFF_POLL_OPTIONS", 3)      # so'rovnomadagi futbolchilar soni
+DIFF_WORKERS = _int("DIFF_WORKERS", 6)                # parallel so'rovlar
 
 
 def _leagues() -> list[tuple[int, str]]:

@@ -1,0 +1,68 @@
+name: Differentiallar
+
+on:
+  schedule:
+    # Tur yakunlangan kuni kechqurun 20:00 (Toshkent) chiqadi.
+    # 19:09 Toshkent = 14:09 UTC — uyg'onib, 20:00 gacha jarayonning ichida kutadi.
+    - cron: "9 14 * * *"
+    # Kechki tekshiruvlar (21:09 va 22:09 Toshkent): FPL turni kech yopgan
+    # bo'lsa, bular kutmasdan darhol chiqaradi. DIFF_LATEST (23:00) dan keyin
+    # esa post ertangi kunga suriladi. Holat fayli takror postga yo'l qo'ymaydi.
+    - cron: "9 16,17 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Telegramga yubormasdan sinash"
+        type: boolean
+        default: false
+      force:
+        description: "Vaqt tekshiruvini e'tiborsiz qoldirib, hoziroq chiqarish"
+        type: boolean
+        default: false
+
+concurrency:
+  group: fpl-differentials
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  differentials:
+    runs-on: ubuntu-latest
+    # 20:00 gacha kutish + top-100 va liga skaneri
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Differentiallarni tayyorlash va yuborish
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          # Birinchi liga "bizniki" — "Bizning ligada" bo'limi shundan olinadi
+          STATS_LEAGUES: "137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan"
+          DIFF_POST_AT: "20:00"
+          DIFF_LATEST: "23:00"
+          DIFF_MAX_OWN: "10"      # "differential" chegarasi, %
+          DIFF_MIN_POINTS: "7"    # o'tgan turdagi eng kam ochko
+          DIFF_TOP_N: "5"
+          DIFF_TOP100_SIZE: "100"
+          DIFF_TOP100_MIN: "12"
+          DIFF_POLL: "true"
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          python -m bot.differentials $ARGS
+
+      - name: Holatni saqlash (commit)
+        if: always()
+        run: bash scripts/commit_state.sh "update differentials state"

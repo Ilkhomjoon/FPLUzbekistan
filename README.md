@@ -202,6 +202,7 @@ Har bir workflow shu tamoyilda ishlaydi:
 | Jonli bonus | o'yindan ≤115 daqiqa oldin | birinchi o'yin boshlanishini uxlab kutadi | **o'yin boshlanishida** |
 | Deadline statistikasi | o'yindan ≤200 daqiqa oldin | `T−40 daqiqa` gacha kutadi, so'ng ligalarni skanerlaydi | **T−40 daqiqa** |
 | Narx bashorati | 22:09 | `--post-at 23:00` | **23:00** |
+| Differentiallar | 19:09 | `DIFF_POST_AT` gacha ushlab turadi | **20:00** |
 | Tur sharhi | 09:09 | `--post-at 10:00` | **10:00** |
 
 **Tur sharhi — alohida holat.** U FPL turni rasman yopishini (`finished: true`) kutadi, bu esa dushanba kechqurun o'yin bo'lgan turlarda seshanba kunduzigacha cho'ziladi. Shuning uchun ertalabki 10:00 dan tashqari kunduzi ham tekshiradi (13:19, 16:19, 19:19, 22:19) va FPL yopgan zahoti chiqaradi — aks holda post butun bir kunga surilib ketardi.
@@ -214,8 +215,8 @@ Har birida **zaxira cron** ham bor — GitHub ba'zan rejalashtirilgan run'ni umu
 |---|---|---|
 | Jonli bonus | 56 ta/kun | 13 ta/kun |
 | Deadline statistikasi | 56 ta/kun | 5 ta/kun |
-| Qolganlari | 6 ta/kun | 10 ta/kun |
-| **Jami** | **~118 ta/kun** | **~28 ta/kun** |
+| Qolganlari | 6 ta/kun | 13 ta/kun |
+| **Jami** | **~118 ta/kun** | **~31 ta/kun** |
 
 Bu o'z-o'zidan kechikishni kamaytiradi: GitHub bitta repodan kelayotgan so'rovlarni ham hisobga oladi. Ochiq (public) repoda daqiqalar cheksiz va tekin, shuning uchun "uxlab turgan" ish hech narsaga tushmaydi.
 
@@ -278,10 +279,12 @@ bot/
   waiter.py         # "erta uyg'on, ichida kut" — cron kechikishiga qarshi
   price_changes.py  # 1-vazifa: kunlik narx o'zgarishlari
   live_bonus.py     # 2-vazifa: jonli bonus ochkolar
+  differentials.py  # tur oralig'idagi differentiallar posti + so'rovnoma
 data/
   prices.json       # kechagi narxlar snapshot'i (Actions o'zi commit qiladi)
   live_message.json # bugungi jonli xabar id'si
   cron_log.csv      # cron kechikish tarixi
+  differentials.json # qaysi tur uchun differentiallar chiqarilgani
 .github/workflows/  # ikkita cron
 scripts/
   commit_state.sh   # holat fayllarini repoga commit qiladi
@@ -318,6 +321,14 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `STATS_WAKE_LEAD` | `300` (workflow'da `200`) | `--wait` rejimida shundan kam qolsa kutib turadi |
 | `ERROR_ALERT_AFTER` | `3` | Necha marta ketma-ket xatodan keyin ogohlantirsin |
 | `CRON_ALERT_MINUTES` | `20` (workflow'da `90`) | Cron kechikishi haqida ogohlantirish chegarasi |
+| `DIFF_POST_AT` | `20:00` | Differentiallar posti qachon chiqadi |
+| `DIFF_LATEST` | `23:00` | Bundan kech bo'lsa post ertangi kunga suriladi |
+| `DIFF_MAX_OWN` | `10` | "Differential" hisoblanish chegarasi, egalik % |
+| `DIFF_MIN_POINTS` | `7` | O'tgan turda shundan kam olgani ro'yxatga tushmaydi |
+| `DIFF_TOP100_SIZE` | `100` | Dunyo bo'yicha nechta menejer tarkibi skanerlanadi |
+| `DIFF_TOP100_MIN` | `12` | Top-100 da shundan ko'p bo'lsa qiziq deb hisoblanadi |
+| `DIFF_LOCAL_LEAGUE` | `true` | "Bizning ligada" bo'limi chiqsinmi |
+| `DIFF_POLL` | `true` | Postdan keyin so'rovnoma yuborilsinmi |
 | `LOCAL_TZ` | `Asia/Tashkent` | Xabardagi vaqtlar shu zonada ko'rsatiladi |
 | `MATCHDAY_TZ` | `Europe/London` | "O'yin kuni" shu zona bo'yicha aniqlanadi |
 
