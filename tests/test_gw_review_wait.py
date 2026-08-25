@@ -130,7 +130,8 @@ class WatchTest(unittest.TestCase):
             "events": [{"id": 1, "finished": False, "data_checked": False}]}
         self.assertEqual(gw_review.watch(), 0)
         self.assertEqual(len(self.ran), 1)
-        self.assertEqual(self.slept, [])   # darhol chiqargan, kutmagan
+        # to'liq POLL kutmagan — faqat tasdiqlash tanaffusi
+        self.assertEqual(self.slept, [config.GW_REVIEW_CONFIRM_WAIT])
 
     def test_gives_up_after_the_deadline(self):
         gw_review.fpl_api.get_bootstrap = lambda: {
@@ -159,6 +160,72 @@ class WatchTest(unittest.TestCase):
         finally:
             gw_review.waiter.local_time_today = original
         self.assertEqual(self.ran, [])
+
+
+class ConfirmationTest(unittest.TestCase):
+    """FPL CDN eski nusxa qaytarishi mumkin — bitta "tayyor" javob yetarli emas."""
+
+    def setUp(self):
+        self._orig = {
+            "bootstrap": gw_review.fpl_api.get_bootstrap,
+            "status": gw_review.fpl_api.get_event_status,
+            "fixtures": gw_review.fpl_api.get_fixtures,
+            "run": gw_review.run,
+            "load": gw_review.storage.load,
+            "sleep": gw_review.time.sleep,
+            "require": config.require_telegram,
+        }
+        config.require_telegram = lambda: None
+        gw_review.fpl_api.get_fixtures = lambda **kw: []
+        gw_review.fpl_api.get_bootstrap = lambda: {
+            "events": [{"id": 1, "is_current": True, "finished": False, "data_checked": False}]}
+        gw_review.storage.load = lambda *a, **kw: {}
+        self.slept = []
+        gw_review.time.sleep = lambda s: self.slept.append(s)
+        self.ran = []
+        gw_review.run = lambda *a, **kw: self.ran.append(True) or 0
+
+    def tearDown(self):
+        for key, value in self._orig.items():
+            if key == "run":
+                gw_review.run = value
+            elif key == "load":
+                gw_review.storage.load = value
+            elif key == "sleep":
+                gw_review.time.sleep = value
+            elif key == "require":
+                config.require_telegram = value
+            else:
+                setattr(gw_review.fpl_api, {"bootstrap": "get_bootstrap",
+                                            "status": "get_event_status",
+                                            "fixtures": "get_fixtures"}[key], value)
+
+    def _sequence(self, answers):
+        """Har chaqiruvda navbatdagi javobni qaytaradi."""
+        box = list(answers)
+        def nxt():
+            return box.pop(0) if box else box_last[0]
+        box_last = [answers[-1]]
+        gw_review.fpl_api.get_event_status = nxt
+
+    def test_two_confirmations_are_required(self):
+        ready = _status(points="r", bonus=True)
+        self._sequence([ready, ready])
+        self.assertEqual(gw_review.watch(), 0)
+        self.assertEqual(len(self.ran), 1)
+        # birinchi tasdiqdan keyin qisqa tanaffus bo'lishi kerak
+        self.assertEqual(self.slept, [config.GW_REVIEW_CONFIRM_WAIT])
+
+    def test_a_stale_answer_resets_the_count(self):
+        ready = _status(points="r", bonus=True)
+        stale = _status(points="p", bonus=False)
+        self._sequence([ready, stale, ready, ready])
+        self.assertEqual(gw_review.watch(), 0)
+        self.assertEqual(len(self.ran), 1)
+        # tanaffus, to'liq kutish, tanaffus
+        self.assertEqual(self.slept,
+                         [config.GW_REVIEW_CONFIRM_WAIT, config.GW_REVIEW_POLL,
+                          config.GW_REVIEW_CONFIRM_WAIT])
 
 
 if __name__ == "__main__":

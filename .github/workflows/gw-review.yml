@@ -55,8 +55,10 @@ jobs:
           STATS_LEAGUES: "137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan"
           GW_REVIEW_TOP_N: "5"
           # FPL tasdig'ini shu vaqtgacha kutamiz (Toshkent)
-          GW_REVIEW_UNTIL: "16:00"
+          GW_REVIEW_UNTIL: "18:00"
           GW_REVIEW_POLL: "180"
+          # CDN eski nusxa qaytarishi mumkin — ikki marta ketma-ket tasdiq talab qilamiz
+          GW_REVIEW_CONFIRM: "2"
         run: |
           ARGS=""
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi

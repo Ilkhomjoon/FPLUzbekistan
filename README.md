@@ -217,6 +217,10 @@ Har bir workflow shu tamoyilda ishlaydi:
 
 Uchalasi ham tayyor bo'lgandagina post chiqadi. `leagues: "Updating"` ni ham kutamiz, chunki sharh liga jadvallarini o'qiydi — aks holda o'rinlar yarim hisoblangan holatda chiqib qolardi.
 
+`data_checked` jarayonning eng oxirgi qadami va bir necha soat kechikadi — unga tayanmaymiz.
+
+**CDN haqida.** FPL API'ni ketma-ket so'raganda turli serverlar turli yoshdagi nusxani qaytaradi — bitta so'rov "tayyor", keyingisi "tayyor emas" deyishi mumkin. Shuning uchun post chiqishidan oldin `GW_REVIEW_CONFIRM` (2) marta ketma-ket tasdiq talab qilinadi, orasida 30 soniya tanaffus bilan.
+
 Har birida **zaxira cron** ham bor — GitHub ba'zan rejalashtirilgan run'ni umuman tashlab ketadi. Holat fayllari tufayli ikki marta post chiqmaydi.
 
 ### Yon foyda: uyg'onishlar soni 5 barobar kamaydi
@@ -331,8 +335,9 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `STATS_WAKE_LEAD` | `300` (workflow'da `200`) | `--wait` rejimida shundan kam qolsa kutib turadi |
 | `ERROR_ALERT_AFTER` | `3` | Necha marta ketma-ket xatodan keyin ogohlantirsin |
 | `CRON_ALERT_MINUTES` | `20` (workflow'da `90`) | Cron kechikishi haqida ogohlantirish chegarasi |
-| `GW_REVIEW_UNTIL` | `16:00` | FPL tasdig'ini shu vaqtgacha kutadi |
+| `GW_REVIEW_UNTIL` | `18:00` | FPL tasdig'ini shu vaqtgacha kutadi |
 | `GW_REVIEW_POLL` | `180` | Tasdiqlanganini necha soniyada bir tekshiradi |
+| `GW_REVIEW_CONFIRM` | `2` | Necha marta ketma-ket tasdiq talab qilinadi (CDN uchun) |
 | `DIFF_POST_AT` | `20:00` | Differentiallar posti qachon chiqadi |
 | `DIFF_LATEST` | `23:00` | Bundan kech bo'lsa post ertangi kunga suriladi |
 | `DIFF_MAX_OWN` | `10` | "Differential" hisoblanish chegarasi, egalik % |

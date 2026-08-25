@@ -270,6 +270,11 @@ def watch() -> int:
     give_up = waiter.local_time_today(config.GW_REVIEW_UNTIL)
     log.info("Kuzatuv boshlandi — FPL tasdig'ini kutamiz (chegara: %s).", give_up.isoformat())
 
+    # FPL API CDN orqali beriladi va turli serverlar turli yoshdagi nusxani
+    # qaytaradi — bitta eski javob "tayyor" deb ko'rsatib qo'yishi mumkin.
+    # Shuning uchun ketma-ket GW_REVIEW_CONFIRM marta tasdiq talab qilamiz.
+    confirmations = 0
+
     while True:
         bootstrap = fpl_api.get_bootstrap()
         try:
@@ -279,8 +284,19 @@ def watch() -> int:
             status = {}
 
         if ready_event(bootstrap, status):
-            log.info("FPL turni yakunladi — sharh chiqarilmoqda.")
-            return run()
+            confirmations += 1
+            if confirmations >= config.GW_REVIEW_CONFIRM:
+                log.info("FPL turni yakunladi (%d marta tasdiqlandi) — sharh chiqarilmoqda.",
+                         confirmations)
+                return run()
+            log.info("Tayyorga o'xshaydi (%d/%d) — %d soniyadan keyin qayta tekshiramiz.",
+                     confirmations, config.GW_REVIEW_CONFIRM, config.GW_REVIEW_CONFIRM_WAIT)
+            time.sleep(config.GW_REVIEW_CONFIRM_WAIT)
+            continue
+
+        if confirmations:
+            log.info("Oldingi javob eski nusxa bo'lgan ko'rinadi — hisob nolga qaytarildi.")
+            confirmations = 0
 
         now = waiter.now_utc()
         if now >= give_up:

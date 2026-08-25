@@ -122,8 +122,12 @@ GW_REVIEW_TOP_N = _int("GW_REVIEW_TOP_N", 5)   # har ligada nechta menejer ko'rs
 # 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni Britaniya
 # vaqti bilan 09:00 da yakuniy qiladi. Toshkentda bu yozda 13:00, qishda 14:00 —
 # shuning uchun aniq soat emas, kuzatuv ishlatiladi.
-GW_REVIEW_UNTIL = os.getenv("GW_REVIEW_UNTIL", "16:00")  # shu vaqtgacha kutamiz
+GW_REVIEW_UNTIL = os.getenv("GW_REVIEW_UNTIL", "18:00")  # shu vaqtgacha kutamiz
 GW_REVIEW_POLL = _int("GW_REVIEW_POLL", 180)             # necha soniyada bir tekshiriladi
+# FPL API CDN orqali beriladi: turli serverlar turli yoshdagi nusxani qaytaradi.
+# Bitta eski javob "tayyor" deb ko'rsatib qo'ymasligi uchun ketma-ket tasdiq talab qilamiz.
+GW_REVIEW_CONFIRM = _int("GW_REVIEW_CONFIRM", 2)         # necha marta ketma-ket tasdiqlansin
+GW_REVIEW_CONFIRM_WAIT = _int("GW_REVIEW_CONFIRM_WAIT", 30)  # tasdiqlar orasidagi tanaffus
 
 
 # --- Differentiallar (tur oralig'idagi post) ---
