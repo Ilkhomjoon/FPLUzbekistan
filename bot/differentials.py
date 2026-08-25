@@ -235,8 +235,8 @@ def fixtures_for(team_id: int, after_event: int, fixtures: list[dict],
 # ---------------- vaqt ----------------
 
 def last_finished_event(bootstrap: dict) -> dict | None:
-    finished = [e for e in bootstrap.get("events", []) if e.get("finished")]
-    return finished[-1] if finished else None
+    """Yakunlangan tur — /event-status/ bo'yicha (`finished` bayrog'i juda kech qo'yiladi)."""
+    return fpl_api.finalised_event(bootstrap)
 
 
 def next_event(bootstrap: dict) -> dict | None:

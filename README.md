@@ -205,7 +205,17 @@ Har bir workflow shu tamoyilda ishlaydi:
 | Differentiallar | 19:09 | `DIFF_POST_AT` gacha ushlab turadi | **20:00** |
 | Tur sharhi | 12:30 | FPL tasdig'ini kuzatadi | **~13:05** (qishda ~14:05) |
 
-**Tur sharhi — alohida holat.** 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni **Britaniya vaqti bilan 09:00** da yakuniy qiladi ("lockdown"). Toshkentda bu yozda 13:00, qishda 14:00 — ya'ni aniq soatni cron'ga yozib bo'lmaydi. Shuning uchun 12:30 da uyg'onib, `bootstrap-static` da `finished: true` paydo bo'lishini har 3 daqiqada tekshiramiz va tasdiqlangan zahoti chiqaramiz (`GW_REVIEW_UNTIL` gacha).
+**Tur sharhi — alohida holat.** 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni **Britaniya vaqti bilan 09:00** da yakuniy qiladi ("lockdown"). Toshkentda bu yozda 13:00, qishda 14:00 — ya'ni aniq soatni cron'ga yozib bo'lmaydi. Shuning uchun 12:30 da uyg'onib, har 3 daqiqada tekshiramiz va tayyor bo'lishi bilan chiqaramiz (`GW_REVIEW_UNTIL` gacha).
+
+**Muhim:** `bootstrap-static` dagi `finished` bayrog'i lockdown'dan ancha keyin qo'yiladi — unga tayanib bo'lmaydi. Turning yakunlanganini `/event-status/` bo'yicha aniqlaymiz:
+
+| Maydon | Yakunlanmagan | Yakunlangan |
+|---|---|---|
+| `points` | `"p"` (provisional) | `"r"` (results) |
+| `bonus_added` | `false` | `true` |
+| `leagues` | `"Updating"` | `""` |
+
+Uchalasi ham tayyor bo'lgandagina post chiqadi. `leagues: "Updating"` ni ham kutamiz, chunki sharh liga jadvallarini o'qiydi — aks holda o'rinlar yarim hisoblangan holatda chiqib qolardi.
 
 Har birida **zaxira cron** ham bor — GitHub ba'zan rejalashtirilgan run'ni umuman tashlab ketadi. Holat fayllari tufayli ikki marta post chiqmaydi.
 

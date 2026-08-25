@@ -86,13 +86,17 @@ class TestPost(unittest.TestCase):
 
 
 class TestVaqt(unittest.TestCase):
+    # event-status bo'sh berilsa `finished` bayrog'iga tayanadi (tarmoqqa chiqmaydi)
+    EMPTY_STATUS = {"status": [], "leagues": ""}
+
     def test_oxirgi_yakunlangan_tur(self):
         bs = {"events": [{"id": 1, "finished": True}, {"id": 2, "finished": True},
                          {"id": 3, "finished": False}]}
-        self.assertEqual(gw_review.last_finished_event(bs)["id"], 2)
+        self.assertEqual(gw_review.last_finished_event(bs, self.EMPTY_STATUS)["id"], 2)
 
     def test_yakunlangan_tur_yoq(self):
-        self.assertIsNone(gw_review.last_finished_event({"events": [{"id": 1, "finished": False}]}))
+        self.assertIsNone(gw_review.last_finished_event(
+            {"events": [{"id": 1, "finished": False}]}, self.EMPTY_STATUS))
 
     def test_tur_tugagan_kun(self):
         fixtures = [{"kickoff_time": "2026-08-22T14:00:00Z"},

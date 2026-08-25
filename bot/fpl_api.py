@@ -61,6 +61,70 @@ def get_live(event: int) -> dict:
     return _get(f"/event/{event}/live/")
 
 
+def get_event_status() -> dict:
+    """Turning yakunlanish holati — kun-kun.
+
+    `bootstrap-static` dagi `finished` bayrog'i ancha kech qo'yiladi, shuning
+    uchun turning yakunlanganini shu endpoint bo'yicha aniqlaymiz.
+    """
+    return _get("/event-status/")
+
+
+# ---------- turning yakunlanishi ----------
+
+POINTS_FINAL = "r"  # "p" = provisional (vaqtinchalik), "r" = results (yakuniy)
+
+
+def status_verdict(status: dict) -> tuple[int | None, bool, str]:
+    """/event-status/ -> (tur raqami, tayyormi, sabab).
+
+    2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni Britaniya
+    vaqti bilan 09:00 da yakuniy qiladi. Shu paytda:
+
+        points:      "p" -> "r"      (ochkolar yakuniy)
+        bonus_added: false -> true   (bonus rasman qo'shildi)
+        leagues:     "Updating"      (liga jadvallari qayta hisoblanmoqda)
+
+    Biz liga jadvallarini o'qiganimiz uchun `leagues` tugashini ham kutamiz —
+    aks holda o'rinlar yarim hisoblangan holatda chiqib qolardi.
+    """
+    rows = status.get("status") or []
+    if not rows:
+        return None, False, "event-status bo'sh"
+
+    event = rows[0].get("event")
+    if not all(r.get("points") == POINTS_FINAL for r in rows):
+        return event, False, "ochkolar hali vaqtinchalik (points='p')"
+    if not all(r.get("bonus_added") for r in rows):
+        return event, False, "bonus hali rasman qo'shilmagan"
+    if (status.get("leagues") or "").strip().lower() == "updating":
+        return event, False, "ochkolar yakunlandi, liga jadvallari yangilanmoqda"
+    return event, True, "tayyor"
+
+
+def finalised_event(bootstrap: dict, status: dict | None = None) -> dict | None:
+    """Yakunlangan turni qaytaradi (yo'q bo'lsa None).
+
+    Avval /event-status/ ga qaraymiz — u `finished` bayrog'idan ancha oldin
+    yangilanadi. Undan aniqlanmasa, bootstrap dagi `finished` ga tayanamiz.
+    """
+    events = bootstrap.get("events", [])
+    if status is None:
+        try:
+            status = get_event_status()
+        except Exception:
+            status = {}
+
+    event_id, ready, _ = status_verdict(status or {})
+    if ready and event_id:
+        found = next((e for e in events if e.get("id") == event_id), None)
+        if found:
+            return found
+
+    finished = [e for e in events if e.get("finished")]
+    return finished[-1] if finished else None
+
+
 # ---------- yordamchi funksiyalar ----------
 
 def players_by_id(bootstrap: dict) -> dict[int, dict]:

@@ -140,19 +140,24 @@ def review_league(league_id: int, label: str, leader_total: int | None,
 
 # ---------------- vaqt ----------------
 
-def last_finished_event(bootstrap: dict) -> dict | None:
-    """Eng oxirgi yakunlangan tur."""
-    finished = [e for e in bootstrap.get("events", []) if e.get("finished")]
-    return finished[-1] if finished else None
+def last_finished_event(bootstrap: dict, status: dict | None = None) -> dict | None:
+    """Yakunlangan tur — /event-status/ bo'yicha (`finished` bayrog'i juda kech qo'yiladi)."""
+    return fpl_api.finalised_event(bootstrap, status)
 
 
-def _explain_not_finished(bootstrap: dict) -> None:
-    """Nega sharh chiqmayotganini logga tushunarli qilib yozadi.
+def _explain_not_finished(bootstrap: dict, status: dict | None = None) -> None:
+    """Nega sharh chiqmayotganini logga tushunarli qilib yozadi."""
+    if status is None:
+        try:
+            status = fpl_api.get_event_status()
+        except Exception:
+            status = {}
 
-    Eng ko'p uchraydigan holat: barcha o'yinlar o'ynalgan, lekin FPL turni
-    hali rasman yopmagan (`finished` va `data_checked` — false). Bu odatda
-    dushanba kechqurun o'yin bo'lganda seshanba kunduzigacha cho'ziladi.
-    """
+    gw, _, reason = fpl_api.status_verdict(status or {})
+    if gw:
+        log.info("GW%d hali tayyor emas: %s", gw, reason)
+        return
+
     current = next((e for e in bootstrap.get("events", []) if e.get("is_current")), None)
     if not current:
         log.info("Yakunlangan tur yo'q — chiqamiz.")
@@ -163,16 +168,9 @@ def _explain_not_finished(bootstrap: dict) -> None:
         fixtures = fpl_api.get_fixtures(event=gw)
     except Exception:
         fixtures = []
-
     played = [f for f in fixtures if f.get("finished") or f.get("finished_provisional")]
-    if fixtures and len(played) == len(fixtures):
-        log.info("GW%d: %d/%d o'yin o'ynalgan, lekin FPL turni hali rasman "
-                 "yopmagan (finished=%s, data_checked=%s). Yopilishi bilan chiqaramiz.",
-                 gw, len(played), len(fixtures),
-                 current.get("finished"), current.get("data_checked"))
-    else:
-        log.info("GW%d hali davom etyapti (%d/%d o'yin o'ynalgan) — chiqamiz.",
-                 gw, len(played), len(fixtures))
+    log.info("GW%d hali davom etyapti (%d/%d o'yin o'ynalgan) — chiqamiz.",
+             gw, len(played), len(fixtures))
 
 
 def event_end_date(fixtures: list[dict], tz: str) -> str | None:
@@ -191,9 +189,15 @@ def run(force: bool = False) -> int:
     config.require_telegram()
 
     bootstrap = fpl_api.get_bootstrap()
-    event = last_finished_event(bootstrap)
+    try:
+        status = fpl_api.get_event_status()
+    except Exception as exc:
+        log.warning("event-status olinmadi: %s", exc)
+        status = {}
+
+    event = last_finished_event(bootstrap, status)
     if not event:
-        _explain_not_finished(bootstrap)
+        _explain_not_finished(bootstrap, status)
         return 0
 
     gw = event["id"]
@@ -244,9 +248,9 @@ def run(force: bool = False) -> int:
     return 0
 
 
-def ready_event(bootstrap: dict) -> dict | None:
+def ready_event(bootstrap: dict, status: dict | None = None) -> dict | None:
     """Chiqarishga tayyor tur bormi? (yakunlangan va hali chiqarilmagan)"""
-    event = last_finished_event(bootstrap)
+    event = last_finished_event(bootstrap, status)
     if not event:
         return None
     state = storage.load(config.GW_REVIEW_STATE_FILE, {}) or {}
@@ -268,17 +272,25 @@ def watch() -> int:
 
     while True:
         bootstrap = fpl_api.get_bootstrap()
-        if ready_event(bootstrap):
-            log.info("FPL turni yopdi — sharh chiqarilmoqda.")
+        try:
+            status = fpl_api.get_event_status()
+        except Exception as exc:
+            log.warning("event-status olinmadi: %s", exc)
+            status = {}
+
+        if ready_event(bootstrap, status):
+            log.info("FPL turni yakunladi — sharh chiqarilmoqda.")
             return run()
 
         now = waiter.now_utc()
         if now >= give_up:
-            log.info("Kutish chegarasi keldi — FPL hali tasdiqlamadi, sharh keyinroq chiqadi.")
-            _explain_not_finished(bootstrap)
+            log.info("Kutish chegarasi keldi — sharh keyinroq chiqadi.")
+            _explain_not_finished(bootstrap, status)
             return 0
+
+        _, _, reason = fpl_api.status_verdict(status or {})
         wait = min(config.GW_REVIEW_POLL, max(1.0, (give_up - now).total_seconds()))
-        log.info("Hali tasdiqlanmadi — %.0f soniyadan keyin qayta tekshiramiz.", wait)
+        log.info("Hali tayyor emas (%s) — %.0f soniyadan keyin qayta tekshiramiz.", reason, wait)
         time.sleep(wait)
 
 
