@@ -204,6 +204,8 @@ Har bir workflow shu tamoyilda ishlaydi:
 | Narx bashorati | 22:09 | `--post-at 23:00` | **23:00** |
 | Tur sharhi | 09:09 | `--post-at 10:00` | **10:00** |
 
+**Tur sharhi — alohida holat.** U FPL turni rasman yopishini (`finished: true`) kutadi, bu esa dushanba kechqurun o'yin bo'lgan turlarda seshanba kunduzigacha cho'ziladi. Shuning uchun ertalabki 10:00 dan tashqari kunduzi ham tekshiradi (13:19, 16:19, 19:19, 22:19) va FPL yopgan zahoti chiqaradi — aks holda post butun bir kunga surilib ketardi.
+
 Har birida **zaxira cron** ham bor — GitHub ba'zan rejalashtirilgan run'ni umuman tashlab ketadi. Holat fayllari tufayli ikki marta post chiqmaydi.
 
 ### Yon foyda: uyg'onishlar soni 5 barobar kamaydi
@@ -212,8 +214,8 @@ Har birida **zaxira cron** ham bor — GitHub ba'zan rejalashtirilgan run'ni umu
 |---|---|---|
 | Jonli bonus | 56 ta/kun | 13 ta/kun |
 | Deadline statistikasi | 56 ta/kun | 5 ta/kun |
-| Qolganlari | 6 ta/kun | 6 ta/kun |
-| **Jami** | **~118 ta/kun** | **~24 ta/kun** |
+| Qolganlari | 6 ta/kun | 10 ta/kun |
+| **Jami** | **~118 ta/kun** | **~28 ta/kun** |
 
 Bu o'z-o'zidan kechikishni kamaytiradi: GitHub bitta repodan kelayotgan so'rovlarni ham hisobga oladi. Ochiq (public) repoda daqiqalar cheksiz va tekin, shuning uchun "uxlab turgan" ish hech narsaga tushmaydi.
 

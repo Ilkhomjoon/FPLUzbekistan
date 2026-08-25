@@ -145,6 +145,35 @@ def last_finished_event(bootstrap: dict) -> dict | None:
     return finished[-1] if finished else None
 
 
+def _explain_not_finished(bootstrap: dict) -> None:
+    """Nega sharh chiqmayotganini logga tushunarli qilib yozadi.
+
+    Eng ko'p uchraydigan holat: barcha o'yinlar o'ynalgan, lekin FPL turni
+    hali rasman yopmagan (`finished` va `data_checked` — false). Bu odatda
+    dushanba kechqurun o'yin bo'lganda seshanba kunduzigacha cho'ziladi.
+    """
+    current = next((e for e in bootstrap.get("events", []) if e.get("is_current")), None)
+    if not current:
+        log.info("Yakunlangan tur yo'q — chiqamiz.")
+        return
+
+    gw = current["id"]
+    try:
+        fixtures = fpl_api.get_fixtures(event=gw)
+    except Exception:
+        fixtures = []
+
+    played = [f for f in fixtures if f.get("finished") or f.get("finished_provisional")]
+    if fixtures and len(played) == len(fixtures):
+        log.info("GW%d: %d/%d o'yin o'ynalgan, lekin FPL turni hali rasman "
+                 "yopmagan (finished=%s, data_checked=%s). Yopilishi bilan chiqaramiz.",
+                 gw, len(played), len(fixtures),
+                 current.get("finished"), current.get("data_checked"))
+    else:
+        log.info("GW%d hali davom etyapti (%d/%d o'yin o'ynalgan) — chiqamiz.",
+                 gw, len(played), len(fixtures))
+
+
 def event_end_date(fixtures: list[dict], tz: str) -> str | None:
     """Turning oxirgi o'yini qaysi kunda bo'lgani."""
     times = [f["kickoff_time"] for f in fixtures if f.get("kickoff_time")]
@@ -163,7 +192,7 @@ def run(force: bool = False) -> int:
     bootstrap = fpl_api.get_bootstrap()
     event = last_finished_event(bootstrap)
     if not event:
-        log.info("Yakunlangan tur yo'q — chiqamiz.")
+        _explain_not_finished(bootstrap)
         return 0
 
     gw = event["id"]

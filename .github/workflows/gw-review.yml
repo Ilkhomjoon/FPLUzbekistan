@@ -2,11 +2,17 @@ name: Tur yakunlari sharhi
 
 on:
   schedule:
-    # 09:09 Toshkent da uyg'onamiz, post esa --post-at bilan aniq 10:00 da
-    # chiqadi. Cron 50 daqiqa kechiksa ham post o'z vaqtida bo'ladi.
+    # Asosiy: 09:09 Toshkent da uyg'onamiz, post esa --post-at bilan aniq
+    # 10:00 da chiqadi. Cron 50 daqiqa kechiksa ham post o'z vaqtida bo'ladi.
     - cron: "9 4 * * *"
     # Zaxira: birinchi run umuman ishga tushmasa
     - cron: "44 5 * * *"
+    # Kunduzgi tekshiruvlar (13:19, 16:19, 19:19, 22:19 Toshkent).
+    # Bular kutmasdan darhol chiqaradi. Kerak bo'lish sababi: FPL turni
+    # rasman yopishi kechikadi — masalan dushanba kechqurun o'yin bo'lsa,
+    # `finished` bayrog'i faqat seshanba kunduzi qo'yiladi. Ularsiz post
+    # butun bir kunga surilib ketardi. Holat fayli takror postga yo'l qo'ymaydi.
+    - cron: "19 8,11,14,17 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -51,9 +57,9 @@ jobs:
         run: |
           ARGS=""
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
-          # cron bo'yicha ishga tushganda aniq 10:00 gacha kutamiz;
-          # qo'lda ishga tushirilganda darhol chiqaramiz
-          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="$ARGS --post-at 10:00"; fi
+          # Faqat ertalabki asosiy cron 10:00 gacha kutadi. Qolganlari —
+          # zaxira va kunduzgi tekshiruvlar — tayyor bo'lsa darhol chiqaradi.
+          if [ "${{ github.event.schedule }}" = "9 4 * * *" ]; then ARGS="$ARGS --post-at 10:00"; fi
           python -m bot.gw_review $ARGS
 
       - name: Holatni saqlash (commit)
