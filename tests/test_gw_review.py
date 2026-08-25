@@ -69,7 +69,8 @@ class TestPost(unittest.TestCase):
         self.assertIn("<b>🌍 Overall</b>", text)
         self.assertIn("<b>🏆 Test · 529 ta jamoa</b>", text)
         self.assertIn("O'rtacha: 54 ochko", text)
-        self.assertIn("Turning eng zo'ri", text)
+        self.assertIn("🔥", text)  # turning eng yaxshi menejeri qatori
+        self.assertIn("— 97 ochko", text)
         self.assertIn("⭐️ Tur yulduzi: Haaland — 16 ochko", text)
 
     def test_koterilish_yozilmaydi_agar_yoq_bolsa(self):

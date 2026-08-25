@@ -38,6 +38,10 @@ class TelegramError(RuntimeError):
     pass
 
 
+class TelegramNetworkError(TelegramError):
+    """Tarmoq muammosi — taymaut, uzilish. Odatda o'z-o'zidan tuzaladi."""
+
+
 def esc(text: str) -> str:
     """HTML parse_mode uchun xavfsiz matn."""
     return html.escape(str(text), quote=False)
@@ -53,7 +57,7 @@ def _call(method: str, **payload) -> dict:
     for attempt in range(4):
         try:
             # (ulanish, o'qish) taymauti — sekin tarmoqda osilib qolmaslik uchun
-            r = session().post(url, json=payload, timeout=(10, 30))
+            r = session().post(url, json=payload, timeout=(10, 60))
             data = r.json()
             LAST_CALL_SECONDS = time.monotonic() - started
             if LAST_CALL_SECONDS > 5:
@@ -79,7 +83,7 @@ def _call(method: str, **payload) -> dict:
             log.debug("Xabar o'zgarmadi, tahrirlash o'tkazib yuborildi")
             return {}
         raise TelegramError(f"{method} xatosi: {desc}")
-    raise TelegramError(f"{method} bajarilmadi: {last_err}")
+    raise TelegramNetworkError(f"{method} bajarilmadi: {last_err}")
 
 
 def send_message(text: str, chat_id: str | None = None, silent: bool = False) -> dict:

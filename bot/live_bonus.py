@@ -148,6 +148,7 @@ def run(once: bool = False) -> int:
 
     deadline = time.monotonic() + config.LIVE_MAX_MINUTES * 60
     all_done_since: float | None = None
+    consecutive_errors = 0
     defcon_cache: dict[int, dict[int, int]] = {}
     # -inf: birinchi aylanishda albatta olinsin. 0.0 bo'lsa yangi ishga tushgan
     # serverda time.monotonic() kichik bo'lib, DefCon bir necha daqiqa kechikardi.
@@ -242,9 +243,19 @@ def run(once: bool = False) -> int:
                     log.info("Kun yakunlandi. Yakuniy yangilanish ~%d daqiqadan keyin.",
                              config.FINAL_SWEEP_MINUTES)
                     return 0
+            consecutive_errors = 0
         except Exception as exc:
-            log.exception("Sikl ichida xatolik (davom etamiz)")
-            telegram.notify_admin(f"⚠️ <b>FPL bot (live bonus)</b>\n<code>{telegram.esc(repr(exc))}</code>")
+            consecutive_errors += 1
+            log.warning("Sikl ichida xatolik (%d-marta ketma-ket): %s", consecutive_errors, exc)
+            # Bitta taymaut o'z-o'zidan tuzaladi — faqat qaytarilsa xabar beramiz
+            if consecutive_errors >= config.ERROR_ALERT_AFTER:
+                log.exception("Xatolik takrorlanmoqda")
+                telegram.notify_admin(
+                    f"⚠️ <b>FPL bot (live bonus)</b>\n"
+                    f"{consecutive_errors} marta ketma-ket xatolik:\n"
+                    f"<code>{telegram.esc(repr(exc))}</code>"
+                )
+                consecutive_errors = 0
 
         if once:
             return 0

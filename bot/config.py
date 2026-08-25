@@ -45,6 +45,7 @@ CHANNEL_ID = os.getenv("TELEGRAM_CHANNEL_ID", "").strip()  # @FPLUzbekistan yoki
 ADMIN_CHAT_ID = os.getenv("TELEGRAM_ADMIN_CHAT_ID", "").strip()  # xatolik xabarlari uchun
 
 # --- Umumiy ---
+ERROR_ALERT_AFTER = _int("ERROR_ALERT_AFTER", 3)  # necha marta ketma-ket xatodan keyin xabar berilsin
 DRY_RUN = _bool("DRY_RUN", False)          # True bo'lsa Telegramga yubormaydi, terminalga chiqaradi
 CHANNEL_TAG = os.getenv("CHANNEL_TAG", "@FPLUzbekistan")
 LOCAL_TZ = os.getenv("LOCAL_TZ", "Asia/Tashkent")        # vaqtlarni ko'rsatish uchun
