@@ -203,9 +203,9 @@ Har bir workflow shu tamoyilda ishlaydi:
 | Deadline statistikasi | o'yindan ≤200 daqiqa oldin | `T−40 daqiqa` gacha kutadi, so'ng ligalarni skanerlaydi | **T−40 daqiqa** |
 | Narx bashorati | 22:09 | `--post-at 23:00` | **23:00** |
 | Differentiallar | 19:09 | `DIFF_POST_AT` gacha ushlab turadi | **20:00** |
-| Tur sharhi | 09:09 | `--post-at 10:00` | **10:00** |
+| Tur sharhi | 12:30 | FPL tasdig'ini kuzatadi | **~13:05** (qishda ~14:05) |
 
-**Tur sharhi — alohida holat.** U FPL turni rasman yopishini (`finished: true`) kutadi, bu esa dushanba kechqurun o'yin bo'lgan turlarda seshanba kunduzigacha cho'ziladi. Shuning uchun ertalabki 10:00 dan tashqari kunduzi ham tekshiradi (13:19, 16:19, 19:19, 22:19) va FPL yopgan zahoti chiqaradi — aks holda post butun bir kunga surilib ketardi.
+**Tur sharhi — alohida holat.** 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni **Britaniya vaqti bilan 09:00** da yakuniy qiladi ("lockdown"). Toshkentda bu yozda 13:00, qishda 14:00 — ya'ni aniq soatni cron'ga yozib bo'lmaydi. Shuning uchun 12:30 da uyg'onib, `bootstrap-static` da `finished: true` paydo bo'lishini har 3 daqiqada tekshiramiz va tasdiqlangan zahoti chiqaramiz (`GW_REVIEW_UNTIL` gacha).
 
 Har birida **zaxira cron** ham bor — GitHub ba'zan rejalashtirilgan run'ni umuman tashlab ketadi. Holat fayllari tufayli ikki marta post chiqmaydi.
 
@@ -215,8 +215,8 @@ Har birida **zaxira cron** ham bor — GitHub ba'zan rejalashtirilgan run'ni umu
 |---|---|---|
 | Jonli bonus | 56 ta/kun | 13 ta/kun |
 | Deadline statistikasi | 56 ta/kun | 5 ta/kun |
-| Qolganlari | 6 ta/kun | 13 ta/kun |
-| **Jami** | **~118 ta/kun** | **~31 ta/kun** |
+| Qolganlari | 6 ta/kun | 10 ta/kun |
+| **Jami** | **~118 ta/kun** | **~28 ta/kun** |
 
 Bu o'z-o'zidan kechikishni kamaytiradi: GitHub bitta repodan kelayotgan so'rovlarni ham hisobga oladi. Ochiq (public) repoda daqiqalar cheksiz va tekin, shuning uchun "uxlab turgan" ish hech narsaga tushmaydi.
 
@@ -321,6 +321,8 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `STATS_WAKE_LEAD` | `300` (workflow'da `200`) | `--wait` rejimida shundan kam qolsa kutib turadi |
 | `ERROR_ALERT_AFTER` | `3` | Necha marta ketma-ket xatodan keyin ogohlantirsin |
 | `CRON_ALERT_MINUTES` | `20` (workflow'da `90`) | Cron kechikishi haqida ogohlantirish chegarasi |
+| `GW_REVIEW_UNTIL` | `16:00` | FPL tasdig'ini shu vaqtgacha kutadi |
+| `GW_REVIEW_POLL` | `180` | Tasdiqlanganini necha soniyada bir tekshiradi |
 | `DIFF_POST_AT` | `20:00` | Differentiallar posti qachon chiqadi |
 | `DIFF_LATEST` | `23:00` | Bundan kech bo'lsa post ertangi kunga suriladi |
 | `DIFF_MAX_OWN` | `10` | "Differential" hisoblanish chegarasi, egalik % |

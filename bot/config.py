@@ -119,6 +119,11 @@ STATS_TOP_N = _int("STATS_TOP_N", 5)         # nechta sardor ko'rsatilsin
 GW_REVIEW_STATE_FILE = DATA_DIR / "gw_review.json"
 GW_REVIEW_HASHTAG = os.getenv("GW_REVIEW_HASHTAG", "#GWReview")
 GW_REVIEW_TOP_N = _int("GW_REVIEW_TOP_N", 5)   # har ligada nechta menejer ko'rsatilsin
+# 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni Britaniya
+# vaqti bilan 09:00 da yakuniy qiladi. Toshkentda bu yozda 13:00, qishda 14:00 —
+# shuning uchun aniq soat emas, kuzatuv ishlatiladi.
+GW_REVIEW_UNTIL = os.getenv("GW_REVIEW_UNTIL", "16:00")  # shu vaqtgacha kutamiz
+GW_REVIEW_POLL = _int("GW_REVIEW_POLL", 180)             # necha soniyada bir tekshiriladi
 
 
 # --- Differentiallar (tur oralig'idagi post) ---

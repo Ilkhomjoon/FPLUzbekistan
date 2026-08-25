@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 import unittest
+from datetime import datetime, timedelta, timezone
 
 from bot import config, gw_review
 
@@ -65,6 +66,67 @@ class NotFinishedTest(unittest.TestCase):
         with self.assertLogs("gw_review", level=logging.INFO):
             self.assertEqual(gw_review.run(), 0)
         self.assertEqual(self.sent, [])
+
+
+class WatchTest(unittest.TestCase):
+    """--watch: FPL tasdiqlaguncha kutadi, tasdiqlangach darhol chiqaradi."""
+
+    def setUp(self):
+        self._orig = {
+            "bootstrap": gw_review.fpl_api.get_bootstrap,
+            "run": gw_review.run,
+            "load": gw_review.storage.load,
+            "sleep": gw_review.time.sleep,
+            "require": config.require_telegram,
+        }
+        config.require_telegram = lambda: None
+        gw_review.storage.load = lambda *a, **kw: {}
+        self.slept = []
+        gw_review.time.sleep = lambda s: self.slept.append(s)
+        self.ran = []
+        gw_review.run = lambda *a, **kw: self.ran.append(True) or 0
+
+    def tearDown(self):
+        gw_review.fpl_api.get_bootstrap = self._orig["bootstrap"]
+        gw_review.run = self._orig["run"]
+        gw_review.storage.load = self._orig["load"]
+        gw_review.time.sleep = self._orig["sleep"]
+        config.require_telegram = self._orig["require"]
+
+    def test_posts_as_soon_as_fpl_confirms(self):
+        gw_review.fpl_api.get_bootstrap = lambda: {
+            "events": [{"id": 1, "finished": True, "data_checked": True}]}
+        self.assertEqual(gw_review.watch(), 0)
+        self.assertEqual(len(self.ran), 1)
+        self.assertEqual(self.slept, [])   # darhol chiqargan, kutmagan
+
+    def test_gives_up_after_the_deadline(self):
+        gw_review.fpl_api.get_bootstrap = lambda: {
+            "events": [{"id": 1, "is_current": True, "finished": False, "data_checked": False}]}
+        gw_review.fpl_api.get_fixtures = lambda **kw: []
+        original = gw_review.waiter.local_time_today
+        gw_review.waiter.local_time_today = lambda hhmm: (
+            datetime.now(timezone.utc) - timedelta(minutes=1))
+        try:
+            self.assertEqual(gw_review.watch(), 0)
+        finally:
+            gw_review.waiter.local_time_today = original
+        self.assertEqual(self.ran, [])
+        self.assertEqual(self.slept, [])
+
+    def test_already_posted_gameweek_is_not_repeated(self):
+        gw_review.storage.load = lambda *a, **kw: {"event": 1}
+        gw_review.fpl_api.get_bootstrap = lambda: {
+            "events": [{"id": 1, "is_current": True, "finished": True, "data_checked": True}]}
+        gw_review.fpl_api.get_fixtures = lambda **kw: []
+        original = gw_review.waiter.local_time_today
+        gw_review.waiter.local_time_today = lambda hhmm: (
+            datetime.now(timezone.utc) - timedelta(minutes=1))
+        try:
+            self.assertEqual(gw_review.watch(), 0)
+        finally:
+            gw_review.waiter.local_time_today = original
+        self.assertEqual(self.ran, [])
 
 
 if __name__ == "__main__":

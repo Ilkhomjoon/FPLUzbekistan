@@ -2,17 +2,16 @@ name: Tur yakunlari sharhi
 
 on:
   schedule:
-    # Asosiy: 09:09 Toshkent da uyg'onamiz, post esa --post-at bilan aniq
-    # 10:00 da chiqadi. Cron 50 daqiqa kechiksa ham post o'z vaqtida bo'ladi.
-    - cron: "9 4 * * *"
-    # Zaxira: birinchi run umuman ishga tushmasa
-    - cron: "44 5 * * *"
-    # Kunduzgi tekshiruvlar (13:19, 16:19, 19:19, 22:19 Toshkent).
-    # Bular kutmasdan darhol chiqaradi. Kerak bo'lish sababi: FPL turni
-    # rasman yopishi kechikadi — masalan dushanba kechqurun o'yin bo'lsa,
-    # `finished` bayrog'i faqat seshanba kunduzi qo'yiladi. Ularsiz post
-    # butun bir kunga surilib ketardi. Holat fayli takror postga yo'l qo'ymaydi.
-    - cron: "19 8,11,14,17 * * *"
+    # 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni
+    # Britaniya vaqti bilan 09:00 da yakuniy qiladi ("lockdown"):
+    #   yozda (BST) = 08:00 UTC = 13:00 Toshkent
+    #   qishda (GMT) = 09:00 UTC = 14:00 Toshkent
+    # Aniq soat yozib bo'lmaydi, shuning uchun 12:30 Toshkent da uyg'onib
+    # (07:30 UTC), FPL tasdiqlashini kuzatamiz va shu zahoti chiqaramiz.
+    - cron: "30 7 * * *"
+    # Zaxira: yuqoridagi run umuman ishga tushmasa. 15:44 Toshkent —
+    # yozda ham, qishda ham lockdown'dan keyin.
+    - cron: "44 10 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -34,7 +33,8 @@ permissions:
 jobs:
   review:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    # 12:30 dan lockdown'gacha kutish (qishda ~1.5 soat) + liga skaneri
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
 
@@ -54,12 +54,15 @@ jobs:
           # Birinchi liga "bizniki" — eng katta ko'tarilish faqat unda yoziladi
           STATS_LEAGUES: "137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan"
           GW_REVIEW_TOP_N: "5"
+          # FPL tasdig'ini shu vaqtgacha kutamiz (Toshkent)
+          GW_REVIEW_UNTIL: "16:00"
+          GW_REVIEW_POLL: "180"
         run: |
           ARGS=""
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
-          # Faqat ertalabki asosiy cron 10:00 gacha kutadi. Qolganlari —
-          # zaxira va kunduzgi tekshiruvlar — tayyor bo'lsa darhol chiqaradi.
-          if [ "${{ github.event.schedule }}" = "9 4 * * *" ]; then ARGS="$ARGS --post-at 10:00"; fi
+          # Asosiy cron FPL tasdig'ini kuzatadi; zaxira cron esa
+          # (lockdown allaqachon o'tgan) bir marta tekshirib chiqadi.
+          if [ "${{ github.event.schedule }}" = "30 7 * * *" ]; then ARGS="$ARGS --watch"; fi
           python -m bot.gw_review $ARGS
 
       - name: Holatni saqlash (commit)

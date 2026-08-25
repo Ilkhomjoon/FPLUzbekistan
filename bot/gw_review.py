@@ -14,6 +14,7 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
+import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
@@ -243,12 +244,52 @@ def run(force: bool = False) -> int:
     return 0
 
 
+def ready_event(bootstrap: dict) -> dict | None:
+    """Chiqarishga tayyor tur bormi? (yakunlangan va hali chiqarilmagan)"""
+    event = last_finished_event(bootstrap)
+    if not event:
+        return None
+    state = storage.load(config.GW_REVIEW_STATE_FILE, {}) or {}
+    return None if state.get("event") == event["id"] else event
+
+
+def watch() -> int:
+    """FPL turni rasman yopishini kutadi va shu zahoti sharhni chiqaradi.
+
+    2026/27 dan boshlab FPL ochkolarni turning oxirgi o'yinidan keyingi kuni
+    Britaniya vaqti bilan 09:00 da yakuniy qiladi ("lockdown"). Toshkentda bu
+    yozda 13:00, qishda 14:00 — ya'ni aniq soatni yozib qo'yib bo'lmaydi.
+    Shuning uchun biroz erta uyg'onib, tasdiqlanishini kuzatib turamiz.
+    """
+    config.require_telegram()
+
+    give_up = waiter.local_time_today(config.GW_REVIEW_UNTIL)
+    log.info("Kuzatuv boshlandi — FPL tasdig'ini kutamiz (chegara: %s).", give_up.isoformat())
+
+    while True:
+        bootstrap = fpl_api.get_bootstrap()
+        if ready_event(bootstrap):
+            log.info("FPL turni yopdi — sharh chiqarilmoqda.")
+            return run()
+
+        now = waiter.now_utc()
+        if now >= give_up:
+            log.info("Kutish chegarasi keldi — FPL hali tasdiqlamadi, sharh keyinroq chiqadi.")
+            _explain_not_finished(bootstrap)
+            return 0
+        wait = min(config.GW_REVIEW_POLL, max(1.0, (give_up - now).total_seconds()))
+        log.info("Hali tasdiqlanmadi — %.0f soniyadan keyin qayta tekshiramiz.", wait)
+        time.sleep(wait)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Tur yakunlari sharhi")
     ap.add_argument("--dry-run", action="store_true", help="Telegramga yubormasdan terminalga chiqaradi")
     ap.add_argument("--force", action="store_true", help="Vaqt tekshiruvini e'tiborsiz qoldiradi")
     ap.add_argument("--post-at", default=None, metavar="HH:MM",
                     help="Shu vaqtgacha kutib turadi (cron kechiksa ham post o'z vaqtida chiqadi)")
+    ap.add_argument("--watch", action="store_true",
+                    help="FPL turni rasman yopishini kutadi va shu zahoti chiqaradi")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
@@ -256,6 +297,8 @@ def main() -> int:
         config.DRY_RUN = True
 
     try:
+        if args.watch and not args.force:
+            return watch()
         if not (args.force or args.dry_run):
             waiter.hold_until(args.post_at, label="Tur sharhi")
         return run(force=args.force)
