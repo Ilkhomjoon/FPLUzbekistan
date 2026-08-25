@@ -2841,6 +2841,11 @@
       "name": "Truffert",
       "team": "BOU"
     },
+    "610": {
+      "cost": 40,
+      "name": "De Fougerolles",
+      "team": "FUL"
+    },
     "62": {
       "cost": 50,
       "name": "Diakité",
@@ -3047,5 +3052,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-08-24T02:49:22+00:00"
+  "taken_at": "2026-08-25T02:10:16+00:00"
 }
