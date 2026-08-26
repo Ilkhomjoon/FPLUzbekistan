@@ -53,9 +53,9 @@ jobs:
         run: |
           ARGS=""
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
-          # cron bo'yicha ishga tushganda aniq 23:00 gacha kutamiz;
-          # qo'lda ishga tushirilganda darhol chiqaramiz
-          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="$ARGS --post-at 23:00"; fi
+          # Faqat asosiy cron 23:00 gacha kutadi. Zaxira cron (23:44 Toshkent)
+          # allaqachon kech — u kutmasdan darhol chiqaradi.
+          if [ "${{ github.event.schedule }}" = "9 17 * * *" ]; then ARGS="$ARGS --post-at 23:00"; fi
           python -m bot.price_watch $ARGS
 
       - name: Holatni saqlash (commit)

@@ -221,6 +221,8 @@ Uchalasi ham tayyor bo'lgandagina post chiqadi. `leagues: "Updating"` ni ham kut
 
 **CDN haqida.** FPL API'ni ketma-ket so'raganda turli serverlar turli yoshdagi nusxani qaytaradi — bitta so'rov "tayyor", keyingisi "tayyor emas" deyishi mumkin. Shuning uchun post chiqishidan oldin `GW_REVIEW_CONFIRM` (2) marta ketma-ket tasdiq talab qilinadi, orasida 30 soniya tanaffus bilan.
 
+> **Yarim tun tuzog'i.** `waiter.local_time_today("23:00")` har doim shu vaqtning **eng yaqin** nusxasini qaytaradi (±12 soat ichida). Bo'lmasa 23:44 ga qo'yilgan cron 16 daqiqa kechikib 00:05 da uyg'onsa, "23:00 gacha kut" degani 23 soat kutish bo'lib qolardi va job timeout'da o'lardi.
+
 Har birida **zaxira cron** ham bor — GitHub ba'zan rejalashtirilgan run'ni umuman tashlab ketadi. Holat fayllari tufayli ikki marta post chiqmaydi.
 
 ### Yon foyda: uyg'onishlar soni 5 barobar kamaydi

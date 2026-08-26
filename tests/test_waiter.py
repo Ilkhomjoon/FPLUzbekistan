@@ -30,6 +30,24 @@ class LocalTimeTodayTest(unittest.TestCase):
         self.assertLess(target, base)
         self.assertEqual((base - target), timedelta(minutes=39))
 
+    def test_time_far_ahead_means_it_already_passed(self):
+        """Yarim tundan keyin ishga tushgan job kechagi 23:00 ni ko'rishi kerak.
+
+        Aks holda "23:00 gacha kut" degani 23 soat kutish bo'lib qolardi —
+        aynan shu sabab narx bashorati joblari 2 soatlik timeout'da o'lgan.
+        """
+        base = datetime(2026, 8, 25, 19, 5, tzinfo=timezone.utc)  # 00:05 Toshkent (26-avgust)
+        target = waiter.local_time_today("23:00", base=base)
+        self.assertLess(target, base)
+        self.assertLess((base - target), timedelta(hours=2))
+
+    def test_result_always_within_twelve_hours(self):
+        base = datetime(2026, 8, 25, 12, 0, tzinfo=timezone.utc)
+        for hhmm in ("00:00", "06:00", "12:00", "18:00", "23:59"):
+            target = waiter.local_time_today(hhmm, base=base)
+            self.assertLessEqual(abs((target - base).total_seconds()), 12 * 3600 + 60,
+                                 f"{hhmm} juda uzoq")
+
     def test_minute_is_parsed(self):
         base = datetime(2026, 8, 25, 1, 0, tzinfo=timezone.utc)
         target = waiter.local_time_today("23:30", base=base)

@@ -50,11 +50,13 @@ class Diff:
     local_count: int = 0
     fixtures_text: str = ""
 
-    def label(self, teams: dict) -> str:
+    def label(self, teams: dict, bold: bool = True) -> str:
+        """"<b>Ødegaard</b> (ARS)" — postda ism qalin yoziladi."""
         from .telegram import esc
 
+        name = f"<b>{esc(self.name)}</b>" if bold else esc(self.name)
         short = teams.get(self.team, {}).get("short_name", "")
-        return f"{esc(self.name)} ({esc(short)})" if short else esc(self.name)
+        return f"{name} ({esc(short)})" if short else name
 
 
 @dataclass

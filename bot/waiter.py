@@ -33,11 +33,17 @@ def now_utc() -> datetime:
 
 
 def local_time_today(hhmm: str, base: datetime | None = None) -> datetime:
-    """"06:00" -> bugungi shu vaqt (LOCAL_TZ bo'yicha), UTC ko'rinishida.
+    """"06:00" -> shu vaqtning ENG YAQIN nusxasi (LOCAL_TZ bo'yicha), UTC da.
 
-    Agar bu vaqt allaqachon 12 soatdan ko'proq oldin o'tgan bo'lsa, ertangi kun
-    tushuniladi. Shu tufayli yarim tunda ishga tushgan jarayon ham to'g'ri
-    kunni tanlaydi.
+    Natija har doim hozirgi vaqtdan ±12 soat ichida bo'ladi:
+
+      - 12 soatdan ko'proq oldin o'tgan bo'lsa -> ertangi kun
+      - 12 soatdan ko'proq keyin bo'lsa       -> kechagi kun (ya'ni o'tib ketgan)
+
+    Ikkinchi qoida yarim tundan keyin ishga tushgan jarayon uchun muhim.
+    Masalan cron 23:44 da rejalashtirilgan bo'lib, GitHub uni 00:05 da
+    uyg'otsa, "23:00" bugungi kechqurunni emas, kechagi (o'tib ketgan)
+    vaqtni bildirishi kerak — aks holda jarayon 23 soat kutib qolardi.
     """
     tz = ZoneInfo(config.LOCAL_TZ)
     ref = (base or now_utc()).astimezone(tz)
@@ -45,6 +51,8 @@ def local_time_today(hhmm: str, base: datetime | None = None) -> datetime:
     target = ref.replace(hour=int(hour), minute=int(minute or 0), second=0, microsecond=0)
     if target < ref - timedelta(hours=12):
         target += timedelta(days=1)
+    elif target > ref + timedelta(hours=12):
+        target -= timedelta(days=1)
     return target.astimezone(timezone.utc)
 
 

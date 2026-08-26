@@ -134,7 +134,7 @@ class PostTest(unittest.TestCase):
         for marker in ("GW2 — differentiallar", "🔥 Kam olingan", "👑 Top-100",
                        "📈 Kech qolmang", "📅 Keyingi", "🇺🇿 🏆 FPLUzbekistan"):
             self.assertIn(marker, text)
-        self.assertIn("Ødegaard (ARS) £6.5M — 9.8%", text)
+        self.assertIn("<b>Ødegaard</b> (ARS) £6.5M — 9.8%", text)
         self.assertIn("top-100: <b>34%</b>", text)
         self.assertIn("41 ta jamoada", text)
         self.assertTrue(text.rstrip().endswith(config.CHANNEL_TAG))
@@ -159,6 +159,16 @@ class PostTest(unittest.TestCase):
     def test_poll_does_not_repeat_a_player(self):
         _, options = differentials_poll(2, self._picks(), TEAMS)
         self.assertEqual(len(options), len(set(options)))
+
+    def test_poll_options_are_plain_text(self):
+        """So'rovnomada HTML ishlamaydi — <b> teglari tushib qolmasligi kerak."""
+        _, options = differentials_poll(2, self._picks(), TEAMS)
+        self.assertFalse(any("<" in o for o in options))
+
+    def test_every_player_name_is_bold(self):
+        text = differentials_post(gw=1, next_gw=2, picks=self._picks(), teams=TEAMS)
+        for name in ("Ødegaard", "White", "Rogers"):
+            self.assertIn(f"<b>{name}</b>", text)
 
 
 if __name__ == "__main__":
