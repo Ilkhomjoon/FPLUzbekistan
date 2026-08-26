@@ -92,7 +92,7 @@
       "team": "BHA"
     },
     "115": {
-      "cost": 45,
+      "cost": 46,
       "name": "De Cuyper",
       "team": "BHA"
     },
@@ -447,7 +447,7 @@
       "team": "COV"
     },
     "18": {
-      "cost": 65,
+      "cost": 64,
       "name": "Martinelli",
       "team": "ARS"
     },
@@ -837,7 +837,7 @@
       "team": "EVE"
     },
     "25": {
-      "cost": 75,
+      "cost": 74,
       "name": "Gyökeres",
       "team": "ARS"
     },
@@ -1694,7 +1694,7 @@
     "403": {
       "cost": 65,
       "name": "Savinho",
-      "team": "MCI"
+      "team": "TOT"
     },
     "404": {
       "cost": 60,
@@ -2587,7 +2587,7 @@
       "team": "IPS"
     },
     "565": {
-      "cost": 55,
+      "cost": 56,
       "name": "M.Sangaré",
       "team": "BRE"
     },
@@ -2846,6 +2846,16 @@
       "name": "De Fougerolles",
       "team": "FUL"
     },
+    "611": {
+      "cost": 45,
+      "name": "Wan-Bissaka",
+      "team": "AVL"
+    },
+    "612": {
+      "cost": 45,
+      "name": "Methalie",
+      "team": "SUN"
+    },
     "62": {
       "cost": 50,
       "name": "Diakité",
@@ -3052,5 +3062,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-08-25T02:44:09+00:00"
+  "taken_at": "2026-08-25T23:33:31+00:00"
 }
