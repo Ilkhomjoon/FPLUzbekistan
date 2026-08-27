@@ -99,11 +99,16 @@ def publish(down: list[dict], up: list[dict], new_snap: dict) -> None:
 
 
 def watch() -> int:
-    """Erta uyg'onib, narx o'zgarishini kutadi va PRICE_POST_AT da yuboradi.
+    """Erta uyg'onib, PRICE_POST_AT gacha kutadi va o'sha paytdagi holatni yuboradi.
 
-    GitHub cron'i bir soat kechikib uyg'otsa ham post o'z vaqtida chiqsin uchun:
-    cron ancha erta qo'yiladi, jarayon esa FPL narxlarni o'zgartirgunicha kutadi,
-    so'ng belgilangan daqiqagacha ushlab turadi.
+    GitHub cron'i bir soat kechikib uyg'otsa ham post o'z vaqtida chiqsin uchun
+    cron ancha erta qo'yiladi. Lekin **avval post vaqtigacha kutamiz**, keyin
+    solishtiramiz — aks holda jarayon ishga tushgan zahoti (masalan 04:07 da)
+    kechagi qoldiq farqlarni ko'rib, tungi haqiqiy o'zgarishdan oldin post
+    qilib yuborardi va o'sha kechaning o'zgarishlari umuman e'lon qilinmasdi.
+
+    Post vaqtidan keyin ham kutish davom etadi: qishki vaqtda FPL narxlarni
+    06:30 (Toshkent) da o'zgartiradi, ya'ni 06:00 dan keyin.
     """
     config.require_telegram()
 
@@ -118,15 +123,18 @@ def watch() -> int:
     give_up = waiter.local_time_today(config.PRICE_WATCH_UNTIL)
     if give_up <= post_at:
         give_up = post_at + timedelta(minutes=90)
-    log.info("Kuzatuv boshlandi. Post vaqti: %s, kutish chegarasi: %s",
-             post_at.isoformat(), give_up.isoformat())
+    log.info("Post vaqti: %s, kutish chegarasi: %s", post_at.isoformat(), give_up.isoformat())
+
+    # Avval post vaqtigacha kutamiz — o'zgarishlarni o'shanda solishtiramiz.
+    waiter.sleep_until(post_at, label="Post vaqtini kutyapmiz")
 
     while True:
         new_snap = build_snapshot(fpl_api.get_bootstrap())
         down, up = diff(old_snap, new_snap)
         if down or up:
             log.info("O'zgarish topildi: %d tushgan, %d ko'tarilgan.", len(down), len(up))
-            break
+            publish(down, up, new_snap)
+            return 0
 
         now = waiter.now_utc()
         if now >= give_up:
@@ -136,10 +144,6 @@ def watch() -> int:
         wait = min(config.PRICE_POLL, max(1.0, (give_up - now).total_seconds()))
         log.info("Hozircha o'zgarish yo'q — %.0f soniyadan keyin qayta tekshiramiz.", wait)
         time.sleep(wait)
-
-    waiter.sleep_until(post_at, label="Post vaqtini kutyapmiz")
-    publish(down, up, new_snap)
-    return 0
 
 
 def preview() -> int:

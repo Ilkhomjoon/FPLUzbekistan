@@ -53,7 +53,14 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      # GitHub cron'ni shartli qilib bo'lmaydi, shuning uchun darvozani shu
+      # yerda qo'yamiz: o'yin yo'q kunlari qolgan qadamlar umuman bajarilmaydi.
+      - name: Bugun o'yin bormi?
+        id: gate
+        run: python -m scripts.matchday
+
       - name: Cron kechikishini o'lchash
+        if: steps.gate.outputs.active == 'true' 
         env:
           CRON_SCHEDULE: ${{ github.event.schedule }}
           CRON_WORKFLOW: "Jonli bonus"
@@ -66,6 +73,7 @@ jobs:
         run: python -m scripts.cron_delay
 
       - name: Jonli bonusni kuzatish
+        if: steps.gate.outputs.active == 'true'
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
@@ -94,5 +102,5 @@ jobs:
           python -m bot.live_bonus $ARGS
 
       - name: Holatni saqlash (commit)
-        if: always()
+        if: always() && steps.gate.outputs.active == 'true' 
         run: bash scripts/commit_state.sh "update live message state"

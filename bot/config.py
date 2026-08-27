@@ -92,6 +92,8 @@ LIVE_FINISH_GRACE = _int("LIVE_FINISH_GRACE", 10)    # oxirgi o'yin tugagach yan
 COLLAPSE_FINISHED = _bool("COLLAPSE_FINISHED", True)  # tugagan o'yinlar yig'ilgan holda tursinmi
 PIN_LIVE_MESSAGE = _bool("PIN_LIVE_MESSAGE", True)   # jonli xabar kanal tepasiga qadalsinmi
 UNPIN_AFTER_FINAL = _bool("UNPIN_AFTER_FINAL", True) # yakuniy yangilanishdan keyin olinsinmi
+LIVE_ACTIVE_AFTER = _int("LIVE_ACTIVE_AFTER", 12)    # oxirgi o'yin tugagach yana necha soat
+                                                     # davomida workflow ishga tushsin (soat)
 FINAL_SWEEP_MINUTES = _int("FINAL_SWEEP_MINUTES", 150)  # kun yakunlangach necha daqiqadan so'ng
                                                      # oxirgi marta yangilansin (rasmiy DefCon uchun)
 
