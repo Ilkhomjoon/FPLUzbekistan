@@ -184,7 +184,7 @@
     "131": {
       "cost": 50,
       "name": "Baleba",
-      "team": "BHA"
+      "team": "MUN"
     },
     "132": {
       "cost": 45,
@@ -367,7 +367,7 @@
       "team": "CHE"
     },
     "165": {
-      "cost": 75,
+      "cost": 76,
       "name": "João Pedro",
       "team": "CHE"
     },
@@ -562,7 +562,7 @@
       "team": "ARS"
     },
     "20": {
-      "cost": 55,
+      "cost": 54,
       "name": "Dowman",
       "team": "ARS"
     },
@@ -1693,7 +1693,7 @@
     },
     "403": {
       "cost": 65,
-      "name": "Savinho",
+      "name": "Sávio",
       "team": "TOT"
     },
     "404": {
@@ -1847,7 +1847,7 @@
       "team": "MUN"
     },
     "431": {
-      "cost": 60,
+      "cost": 59,
       "name": "Amad",
       "team": "MUN"
     },
@@ -2502,7 +2502,7 @@
       "team": "SUN"
     },
     "55": {
-      "cost": 80,
+      "cost": 79,
       "name": "Watkins",
       "team": "AVL"
     },
@@ -2856,6 +2856,16 @@
       "name": "Methalie",
       "team": "SUN"
     },
+    "613": {
+      "cost": 45,
+      "name": "Ahoka",
+      "team": "SUN"
+    },
+    "614": {
+      "cost": 45,
+      "name": "Hadjam",
+      "team": "BHA"
+    },
     "62": {
       "cost": 50,
       "name": "Diakité",
@@ -2952,7 +2962,7 @@
       "team": "BOU"
     },
     "8": {
-      "cost": 55,
+      "cost": 56,
       "name": "Calafiori",
       "team": "ARS"
     },
@@ -2997,7 +3007,7 @@
       "team": "BRE"
     },
     "88": {
-      "cost": 45,
+      "cost": 46,
       "name": "Kayode",
       "team": "BRE"
     },
@@ -3062,5 +3072,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-08-26T02:51:07+00:00"
+  "taken_at": "2026-08-27T02:35:02+00:00"
 }
