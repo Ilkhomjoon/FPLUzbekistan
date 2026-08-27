@@ -126,7 +126,8 @@ def watch() -> int:
     log.info("Post vaqti: %s, kutish chegarasi: %s", post_at.isoformat(), give_up.isoformat())
 
     # Avval post vaqtigacha kutamiz — o'zgarishlarni o'shanda solishtiramiz.
-    waiter.sleep_until(post_at, label="Post vaqtini kutyapmiz")
+    budget_end = waiter.budget(config.PRICE_MAX_MINUTES)
+    waiter.sleep_until(post_at, label="Post vaqtini kutyapmiz", budget_end=budget_end)
 
     while True:
         new_snap = build_snapshot(fpl_api.get_bootstrap())

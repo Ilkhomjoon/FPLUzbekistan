@@ -67,6 +67,7 @@ PRICE_SHOW_TEAM = _bool("PRICE_SHOW_TEAM", False)  # "Cherki (MCI) (£6.5M)" ko'
 PRICE_POST_AT = os.getenv("PRICE_POST_AT", "06:00")        # LOCAL_TZ bo'yicha
 PRICE_WATCH_UNTIL = os.getenv("PRICE_WATCH_UNTIL", "07:30")  # shu vaqtgacha kutamiz
 PRICE_POLL = _int("PRICE_POLL", 120)                       # necha soniyada bir tekshirilsin
+PRICE_MAX_MINUTES = _int("PRICE_MAX_MINUTES", 300)         # jarayon maksimal necha daqiqa yashaydi
 
 # --- Live bonus ---
 LIVE_STATE_FILE = DATA_DIR / "live_message.json"
@@ -104,6 +105,7 @@ PRICE_WATCH_HASHTAG = os.getenv("PRICE_WATCH_HASHTAG", "#PriceWatch")
 PRICE_WATCH_MIN = _int("PRICE_WATCH_MIN", 85)          # shu foizdan pastlari ro'yxatga tushmaydi
 PRICE_WATCH_MAX = _int("PRICE_WATCH_MAX", 8)           # har tomonda ko'pi bilan nechta futbolchi
 PRICE_WATCH_SURE = _int("PRICE_WATCH_SURE", 100)       # shundan oshgani "kutilmoqda" deb qalin yoziladi
+PRICE_WATCH_MAX_MINUTES = _int("PRICE_WATCH_MAX_MINUTES", 300)  # jarayon maksimal ish vaqti
 
 # --- Deadline statistikasi (sardorlar va chiplar) ---
 STATS_STATE_FILE = DATA_DIR / "deadline_stats.json"
@@ -130,6 +132,7 @@ GW_REVIEW_POLL = _int("GW_REVIEW_POLL", 180)             # necha soniyada bir te
 # Bitta eski javob "tayyor" deb ko'rsatib qo'ymasligi uchun ketma-ket tasdiq talab qilamiz.
 GW_REVIEW_CONFIRM = _int("GW_REVIEW_CONFIRM", 2)         # necha marta ketma-ket tasdiqlansin
 GW_REVIEW_CONFIRM_WAIT = _int("GW_REVIEW_CONFIRM_WAIT", 30)  # tasdiqlar orasidagi tanaffus
+GW_REVIEW_MAX_MINUTES = _int("GW_REVIEW_MAX_MINUTES", 300)   # jarayon maksimal ish vaqti
 
 
 # --- Differentiallar (tur oralig'idagi post) ---
@@ -149,6 +152,7 @@ DIFF_LOCAL_LEAGUE = _bool("DIFF_LOCAL_LEAGUE", True)  # "bizning ligada" bo'limi
 DIFF_POLL = _bool("DIFF_POLL", True)                  # so'rovnoma yuborilsinmi
 DIFF_POLL_OPTIONS = _int("DIFF_POLL_OPTIONS", 3)      # so'rovnomadagi futbolchilar soni
 DIFF_WORKERS = _int("DIFF_WORKERS", 6)                # parallel so'rovlar
+DIFF_MAX_MINUTES = _int("DIFF_MAX_MINUTES", 300)      # jarayon maksimal ish vaqti
 
 
 def _leagues() -> list[tuple[int, str]]:

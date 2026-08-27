@@ -198,12 +198,12 @@ Har bir workflow shu tamoyilda ishlaydi:
 
 | Post | Cron uyg'onadi | Jarayon ichida | Post chiqadi |
 |---|---|---|---|
-| Narx o'zgarishlari | 04:07 | narx o'zgarishini kuzatadi, so'ng `PRICE_POST_AT` gacha ushlab turadi | **06:00** |
+| Narx o'zgarishlari | 02:07 | `PRICE_POST_AT` gacha ushlab turadi, keyin solishtiradi | **06:00** |
 | Jonli bonus | o'yindan ≤115 daqiqa oldin | birinchi o'yin boshlanishini uxlab kutadi | **o'yin boshlanishida** |
 | Deadline statistikasi | o'yindan ≤200 daqiqa oldin | `T−40 daqiqa` gacha kutadi, so'ng ligalarni skanerlaydi | **T−40 daqiqa** |
-| Narx bashorati | 22:09 | `--post-at 23:00` | **23:00** |
-| Differentiallar | 19:09 | `DIFF_POST_AT` gacha ushlab turadi | **20:00** |
-| Tur sharhi | 12:30 | FPL tasdig'ini kuzatadi | **~13:05** (qishda ~14:05) |
+| Narx bashorati | 18:09 | `--post-at 23:00` | **23:00** |
+| Differentiallar | 15:09 | `DIFF_POST_AT` gacha ushlab turadi | **20:00** |
+| Tur sharhi | 11:30 | FPL tasdig'ini kuzatadi | **~13:05** (qishda ~14:05) |
 
 **Jonli bonus — o'yin yo'q kunlari umuman ishlamaydi.** GitHub cron'ni shartli qilib bo'lmaydi, shuning uchun ishning birinchi qadami `scripts/matchday.py` — u bitta so'rov bilan "bugun o'yin bormi yoki oxirgi o'yin tugaganiga `LIVE_ACTIVE_AFTER` (12) soatdan kam vaqt o'tdimi" deb qaraydi. Javob yo'q bo'lsa qolgan hamma qadam o'tkazib yuboriladi — na kuzatuv, na cron kechikishi haqida ogohlantirish.
 
@@ -222,6 +222,8 @@ Uchalasi ham tayyor bo'lgandagina post chiqadi. `leagues: "Updating"` ni ham kut
 `data_checked` jarayonning eng oxirgi qadami va bir necha soat kechikadi — unga tayanmaymiz.
 
 **CDN haqida.** FPL API'ni ketma-ket so'raganda turli serverlar turli yoshdagi nusxani qaytaradi — bitta so'rov "tayyor", keyingisi "tayyor emas" deyishi mumkin. Shuning uchun post chiqishidan oldin `GW_REVIEW_CONFIRM` (2) marta ketma-ket tasdiq talab qilinadi, orasida 30 soniya tanaffus bilan.
+
+> **Zaxira qancha bo'lishi kerak?** Uyg'onish vaqti bilan post vaqti orasidagi masofa **o'lchangan eng yomon cron kechikishidan katta** bo'lishi shart. Bizda eng yomoni **202 daqiqa** — shuning uchun har bir postda kamida 3.5 soat zaxira qoldirilgan. Ilgari narx bashoratiga atigi 51 daqiqa berilgan edi va cron 70 daqiqa kechikkanida post umuman chiqmadi.
 
 > **Yarim tun tuzog'i.** `waiter.local_time_today("23:00")` har doim shu vaqtning **eng yaqin** nusxasini qaytaradi (±12 soat ichida). Bo'lmasa 23:44 ga qo'yilgan cron 16 daqiqa kechikib 00:05 da uyg'onsa, "23:00 gacha kut" degani 23 soat kutish bo'lib qolardi va job timeout'da o'lardi.
 

@@ -180,12 +180,17 @@ class ConfirmationTest(unittest.TestCase):
         gw_review.fpl_api.get_bootstrap = lambda: {
             "events": [{"id": 1, "is_current": True, "finished": False, "data_checked": False}]}
         gw_review.storage.load = lambda *a, **kw: {}
+        # kutish chegarasi haqiqiy soatga bog'liq bo'lmasin
+        self._local_time = gw_review.waiter.local_time_today
+        gw_review.waiter.local_time_today = lambda hhmm: (
+            datetime.now(timezone.utc) + timedelta(hours=6))
         self.slept = []
         gw_review.time.sleep = lambda s: self.slept.append(s)
         self.ran = []
         gw_review.run = lambda *a, **kw: self.ran.append(True) or 0
 
     def tearDown(self):
+        gw_review.waiter.local_time_today = self._local_time
         for key, value in self._orig.items():
             if key == "run":
                 gw_review.run = value

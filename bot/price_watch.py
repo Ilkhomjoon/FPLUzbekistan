@@ -125,7 +125,8 @@ def main() -> int:
 
     try:
         if not (args.force or args.dry_run):
-            waiter.hold_until(args.post_at, label="Narx bashorati")
+            waiter.hold_until(args.post_at, label="Narx bashorati",
+                              budget_end=waiter.budget(config.PRICE_WATCH_MAX_MINUTES))
         return run(force=args.force)
     except Exception as exc:
         log.exception("Narx bashorati skriptida xatolik")

@@ -268,6 +268,8 @@ def watch() -> int:
     config.require_telegram()
 
     give_up = waiter.local_time_today(config.GW_REVIEW_UNTIL)
+    # Job timeout'ida o'lib qolmaslik uchun o'zimiz chiqamiz — keyingi cron davom ettiradi.
+    budget_end = waiter.budget(config.GW_REVIEW_MAX_MINUTES)
     log.info("Kuzatuv boshlandi — FPL tasdig'ini kutamiz (chegara: %s).", give_up.isoformat())
 
     # FPL API CDN orqali beriladi va turli serverlar turli yoshdagi nusxani
@@ -303,6 +305,9 @@ def watch() -> int:
             log.info("Kutish chegarasi keldi — sharh keyinroq chiqadi.")
             _explain_not_finished(bootstrap, status)
             return 0
+        if time.monotonic() >= budget_end:
+            log.info("Jarayon vaqti tugadi — keyingi cron kuzatishni davom ettiradi.")
+            return 0
 
         _, _, reason = fpl_api.status_verdict(status or {})
         wait = min(config.GW_REVIEW_POLL, max(1.0, (give_up - now).total_seconds()))
@@ -328,7 +333,8 @@ def main() -> int:
         if args.watch and not args.force:
             return watch()
         if not (args.force or args.dry_run):
-            waiter.hold_until(args.post_at, label="Tur sharhi")
+            waiter.hold_until(args.post_at, label="Tur sharhi",
+                              budget_end=waiter.budget(config.GW_REVIEW_MAX_MINUTES))
         return run(force=args.force)
     except Exception as exc:
         log.exception("Tur sharhi skriptida xatolik")

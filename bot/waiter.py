@@ -78,16 +78,23 @@ def sleep_until(target: datetime, label: str = "Kutish",
         time.sleep(min(left, CHUNK))
 
 
-def hold_until(hhmm: str | None, label: str = "Post vaqtini kutyapmiz") -> None:
+def budget(minutes: int) -> float:
+    """`time.monotonic()` shkalasidagi chegara — job timeout'idan oshib ketmaslik uchun."""
+    return time.monotonic() + minutes * 60
+
+
+def hold_until(hhmm: str | None, label: str = "Post vaqtini kutyapmiz",
+               budget_end: float | None = None) -> None:
     """LOCAL_TZ bo'yicha "HH:MM" kelguncha ushlab turadi. Vaqt o'tgan bo'lsa — darhol davom etadi.
 
-    Cron erta qo'yiladi, post esa aynan kerakli daqiqada chiqadi.
+    Cron ataylab ancha erta qo'yiladi (GitHub 3 soatgacha kechikishi mumkin),
+    post esa aynan kerakli daqiqada chiqadi.
     """
     if not hhmm:
         return
     target = local_time_today(hhmm)
     if target > now_utc():
-        sleep_until(target, label=label)
+        sleep_until(target, label=label, budget_end=budget_end)
 
 
 def _hhmmss(dt: datetime) -> str:

@@ -7,9 +7,9 @@ on:
     # PRICE_POST_AT (06:00 Toshkent) da yuboradi. GitHub cron 1 soat kechikib
     # uyg'otsa ham post o'z vaqtida chiqadi.
     #
-    # 23:07 UTC = 04:07 Toshkent. Daqiqa "07" — :00, :15, :30, :45 GitHub'da
-    # eng band daqiqalar, ularda kechikish eng katta bo'ladi.
-    - cron: "7 23 * * *"
+    # 21:07 UTC = 02:07 Toshkent -> 06:00 gacha 3 soat 53 daqiqa zaxira.
+    # Daqiqa "07" — :00, :15, :30, :45 GitHub'da eng band daqiqalar.
+    - cron: "7 21 * * *"
     # Zaxira: agar yuqoridagi run umuman ishga tushmasa (GitHub ba'zan
     # rejalashtirilgan run'ni tashlab ketadi), 06:39 Toshkent da oddiy
     # bir martalik tekshiruv. O'zgarish bo'lmasa post yo'q.
@@ -32,7 +32,7 @@ jobs:
   prices:
     runs-on: ubuntu-latest
     # Kuzatuv rejimi 04:07 dan 06:00 gacha kutadi — shuning uchun uzoq timeout
-    timeout-minutes: 240
+    timeout-minutes: 340
     steps:
       - uses: actions/checkout@v4
 
@@ -67,7 +67,7 @@ jobs:
           PRICE_POLL: "120"
         run: |
           # tungi cron -> kuzatuv rejimi, zaxira cron -> oddiy bir martalik tekshiruv
-          if [ "${{ github.event.schedule }}" = "7 23 * * *" ]; then
+          if [ "${{ github.event.schedule }}" = "7 21 * * *" ]; then
             python -m bot.price_changes --watch
           else
             python -m bot.price_changes

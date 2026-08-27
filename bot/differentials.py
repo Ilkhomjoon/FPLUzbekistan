@@ -321,7 +321,8 @@ def run(force: bool = False) -> int:
     if not force:
         post_at = waiter.local_time_today(config.DIFF_POST_AT)
         if waiter.now_utc() < post_at:
-            waiter.sleep_until(post_at, label="Differentiallar posti")
+            waiter.sleep_until(post_at, label="Differentiallar posti",
+                               budget_end=waiter.budget(config.DIFF_MAX_MINUTES))
         elif _too_late():
             log.info("Kech bo'ldi (%s dan keyin) — post ertaga chiqadi.", config.DIFF_LATEST)
             return 0

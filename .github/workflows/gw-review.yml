@@ -6,12 +6,15 @@ on:
     # Britaniya vaqti bilan 09:00 da yakuniy qiladi ("lockdown"):
     #   yozda (BST) = 08:00 UTC = 13:00 Toshkent
     #   qishda (GMT) = 09:00 UTC = 14:00 Toshkent
-    # Aniq soat yozib bo'lmaydi, shuning uchun 12:30 Toshkent da uyg'onib
-    # (07:30 UTC), FPL tasdiqlashini kuzatamiz va shu zahoti chiqaramiz.
-    - cron: "30 7 * * *"
-    # Zaxira: yuqoridagi run umuman ishga tushmasa. 15:44 Toshkent —
-    # yozda ham, qishda ham lockdown'dan keyin.
-    - cron: "44 10 * * *"
+    # Aniq soat yozib bo'lmaydi, shuning uchun erta uyg'onib kuzatamiz.
+    # Cron 3 soatgacha kechikishi mumkin, shuning uchun zaxira katta:
+    #   06:30 UTC = 11:30 Toshkent (lockdown'dan 1.5 soat oldin)
+    - cron: "30 6 * * *"
+    # Ikkinchi kuzatuvchi (14:30 Toshkent) — birinchisi tushib qolsa yoki
+    # vaqti tugasa, kuzatishni shu davom ettiradi
+    - cron: "30 9 * * *"
+    # Oxirgi zaxira (17:44 Toshkent): bir marta tekshirib chiqadi
+    - cron: "44 12 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -34,7 +37,7 @@ jobs:
   review:
     runs-on: ubuntu-latest
     # 12:30 dan lockdown'gacha kutish (qishda ~1.5 soat) + liga skaneri
-    timeout-minutes: 300
+    timeout-minutes: 340
     steps:
       - uses: actions/checkout@v4
 
@@ -64,7 +67,9 @@ jobs:
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
           # Asosiy cron FPL tasdig'ini kuzatadi; zaxira cron esa
           # (lockdown allaqachon o'tgan) bir marta tekshirib chiqadi.
-          if [ "${{ github.event.schedule }}" = "30 7 * * *" ]; then ARGS="$ARGS --watch"; fi
+          case "${{ github.event.schedule }}" in
+            "30 6 * * *"|"30 9 * * *") ARGS="$ARGS --watch" ;;
+          esac
           python -m bot.gw_review $ARGS
 
       - name: Holatni saqlash (commit)
