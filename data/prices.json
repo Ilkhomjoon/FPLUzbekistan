@@ -282,7 +282,7 @@
       "team": "CHE"
     },
     "15": {
-      "cost": 65,
+      "cost": 66,
       "name": "Ødegaard",
       "team": "ARS"
     },
@@ -337,7 +337,7 @@
       "team": "CHE"
     },
     "16": {
-      "cost": 65,
+      "cost": 64,
       "name": "Madueke",
       "team": "ARS"
     },
@@ -607,7 +607,7 @@
       "team": "CRY"
     },
     "208": {
-      "cost": 65,
+      "cost": 64,
       "name": "Sarr",
       "team": "CRY"
     },
@@ -1962,7 +1962,7 @@
       "team": "NEW"
     },
     "452": {
-      "cost": 70,
+      "cost": 69,
       "name": "Bruno G.",
       "team": "ARS"
     },
@@ -2122,7 +2122,7 @@
       "team": "NFO"
     },
     "481": {
-      "cost": 65,
+      "cost": 64,
       "name": "Anderson",
       "team": "MCI"
     },
@@ -2327,7 +2327,7 @@
       "team": "TOT"
     },
     "518": {
-      "cost": 50,
+      "cost": 49,
       "name": "P.M.Sarr",
       "team": "TOT"
     },
@@ -2866,6 +2866,16 @@
       "name": "Hadjam",
       "team": "BHA"
     },
+    "615": {
+      "cost": 45,
+      "name": "Di Gregorio",
+      "team": "BOU"
+    },
+    "616": {
+      "cost": 55,
+      "name": "Bouaddi",
+      "team": "MCI"
+    },
     "62": {
       "cost": 50,
       "name": "Diakité",
@@ -3017,7 +3027,7 @@
       "team": "BRE"
     },
     "9": {
-      "cost": 55,
+      "cost": 54,
       "name": "Hincapie",
       "team": "ARS"
     },
@@ -3072,5 +3082,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-08-27T12:00:18+00:00"
+  "taken_at": "2026-08-28T01:05:32+00:00"
 }
