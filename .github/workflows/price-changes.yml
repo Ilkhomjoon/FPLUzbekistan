@@ -67,11 +67,11 @@ jobs:
           PRICE_POLL: "120"
         run: |
           # tungi cron -> kuzatuv rejimi, zaxira cron -> oddiy bir martalik tekshiruv
-          if [ "${{ github.event.schedule }}" = "7 21 * * *" ]; then
-            python -m bot.price_changes --watch
-          else
-            python -m bot.price_changes
-          fi
+          ARGS=""
+          # Cron bo'yicha ishga tushganda post faqat ertalabki oynada chiqadi
+          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="--window 05:00-09:00"; fi
+          if [ "${{ github.event.schedule }}" = "7 21 * * *" ]; then ARGS="$ARGS --watch"; fi
+          python -m bot.price_changes $ARGS
 
       - name: Holatni saqlash (commit)
         if: always()

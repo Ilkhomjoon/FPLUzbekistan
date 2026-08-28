@@ -106,6 +106,8 @@ PRICE_WATCH_MIN = _int("PRICE_WATCH_MIN", 85)          # shu foizdan pastlari ro
 PRICE_WATCH_MAX = _int("PRICE_WATCH_MAX", 8)           # har tomonda ko'pi bilan nechta futbolchi
 PRICE_WATCH_SURE = _int("PRICE_WATCH_SURE", 100)       # shundan oshgani "kutilmoqda" deb qalin yoziladi
 PRICE_WATCH_MAX_MINUTES = _int("PRICE_WATCH_MAX_MINUTES", 300)  # jarayon maksimal ish vaqti
+# Takror postga qarshi: kalendar kuniga emas, o'tgan vaqtga qaraymiz
+PRICE_WATCH_REPEAT_HOURS = _float("PRICE_WATCH_REPEAT_HOURS", 20.0)
 
 # --- Deadline statistikasi (sardorlar va chiplar) ---
 STATS_STATE_FILE = DATA_DIR / "deadline_stats.json"

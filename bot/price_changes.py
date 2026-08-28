@@ -59,8 +59,11 @@ def diff(old: dict, new: dict) -> tuple[list[dict], list[dict]]:
     return down, up
 
 
-def run(force: bool = False) -> int:
+def run(force: bool = False, window: str | None = None) -> int:
     config.require_telegram()
+    if not force and not waiter.in_window(window):
+        log.info("Post oynasi (%s) tashqarisidamiz — narx posti chiqarilmaydi.", window)
+        return 0
     bootstrap = fpl_api.get_bootstrap()
     new_snap = build_snapshot(bootstrap)
     old_snap = storage.load(config.PRICE_STATE_FILE)
@@ -98,7 +101,7 @@ def publish(down: list[dict], up: list[dict], new_snap: dict) -> None:
     storage.save(config.PRICE_STATE_FILE, new_snap)
 
 
-def watch() -> int:
+def watch(window: str | None = None) -> int:
     """Erta uyg'onib, PRICE_POST_AT gacha kutadi va o'sha paytdagi holatni yuboradi.
 
     GitHub cron'i bir soat kechikib uyg'otsa ham post o'z vaqtida chiqsin uchun
@@ -134,6 +137,10 @@ def watch() -> int:
         down, up = diff(old_snap, new_snap)
         if down or up:
             log.info("O'zgarish topildi: %d tushgan, %d ko'tarilgan.", len(down), len(up))
+            if not waiter.in_window(window):
+                log.info("Lekin post oynasi (%s) tashqarisidamiz — chiqarilmaydi.", window)
+                storage.save(config.PRICE_STATE_FILE, new_snap)
+                return 0
             publish(down, up, new_snap)
             return 0
 
@@ -199,6 +206,8 @@ def main() -> int:
     ap.add_argument("--reset", action="store_true", help="Snapshot'ni qaytadan oladi va postsiz chiqadi")
     ap.add_argument("--watch", action="store_true",
                     help="Narx o'zgarishini kutadi va PRICE_POST_AT da yuboradi (cron kechikishiga qarshi)")
+    ap.add_argument("--window", default=None, metavar="HH:MM-HH:MM",
+                    help="Faqat shu oynada chiqaradi (cron juda kechiksa post umuman chiqmaydi)")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
@@ -218,7 +227,8 @@ def main() -> int:
         return 0
 
     try:
-        return watch() if args.watch else run(force=args.force)
+        return (watch(window=args.window) if args.watch
+                else run(force=args.force, window=args.window))
     except Exception as exc:
         log.exception("Narx skriptida xatolik")
         telegram.notify_admin(f"⚠️ <b>FPL bot xatoligi (narx)</b>\n<code>{telegram.esc(repr(exc))}</code>")

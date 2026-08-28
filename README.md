@@ -225,6 +225,10 @@ Uchalasi ham tayyor bo'lgandagina post chiqadi. `leagues: "Updating"` ni ham kut
 
 > **Zaxira qancha bo'lishi kerak?** Uyg'onish vaqti bilan post vaqti orasidagi masofa **o'lchangan eng yomon cron kechikishidan katta** bo'lishi shart. Bizda eng yomoni **202 daqiqa** — shuning uchun har bir postda kamida 3.5 soat zaxira qoldirilgan. Ilgari narx bashoratiga atigi 51 daqiqa berilgan edi va cron 70 daqiqa kechikkanida post umuman chiqmadi.
 
+> **Ikki qavatli himoya.** Cron kechikishi zaxiradan ham oshib ketsa, post **umuman chiqmasligi** kerak — kech chiqqanidan ko'ra chiqmagani yaxshi. Shuning uchun har bir cron postiga `--window` beriladi: narx bashorati faqat `20:00-01:00`, narx o'zgarishlari `05:00-09:00`, tur sharhi `09:00-19:00` oynasida chiqadi. Qo'lda ishga tushirilganda cheklov yo'q.
+>
+> Takror postga qarshi ham **kalendar kuniga emas, o'tgan vaqtga** qaraladi (`PRICE_WATCH_REPEAT_HOURS = 20`). Aks holda 00:17 da chiqqan post ertalab "yangi kun" deb qaytadan chiqib ketardi — 28-avgustda aynan shunday bo'ldi.
+
 > **Yarim tun tuzog'i.** `waiter.local_time_today("23:00")` har doim shu vaqtning **eng yaqin** nusxasini qaytaradi (±12 soat ichida). Bo'lmasa 23:44 ga qo'yilgan cron 16 daqiqa kechikib 00:05 da uyg'onsa, "23:00 gacha kut" degani 23 soat kutish bo'lib qolardi va job timeout'da o'lardi.
 
 Har birida **zaxira cron** ham bor — GitHub ba'zan rejalashtirilgan run'ni umuman tashlab ketadi. Holat fayllari tufayli ikki marta post chiqmaydi.
@@ -330,6 +334,7 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `PRICE_POST_AT` | `06:00` | `--watch` rejimida post aynan shu vaqtda chiqadi |
 | `PRICE_WATCH_UNTIL` | `07:30` | Shu vaqtgacha o'zgarish bo'lmasa — post yo'q |
 | `PRICE_POLL` | `120` | `--watch` necha soniyada bir tekshiradi |
+| `PRICE_WATCH_REPEAT_HOURS` | `20` | Shu soat ichida narx bashorati takrorlanmaydi |
 | `LIVE_HASHTAG` | `#BonusPoints` | Jonli post hashtagi |
 | `SHOW_BPS` | `true` | Bonus yonida BPS ko'rsatilsinmi (`3 · 34 BPS`) |
 | `SHOW_DEFCON` | `true` | 🛡 DefCon qatori chiqsinmi |

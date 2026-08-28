@@ -97,5 +97,46 @@ def hold_until(hhmm: str | None, label: str = "Post vaqtini kutyapmiz",
         sleep_until(target, label=label, budget_end=budget_end)
 
 
+def _minutes(hhmm: str) -> int:
+    hour, _, minute = hhmm.partition(":")
+    return int(hour) * 60 + int(minute or 0)
+
+
+def in_window(window: str | None, now: datetime | None = None) -> bool:
+    """LOCAL_TZ bo'yicha "20:00-01:00" oynasi ichidamizmi?
+
+    Bu — oxirgi himoya chizig'i. Cron bir necha soat kechikib, jarayon
+    tunda chiqishi kerak bo'lgan postni ertalab yuborib qo'ymasligi uchun.
+    Oyna yarim tundan o'tishi mumkin (boshi oxiridan katta bo'lsa).
+    """
+    if not window:
+        return True
+    start, _, end = window.partition("-")
+    if not end:
+        return True
+    tz = ZoneInfo(config.LOCAL_TZ)
+    ref = (now or now_utc()).astimezone(tz)
+    cur = ref.hour * 60 + ref.minute
+    a, b = _minutes(start), _minutes(end)
+    return a <= cur <= b if a <= b else (cur >= a or cur <= b)
+
+
+def recent(iso: str | None, hours: float, now: datetime | None = None) -> bool:
+    """`iso` vaqtidan beri `hours` soatdan kam o'tdimi?
+
+    Kalendar kuniga emas, o'tgan vaqtga qaraymiz: yarim tundan keyin ishga
+    tushgan jarayon "yangi kun" deb postni takrorlab yubormasligi kerak.
+    """
+    if not iso:
+        return False
+    try:
+        when = datetime.fromisoformat(iso)
+    except ValueError:
+        return False
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=timezone.utc)
+    return (now or now_utc()) - when < timedelta(hours=hours)
+
+
 def _hhmmss(dt: datetime) -> str:
     return dt.astimezone(ZoneInfo(config.LOCAL_TZ)).strftime("%H:%M:%S")

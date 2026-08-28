@@ -61,6 +61,10 @@ jobs:
           case "${{ github.event.schedule }}" in
             "9 13 * * *"|"9 16 * * *") ARGS="$ARGS --post-at 23:00" ;;
           esac
+          # Cron bo'yicha ishga tushganda post FAQAT shu oynada chiqadi.
+          # Juda kechikkan job "ertaga narxi o'zgaradi" postini ertalab
+          # yuborib qo'ymasligi uchun. Qo'lda ishga tushirilganda cheklov yo'q.
+          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="$ARGS --window 20:00-01:00"; fi
           python -m bot.price_watch $ARGS
 
       - name: Holatni saqlash (commit)

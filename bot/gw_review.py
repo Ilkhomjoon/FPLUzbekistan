@@ -185,8 +185,11 @@ def event_end_date(fixtures: list[dict], tz: str) -> str | None:
 
 # ---------------- asosiy ----------------
 
-def run(force: bool = False) -> int:
+def run(force: bool = False, window: str | None = None) -> int:
     config.require_telegram()
+    if not force and not waiter.in_window(window):
+        log.info("Post oynasi (%s) tashqarisidamiz — sharh chiqarilmaydi.", window)
+        return 0
 
     bootstrap = fpl_api.get_bootstrap()
     try:
@@ -257,7 +260,7 @@ def ready_event(bootstrap: dict, status: dict | None = None) -> dict | None:
     return None if state.get("event") == event["id"] else event
 
 
-def watch() -> int:
+def watch(window: str | None = None) -> int:
     """FPL turni rasman yopishini kutadi va shu zahoti sharhni chiqaradi.
 
     2026/27 dan boshlab FPL ochkolarni turning oxirgi o'yinidan keyingi kuni
@@ -290,7 +293,7 @@ def watch() -> int:
             if confirmations >= config.GW_REVIEW_CONFIRM:
                 log.info("FPL turni yakunladi (%d marta tasdiqlandi) — sharh chiqarilmoqda.",
                          confirmations)
-                return run()
+                return run(window=window)
             log.info("Tayyorga o'xshaydi (%d/%d) — %d soniyadan keyin qayta tekshiramiz.",
                      confirmations, config.GW_REVIEW_CONFIRM, config.GW_REVIEW_CONFIRM_WAIT)
             time.sleep(config.GW_REVIEW_CONFIRM_WAIT)
@@ -323,6 +326,8 @@ def main() -> int:
                     help="Shu vaqtgacha kutib turadi (cron kechiksa ham post o'z vaqtida chiqadi)")
     ap.add_argument("--watch", action="store_true",
                     help="FPL turni rasman yopishini kutadi va shu zahoti chiqaradi")
+    ap.add_argument("--window", default=None, metavar="HH:MM-HH:MM",
+                    help="Faqat shu oynada chiqaradi (cron juda kechiksa post umuman chiqmaydi)")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
@@ -331,11 +336,11 @@ def main() -> int:
 
     try:
         if args.watch and not args.force:
-            return watch()
+            return watch(window=args.window)
         if not (args.force or args.dry_run):
             waiter.hold_until(args.post_at, label="Tur sharhi",
                               budget_end=waiter.budget(config.GW_REVIEW_MAX_MINUTES))
-        return run(force=args.force)
+        return run(force=args.force, window=args.window)
     except Exception as exc:
         log.exception("Tur sharhi skriptida xatolik")
         telegram.notify_admin(f"⚠️ <b>FPL bot (tur sharhi)</b>\n<code>{telegram.esc(repr(exc))}</code>")

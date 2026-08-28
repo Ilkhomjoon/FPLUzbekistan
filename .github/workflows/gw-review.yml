@@ -70,6 +70,8 @@ jobs:
           case "${{ github.event.schedule }}" in
             "30 6 * * *"|"30 9 * * *") ARGS="$ARGS --watch" ;;
           esac
+          # Sharh faqat kunduzi chiqsin — kechikkan job uni tunda yubormasin
+          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="$ARGS --window 09:00-19:00"; fi
           python -m bot.gw_review $ARGS
 
       - name: Holatni saqlash (commit)
