@@ -229,6 +229,11 @@ def _live_post(
     if all_done:
         blocks.append("✅ Bugungi o'yinlar yakunlandi.")
 
+    # "BPS nima?" — o'quvchilar tez-tez so'raydi. Joy tor bo'lgan holatda
+    # (level 2 — BPS raqamlari ham olib tashlangan) izoh ham tushib qoladi.
+    if config.SHOW_BPS and config.BPS_NOTE and level < 2:
+        blocks.append(f"<blockquote>{esc(config.BPS_NOTE)}</blockquote>")
+
     blocks.append(f"{config.LIVE_HASHTAG}\n\n{config.CHANNEL_TAG}")
     return "\n\n".join(blocks)
 

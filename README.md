@@ -347,6 +347,7 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `PRICE_WATCH_REPEAT_HOURS` | `20` | Shu soat ichida narx bashorati takrorlanmaydi |
 | `LIVE_HASHTAG` | `#BonusPoints` | Jonli post hashtagi |
 | `SHOW_BPS` | `true` | Bonus yonida BPS ko'rsatilsinmi (`3 · 34 BPS`) |
+| `BPS_NOTE` | "BPS — Bonus ochkolar…" | Hashtagdan yuqorida chiqadigan izoh; bo'sh qilinsa chiqmaydi |
 | `SHOW_DEFCON` | `true` | 🛡 DefCon qatori chiqsinmi |
 | `DEFCON_TTL` | `120` | DefCon necha soniyada bir yangilanadi |
 | `LIVE_INTERVAL` | `60` | Necha soniyada bir yangilanadi |

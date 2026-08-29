@@ -76,6 +76,13 @@ LIVE_LABEL = os.getenv("LIVE_LABEL", "🔴 LIVE")      # o'yin ketayotgandagi sa
 DONE_LABEL = os.getenv("DONE_LABEL", "✅ YAKUNLANDI")  # hammasi tugagandagi belgi
 WAIT_LABEL = os.getenv("WAIT_LABEL", "⚪️ KUTILMOQDA")  # hali boshlanmagan
 SHOW_BPS = _bool("SHOW_BPS", True)                   # bonus yonida BPS ham ko'rsatilsinmi
+# Xabar oxirida, hashtagdan oldin chiqadigan qisqa izoh — "BPS nima?" degan
+# savol juda ko'p kelgani uchun. Bo'sh qilib qo'yilsa umuman chiqmaydi.
+BPS_NOTE = os.getenv(
+    "BPS_NOTE",
+    "BPS — Bonus ochkolar hisoblanishi uchun ishlatiladi, "
+    "eng ko'p BPS to'plagan futbolchilar bonuslarga ega chiqadi.",
+)
 SHOW_DEFCON = _bool("SHOW_DEFCON", True)             # DefCon oluvchilar qatori chiqsinmi
 SHOW_GOALS = _bool("SHOW_GOALS", True)               # gol va assistlar qatori chiqsinmi
 SHOW_CARDS = _bool("SHOW_CARDS", True)               # sariq/qizil kartochkalar chiqsinmi

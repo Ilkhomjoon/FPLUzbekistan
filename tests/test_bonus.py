@@ -71,3 +71,50 @@ class TestMinBps(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class BpsNoteTest(unittest.TestCase):
+    """"BPS nima?" izohi — hashtagdan bevosita yuqorida turishi kerak."""
+
+    FIXTURES = [{
+        "id": 1, "event": 2, "kickoff_time": "2026-08-28T19:00:00Z", "started": True,
+        "finished": True, "finished_provisional": True, "team_h": 1, "team_a": 2,
+        "team_h_score": 1, "team_a_score": 4, "stats": [],
+    }]
+    TEAMS = {1: {"short_name": "CRY", "name": "Crystal Palace"},
+             2: {"short_name": "MCI", "name": "Man City"}}
+
+    def _post(self, level=0):
+        from bot.formatting import _live_post
+        return _live_post(self.FIXTURES, {}, self.TEAMS, 2, {}, level)
+
+    def test_note_sits_directly_above_the_hashtag(self):
+        from bot import config
+
+        text = self._post()
+        note = f"<blockquote>{config.BPS_NOTE}</blockquote>"
+        self.assertIn(note, text)
+        # oralarida aynan bitta bo'sh qator
+        self.assertIn(f"{note}\n\n{config.LIVE_HASHTAG}", text)
+
+    def test_note_is_separated_from_what_comes_before(self):
+        from bot import config
+
+        text = self._post()
+        before, _, _ = text.partition(f"<blockquote>{config.BPS_NOTE}")
+        self.assertTrue(before.endswith("\n\n"), "izohdan oldin bitta bo'sh qator kerak")
+
+    def test_note_dropped_when_the_message_is_too_long(self):
+        from bot import config
+
+        self.assertNotIn(config.BPS_NOTE, self._post(level=2))
+
+    def test_note_can_be_switched_off(self):
+        from bot import config
+
+        original = config.BPS_NOTE
+        config.BPS_NOTE = ""
+        try:
+            self.assertNotIn("<blockquote>", self._post())
+        finally:
+            config.BPS_NOTE = original
