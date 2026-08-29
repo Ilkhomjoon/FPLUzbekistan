@@ -205,6 +205,8 @@ Har bir workflow shu tamoyilda ishlaydi:
 | Differentiallar | 15:09 | `DIFF_POST_AT` gacha ushlab turadi | **20:00** |
 | Tur sharhi | 11:30 | FPL tasdig'ini kuzatadi | **~13:05** (qishda ~14:05) |
 
+**Yakuniy yangilanish o'tkazib yuborilsa.** Kun tugagach xabarni oxirgi marta yangilaydigan `--final` run biror sababga ko'ra ishlamay qolsa, ertasi kuni yangi xabar holat faylini qayta yozadi va eski xabar kanal tepasida qolib ketardi. Endi yangi xabar yaratilishidan oldin `retire_previous()` eski xabarni yakuniy holatga keltirib, pindan oladi.
+
 **Jonli bonus — o'yin yo'q kunlari umuman ishlamaydi.** GitHub cron'ni shartli qilib bo'lmaydi, shuning uchun ishning birinchi qadami `scripts/matchday.py` — u bitta so'rov bilan "bugun o'yin bormi yoki oxirgi o'yin tugaganiga `LIVE_ACTIVE_AFTER` (12) soatdan kam vaqt o'tdimi" deb qaraydi. Javob yo'q bo'lsa qolgan hamma qadam o'tkazib yuboriladi — na kuzatuv, na cron kechikishi haqida ogohlantirish.
 
 **Tur sharhi — alohida holat.** 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni **Britaniya vaqti bilan 09:00** da yakuniy qiladi ("lockdown"). Toshkentda bu yozda 13:00, qishda 14:00 — ya'ni aniq soatni cron'ga yozib bo'lmaydi. Shuning uchun 12:30 da uyg'onib, har 3 daqiqada tekshiramiz va tayyor bo'lishi bilan chiqaramiz (`GW_REVIEW_UNTIL` gacha).

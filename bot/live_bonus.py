@@ -108,6 +108,38 @@ def _send_or_edit(message_id, text_builder):
                 else telegram.send_message(text)), text
 
 
+def retire_previous(previous: dict, all_fixtures: list[dict],
+                    players: dict, teams: dict) -> None:
+    """Oldingi kungi xabar yakunlanmagan bo'lsa — yangi xabar yaratishdan
+    oldin uni yakunlab, kanal tepasidan olamiz.
+
+    Yakuniy yangilanish (`--final`) biror kuni o'tkazib yuborilsa, ertasi kuni
+    yangi xabar holat faylini qayta yozadi va eski xabar abadiy pinda qolib
+    ketardi. Shu yerda oxirgi imkoniyatni ishlatamiz.
+    """
+    message_id = previous.get("message_id")
+    day = previous.get("date")
+    if not message_id or not day or previous.get("swept"):
+        return
+
+    log.info("%s kungi xabar yakunlanmay qolgan (id=%s) — hozir yakunlaymiz.", day, message_id)
+    try:
+        fixtures = todays_fixtures(all_fixtures, day)
+        if fixtures:
+            events = sorted({f["event"] for f in fixtures if f.get("event")})
+            gw = events[0] if events else None
+            defcon = fetch_defcon(events, fixtures, players) if config.SHOW_DEFCON else {}
+            text = live_bonus_post(fixtures, players, teams, gw, defcon=defcon)
+            if text != previous.get("last_text"):
+                telegram.edit_message(message_id, text)
+                log.info("%s kungi xabar yakuniy holatga keltirildi.", day)
+        if config.PIN_LIVE_MESSAGE and config.UNPIN_AFTER_FINAL:
+            telegram.unpin_message(message_id)
+    except Exception as exc:
+        # bu qo'shimcha ish — bugungi kuzatuvni to'xtatib qo'ymasin
+        log.warning("%s kungi xabarni yakunlab bo'lmadi: %s", day, exc)
+
+
 # ---------------- asosiy sikl ----------------
 
 def run(once: bool = False) -> int:
@@ -156,8 +188,11 @@ def run(once: bool = False) -> int:
             return 0
 
     state = storage.load(config.LIVE_STATE_FILE, {}) or {}
-    message_id = state.get("message_id") if state.get("date") == day else None
-    last_text = state.get("last_text") if state.get("date") == day else None
+    same_day = state.get("date") == day
+    message_id = state.get("message_id") if same_day else None
+    last_text = state.get("last_text") if same_day else None
+    # boshqa kungi, yakunlanmagan xabar — yangi xabar yaratishdan oldin yopamiz
+    previous = state if (state.get("date") and not same_day) else None
 
     deadline = started + config.LIVE_MAX_MINUTES * 60
     all_done_since: float | None = None
@@ -199,6 +234,9 @@ def run(once: bool = False) -> int:
                 text = live_bonus_post(today, players, teams, gw, defcon=defcon_cache)
 
                 if message_id is None:
+                    if previous:
+                        retire_previous(previous, fresh or all_fixtures, players, teams)
+                        previous = None
                     res, text = _send_or_edit(None, lambda: live_bonus_post(
                         today, players, teams, gw, defcon=defcon_cache))
                     message_id = res.get("message_id")
