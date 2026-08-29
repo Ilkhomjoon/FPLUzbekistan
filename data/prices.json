@@ -1,5 +1,5 @@
 {
-  "event": 1,
+  "event": 2,
   "players": {
     "1": {
       "cost": 60,
@@ -82,7 +82,7 @@
       "team": "TOT"
     },
     "113": {
-      "cost": 45,
+      "cost": 44,
       "name": "F.Kadıoğlu",
       "team": "BHA"
     },
@@ -132,7 +132,7 @@
       "team": "BHA"
     },
     "122": {
-      "cost": 60,
+      "cost": 59,
       "name": "Minteh",
       "team": "BHA"
     },
@@ -227,7 +227,7 @@
       "team": "BHA"
     },
     "14": {
-      "cost": 65,
+      "cost": 64,
       "name": "Eze",
       "team": "ARS"
     },
@@ -304,10 +304,10 @@
     "153": {
       "cost": 45,
       "name": "Disasi",
-      "team": "CHE"
+      "team": "CRY"
     },
     "154": {
-      "cost": 95,
+      "cost": 96,
       "name": "Palmer",
       "team": "CHE"
     },
@@ -374,12 +374,12 @@
     "166": {
       "cost": 65,
       "name": "N.Jackson",
-      "team": "CHE"
+      "team": "AVL"
     },
     "167": {
       "cost": 55,
       "name": "Delap",
-      "team": "CHE"
+      "team": "NFO"
     },
     "168": {
       "cost": 50,
@@ -392,7 +392,7 @@
       "team": "CHE"
     },
     "17": {
-      "cost": 60,
+      "cost": 59,
       "name": "Merino",
       "team": "ARS"
     },
@@ -502,7 +502,7 @@
       "team": "COV"
     },
     "19": {
-      "cost": 55,
+      "cost": 54,
       "name": "Zubimendi",
       "team": "ARS"
     },
@@ -597,7 +597,7 @@
       "team": "CRY"
     },
     "206": {
-      "cost": 45,
+      "cost": 44,
       "name": "Chadi Riad",
       "team": "CRY"
     },
@@ -657,7 +657,7 @@
       "team": "CRY"
     },
     "217": {
-      "cost": 50,
+      "cost": 49,
       "name": "M.França",
       "team": "CRY"
     },
@@ -1627,7 +1627,7 @@
       "team": "MCI"
     },
     "392": {
-      "cost": 55,
+      "cost": 54,
       "name": "Aït-Nouri",
       "team": "MCI"
     },
@@ -1662,7 +1662,7 @@
       "team": "MCI"
     },
     "399": {
-      "cost": 75,
+      "cost": 76,
       "name": "Cherki",
       "team": "MCI"
     },
@@ -1677,14 +1677,14 @@
       "team": "CHE"
     },
     "400": {
-      "cost": 75,
+      "cost": 74,
       "name": "Doku",
       "team": "MCI"
     },
     "401": {
       "cost": 70,
       "name": "Marmoush",
-      "team": "MCI"
+      "team": "TOT"
     },
     "402": {
       "cost": 65,
@@ -1704,7 +1704,7 @@
     "405": {
       "cost": 55,
       "name": "N.Gonzalez",
-      "team": "MCI"
+      "team": "NEW"
     },
     "406": {
       "cost": 55,
@@ -1757,7 +1757,7 @@
       "team": "MUN"
     },
     "415": {
-      "cost": 60,
+      "cost": 59,
       "name": "Dorgu",
       "team": "MUN"
     },
@@ -1897,7 +1897,7 @@
       "team": "AVL"
     },
     "440": {
-      "cost": 55,
+      "cost": 54,
       "name": "Zirkzee",
       "team": "MUN"
     },
@@ -2117,7 +2117,7 @@
       "team": "AVL"
     },
     "480": {
-      "cost": 80,
+      "cost": 79,
       "name": "Gibbs-White",
       "team": "NFO"
     },
@@ -2127,7 +2127,7 @@
       "team": "MCI"
     },
     "482": {
-      "cost": 60,
+      "cost": 59,
       "name": "Hudson-Odoi",
       "team": "NFO"
     },
@@ -2312,7 +2312,7 @@
       "team": "TOT"
     },
     "515": {
-      "cost": 65,
+      "cost": 64,
       "name": "Maddison",
       "team": "TOT"
     },
@@ -2482,7 +2482,7 @@
       "team": "SUN"
     },
     "546": {
-      "cost": 50,
+      "cost": 49,
       "name": "Adingra",
       "team": "SUN"
     },
@@ -2876,10 +2876,40 @@
       "name": "Bouaddi",
       "team": "MCI"
     },
+    "617": {
+      "cost": 50,
+      "name": "Cho",
+      "team": "HUL"
+    },
+    "618": {
+      "cost": 60,
+      "name": "Goretzka",
+      "team": "AVL"
+    },
+    "619": {
+      "cost": 50,
+      "name": "Palacios",
+      "team": "IPS"
+    },
     "62": {
       "cost": 50,
       "name": "Diakité",
       "team": "BOU"
+    },
+    "620": {
+      "cost": 45,
+      "name": "Diouf",
+      "team": "BRE"
+    },
+    "621": {
+      "cost": 45,
+      "name": "McAidoo",
+      "team": "MCI"
+    },
+    "622": {
+      "cost": 40,
+      "name": "Braithwaite",
+      "team": "MCI"
     },
     "63": {
       "cost": 50,
@@ -3039,7 +3069,7 @@
     "91": {
       "cost": 45,
       "name": "Pinnock",
-      "team": "BRE"
+      "team": "COV"
     },
     "92": {
       "cost": 45,
@@ -3082,5 +3112,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-08-28T05:19:29+00:00"
+  "taken_at": "2026-08-29T02:41:38+00:00"
 }
