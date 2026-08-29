@@ -18,6 +18,10 @@ on:
         description: "Vaqt oynasini e'tiborsiz qoldirib, hoziroq chiqarish"
         type: boolean
         default: false
+      scheduled:
+        description: "Tashqi cron chaqirdi — jadval bo'yicha ishlasin"
+        type: boolean
+        default: false
 
 concurrency:
   group: fpl-deadline-stats

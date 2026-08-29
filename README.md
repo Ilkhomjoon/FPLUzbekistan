@@ -258,6 +258,14 @@ Cron daqiqalari ham ataylab **g'alati** tanlangan (`:07`, `:11`, `:13`, `:23`, `
 
 Yangilanish tezligini `LIVE_INTERVAL` (soniyada) bilan o'zgartirasiz. 60 soniyadan pastga tushirishni tavsiya qilmayman: FPL API'ni ortiqcha yuklaydi va Telegram tahrirlash limitiga yaqinlashadi.
 
+### Tashqi cron (asosiy ishga tushirish)
+
+GitHub cron'i 8-10 soatgacha kechikadigan bo'lib qolgach, postlar **tashqaridan** ishga tushiriladi: cron-job.org belgilangan daqiqada GitHub API'ga `workflow_dispatch` so'rovini yuboradi va ish navbatga tushmasdan darhol boshlanadi. GitHub cron'lari zaxira bo'lib qoladi.
+
+To'liq sozlash yo'riqnomasi: [`docs/tashqi-cron.md`](docs/tashqi-cron.md).
+
+Tashqi chaqiruv `scheduled: true` kirituvchisini yuboradi — workflow uni cron bilan bir xil ko'radi (kutish, oyna, kuzatuv rejimi hammasi ishlaydi).
+
 ### Kechikishni o'lchash
 
 Har ishga tushishda bot `data/cron_log.csv` ga yozib boradi. Hisobot:

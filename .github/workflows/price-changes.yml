@@ -20,6 +20,10 @@ on:
         description: "Telegramga yubormasdan sinash"
         type: boolean
         default: false
+      scheduled:
+        description: "Tashqi cron chaqirdi — jadval bo'yicha ishlasin"
+        type: boolean
+        default: false
 
 concurrency:
   group: fpl-price-changes
@@ -66,11 +70,15 @@ jobs:
           PRICE_WATCH_UNTIL: "07:30"   # shu vaqtgacha o'zgarish bo'lmasa — post yo'q
           PRICE_POLL: "120"
         run: |
-          # tungi cron -> kuzatuv rejimi, zaxira cron -> oddiy bir martalik tekshiruv
+          # Uch xil ishga tushish: tashqi cron (asosiy), GitHub cron (zaxira),
+          # qo'lda (cheklovsiz). Tashqi cron `scheduled=true` yuboradi.
           ARGS=""
-          # Cron bo'yicha ishga tushganda post faqat ertalabki oynada chiqadi
-          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="--window 05:00-09:00"; fi
-          if [ "${{ github.event.schedule }}" = "7 21 * * *" ]; then ARGS="$ARGS --watch"; fi
+          if [ "${{ inputs.scheduled }}" = "true" ]; then
+            ARGS="--watch --window 05:00-09:00"
+          elif [ "${{ github.event_name }}" = "schedule" ]; then
+            ARGS="--window 05:00-09:00"
+            if [ "${{ github.event.schedule }}" = "7 21 * * *" ]; then ARGS="$ARGS --watch"; fi
+          fi
           python -m bot.price_changes $ARGS
 
       - name: Holatni saqlash (commit)

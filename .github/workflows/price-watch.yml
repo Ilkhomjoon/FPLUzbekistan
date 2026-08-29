@@ -20,6 +20,10 @@ on:
         description: "Bugun chiqarilgan bo'lsa ham qayta chiqarish"
         type: boolean
         default: false
+      scheduled:
+        description: "Tashqi cron chaqirdi — jadval bo'yicha ishlasin"
+        type: boolean
+        default: false
 
 concurrency:
   group: fpl-price-watch
@@ -56,15 +60,16 @@ jobs:
         run: |
           ARGS=""
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
-          # Faqat asosiy cron 23:00 gacha kutadi. Zaxira cron (23:44 Toshkent)
-          # allaqachon kech — u kutmasdan darhol chiqaradi.
-          case "${{ github.event.schedule }}" in
-            "9 13 * * *"|"9 16 * * *") ARGS="$ARGS --post-at 23:00" ;;
-          esac
-          # Cron bo'yicha ishga tushganda post FAQAT shu oynada chiqadi.
-          # Juda kechikkan job "ertaga narxi o'zgaradi" postini ertalab
-          # yuborib qo'ymasligi uchun. Qo'lda ishga tushirilganda cheklov yo'q.
-          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="$ARGS --window 20:00-01:00"; fi
+          # Tashqi cron 22:50 da chaqiradi -> 23:00 gacha ushlab turadi.
+          if [ "${{ inputs.scheduled }}" = "true" ]; then
+            ARGS="$ARGS --post-at 23:00 --window 20:00-01:00"
+          elif [ "${{ github.event_name }}" = "schedule" ]; then
+            case "${{ github.event.schedule }}" in
+              "9 13 * * *"|"9 16 * * *") ARGS="$ARGS --post-at 23:00" ;;
+            esac
+            # Juda kechikkan job "ertaga narxi o'zgaradi" postini ertalab yubormasin
+            ARGS="$ARGS --window 20:00-01:00"
+          fi
           python -m bot.price_watch $ARGS
 
       - name: Holatni saqlash (commit)

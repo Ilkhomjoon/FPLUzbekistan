@@ -29,6 +29,10 @@ on:
         description: "Yakuniy yangilanish (kun tugagach rasmiy bonus/DefCon)"
         type: boolean
         default: false
+      scheduled:
+        description: "Tashqi cron chaqirdi — jadval bo'yicha ishlasin"
+        type: boolean
+        default: false
 
 concurrency:
   group: fpl-live-bonus

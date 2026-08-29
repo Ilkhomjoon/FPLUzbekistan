@@ -25,6 +25,10 @@ on:
         description: "Vaqt tekshiruvini e'tiborsiz qoldirib, hoziroq chiqarish"
         type: boolean
         default: false
+      scheduled:
+        description: "Tashqi cron chaqirdi — jadval bo'yicha ishlasin"
+        type: boolean
+        default: false
 
 concurrency:
   group: fpl-gw-review
@@ -65,13 +69,15 @@ jobs:
         run: |
           ARGS=""
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
-          # Asosiy cron FPL tasdig'ini kuzatadi; zaxira cron esa
-          # (lockdown allaqachon o'tgan) bir marta tekshirib chiqadi.
-          case "${{ github.event.schedule }}" in
-            "30 6 * * *"|"30 9 * * *") ARGS="$ARGS --watch" ;;
-          esac
-          # Sharh faqat kunduzi chiqsin — kechikkan job uni tunda yubormasin
-          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="$ARGS --window 09:00-19:00"; fi
+          if [ "${{ inputs.scheduled }}" = "true" ]; then
+            ARGS="$ARGS --watch --window 09:00-19:00"
+          elif [ "${{ github.event_name }}" = "schedule" ]; then
+            case "${{ github.event.schedule }}" in
+              "30 6 * * *"|"30 9 * * *") ARGS="$ARGS --watch" ;;
+            esac
+            # Sharh faqat kunduzi chiqsin — kechikkan job uni tunda yubormasin
+            ARGS="$ARGS --window 09:00-19:00"
+          fi
           python -m bot.gw_review $ARGS
 
       - name: Holatni saqlash (commit)
