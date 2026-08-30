@@ -1,16 +1,10 @@
 name: Differentiallar
 
 on:
-  schedule:
-    # Tur yakunlangan kuni kechqurun 20:00 (Toshkent) chiqadi.
-    # Cron kechikishiga zaxira: 10:09 UTC = 15:09 Toshkent -> 4 soat 51 daqiqa
-    - cron: "9 10 * * *"
-    # Ikkinchi kuzatuvchi (18:09 Toshkent)
-    - cron: "9 13 * * *"
-    # Kechki tekshiruvlar (21:09 va 22:09 Toshkent): FPL turni kech yopgan
-    # bo'lsa, bular kutmasdan darhol chiqaradi. DIFF_LATEST (23:00) dan keyin
-    # esa post ertangi kunga suriladi. Holat fayli takror postga yo'l qo'ymaydi.
-    - cron: "9 16,17 * * *"
+  # Jadval bo'yicha ishga tushirish tashqi cron (cron-job.org) orqali —
+  # `scheduled: true` kirituvchisi bilan. GitHub cron'lari olib tashlandi:
+  # ular 8-10 soat kechikardi va tashqi cron bilan birga ishlaganda
+  # postlar ikki marta chiqib ketardi. Sozlash: docs/tashqi-cron.md
   workflow_dispatch:
     inputs:
       dry_run:

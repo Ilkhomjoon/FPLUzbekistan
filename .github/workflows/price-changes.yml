@@ -1,19 +1,10 @@
 name: Narx o'zgarishlari
 
 on:
-  schedule:
-    # STRATEGIYA: cron'ga ishonmaymiz, uni ataylab ERTA qo'yamiz.
-    # Jarayon o'zi FPL narxlarni o'zgartirishini kutadi va postni aynan
-    # PRICE_POST_AT (06:00 Toshkent) da yuboradi. GitHub cron 1 soat kechikib
-    # uyg'otsa ham post o'z vaqtida chiqadi.
-    #
-    # 21:07 UTC = 02:07 Toshkent -> 06:00 gacha 3 soat 53 daqiqa zaxira.
-    # Daqiqa "07" — :00, :15, :30, :45 GitHub'da eng band daqiqalar.
-    - cron: "7 21 * * *"
-    # Zaxira: agar yuqoridagi run umuman ishga tushmasa (GitHub ba'zan
-    # rejalashtirilgan run'ni tashlab ketadi), 06:39 Toshkent da oddiy
-    # bir martalik tekshiruv. O'zgarish bo'lmasa post yo'q.
-    - cron: "39 1 * * *"
+  # Jadval bo'yicha ishga tushirish tashqi cron (cron-job.org) orqali —
+  # `scheduled: true` kirituvchisi bilan. GitHub cron'lari olib tashlandi:
+  # ular 8-10 soat kechikardi va tashqi cron bilan birga ishlaganda
+  # postlar ikki marta chiqib ketardi. Sozlash: docs/tashqi-cron.md
   workflow_dispatch:
     inputs:
       dry_run:
@@ -70,14 +61,11 @@ jobs:
           PRICE_WATCH_UNTIL: "07:30"   # shu vaqtgacha o'zgarish bo'lmasa — post yo'q
           PRICE_POLL: "120"
         run: |
-          # Uch xil ishga tushish: tashqi cron (asosiy), GitHub cron (zaxira),
-          # qo'lda (cheklovsiz). Tashqi cron `scheduled=true` yuboradi.
+          # Tashqi cron 05:45 da chaqiradi -> 06:00 gacha kutadi va solishtiradi.
+          # Qo'lda ishga tushirilganda cheklov yo'q.
           ARGS=""
           if [ "${{ inputs.scheduled }}" = "true" ]; then
             ARGS="--watch --window 05:00-09:00"
-          elif [ "${{ github.event_name }}" = "schedule" ]; then
-            ARGS="--window 05:00-09:00"
-            if [ "${{ github.event.schedule }}" = "7 21 * * *" ]; then ARGS="$ARGS --watch"; fi
           fi
           python -m bot.price_changes $ARGS
 

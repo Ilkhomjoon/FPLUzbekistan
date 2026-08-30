@@ -1,20 +1,10 @@
 name: Tur yakunlari sharhi
 
 on:
-  schedule:
-    # 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni
-    # Britaniya vaqti bilan 09:00 da yakuniy qiladi ("lockdown"):
-    #   yozda (BST) = 08:00 UTC = 13:00 Toshkent
-    #   qishda (GMT) = 09:00 UTC = 14:00 Toshkent
-    # Aniq soat yozib bo'lmaydi, shuning uchun erta uyg'onib kuzatamiz.
-    # Cron 3 soatgacha kechikishi mumkin, shuning uchun zaxira katta:
-    #   06:30 UTC = 11:30 Toshkent (lockdown'dan 1.5 soat oldin)
-    - cron: "30 6 * * *"
-    # Ikkinchi kuzatuvchi (14:30 Toshkent) — birinchisi tushib qolsa yoki
-    # vaqti tugasa, kuzatishni shu davom ettiradi
-    - cron: "30 9 * * *"
-    # Oxirgi zaxira (17:44 Toshkent): bir marta tekshirib chiqadi
-    - cron: "44 12 * * *"
+  # Jadval bo'yicha ishga tushirish tashqi cron (cron-job.org) orqali —
+  # `scheduled: true` kirituvchisi bilan. GitHub cron'lari olib tashlandi:
+  # ular 8-10 soat kechikardi va tashqi cron bilan birga ishlaganda
+  # postlar ikki marta chiqib ketardi. Sozlash: docs/tashqi-cron.md
   workflow_dispatch:
     inputs:
       dry_run:
@@ -71,12 +61,6 @@ jobs:
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
           if [ "${{ inputs.scheduled }}" = "true" ]; then
             ARGS="$ARGS --watch --window 09:00-19:00"
-          elif [ "${{ github.event_name }}" = "schedule" ]; then
-            case "${{ github.event.schedule }}" in
-              "30 6 * * *"|"30 9 * * *") ARGS="$ARGS --watch" ;;
-            esac
-            # Sharh faqat kunduzi chiqsin — kechikkan job uni tunda yubormasin
-            ARGS="$ARGS --window 09:00-19:00"
           fi
           python -m bot.gw_review $ARGS
 

@@ -1,15 +1,10 @@
 name: Narx bashorati
 
 on:
-  schedule:
-    # Post aniq 23:00 (Toshkent) da chiqadi. GitHub cron 3 soatgacha
-    # kechikishi o'lchangan, shuning uchun uyg'onish ATAYLAB juda erta:
-    #   13:09 UTC = 18:09 Toshkent -> 23:00 gacha 4 soat 51 daqiqa zaxira
-    - cron: "9 13 * * *"
-    # Ikkinchi kuzatuvchi (21:09 Toshkent) — birinchisi tushib qolsa
-    - cron: "9 16 * * *"
-    # Oxirgi zaxira (23:44 Toshkent): kutmasdan darhol chiqaradi
-    - cron: "44 18 * * *"
+  # Jadval bo'yicha ishga tushirish tashqi cron (cron-job.org) orqali —
+  # `scheduled: true` kirituvchisi bilan. GitHub cron'lari olib tashlandi:
+  # ular 8-10 soat kechikardi va tashqi cron bilan birga ishlaganda
+  # postlar ikki marta chiqib ketardi. Sozlash: docs/tashqi-cron.md
   workflow_dispatch:
     inputs:
       dry_run:
@@ -63,12 +58,6 @@ jobs:
           # Tashqi cron 22:50 da chaqiradi -> 23:00 gacha ushlab turadi.
           if [ "${{ inputs.scheduled }}" = "true" ]; then
             ARGS="$ARGS --post-at 23:00 --window 20:00-01:00"
-          elif [ "${{ github.event_name }}" = "schedule" ]; then
-            case "${{ github.event.schedule }}" in
-              "9 13 * * *"|"9 16 * * *") ARGS="$ARGS --post-at 23:00" ;;
-            esac
-            # Juda kechikkan job "ertaga narxi o'zgaradi" postini ertalab yubormasin
-            ARGS="$ARGS --window 20:00-01:00"
           fi
           python -m bot.price_watch $ARGS
 

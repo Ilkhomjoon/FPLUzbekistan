@@ -203,10 +203,13 @@ def _live_post(
     def _done(f: dict) -> bool:
         return bool(f.get("finished") or f.get("finished_provisional"))
 
-    if any(f.get("started") and not _done(f) for f in fixtures):
-        status = config.LIVE_LABEL
-    elif fixtures and all(_done(f) for f in fixtures):
+    # Tartib muhim: kun boshlangach, o'yinlar orasidagi tanaffusda ham "LIVE"
+    # bo'lib tursin. Ilgari 3 ta o'yin tugab, 4-chisi hali boshlanmaganda
+    # sarlavha "KUTILMOQDA" ga qaytib ketardi.
+    if fixtures and all(_done(f) for f in fixtures):
         status = config.DONE_LABEL
+    elif any(f.get("started") for f in fixtures):
+        status = config.LIVE_LABEL
     else:
         status = config.WAIT_LABEL
 

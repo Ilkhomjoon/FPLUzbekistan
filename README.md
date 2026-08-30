@@ -227,6 +227,8 @@ Uchalasi ham tayyor bo'lgandagina post chiqadi. `leagues: "Updating"` ni ham kut
 
 > **Zaxira qancha bo'lishi kerak?** Uyg'onish vaqti bilan post vaqti orasidagi masofa **o'lchangan eng yomon cron kechikishidan katta** bo'lishi shart. Bizda eng yomoni **202 daqiqa** — shuning uchun har bir postda kamida 3.5 soat zaxira qoldirilgan. Ilgari narx bashoratiga atigi 51 daqiqa berilgan edi va cron 70 daqiqa kechikkanida post umuman chiqmadi.
 
+> **Bitta manba qoidasi.** Har bir postni **faqat bitta** narsa ishga tushirishi kerak. Tashqi cron va GitHub cron birga ishlaganda postlar ikki marta chiqib ketdi (narx bashorati, narx o'zgarishlari, hatto jonli xabar ikki nusxada yaratildi). Holat fayllari git orqali sinxronlanadi va bu ikki parallel run uchun yetarlicha tez emas.
+
 > **Ikki qavatli himoya.** Cron kechikishi zaxiradan ham oshib ketsa, post **umuman chiqmasligi** kerak — kech chiqqanidan ko'ra chiqmagani yaxshi. Shuning uchun har bir cron postiga `--window` beriladi: narx bashorati faqat `20:00-01:00`, narx o'zgarishlari `05:00-09:00`, tur sharhi `09:00-19:00` oynasida chiqadi. Qo'lda ishga tushirilganda cheklov yo'q.
 >
 > Takror postga qarshi ham **kalendar kuniga emas, o'tgan vaqtga** qaraladi (`PRICE_WATCH_REPEAT_HOURS = 20`). Aks holda 00:17 da chiqqan post ertalab "yangi kun" deb qaytadan chiqib ketardi — 28-avgustda aynan shunday bo'ldi.
@@ -262,7 +264,9 @@ Yangilanish tezligini `LIVE_INTERVAL` (soniyada) bilan o'zgartirasiz. 60 soniyad
 
 ### Tashqi cron (asosiy ishga tushirish)
 
-GitHub cron'i 8-10 soatgacha kechikadigan bo'lib qolgach, postlar **tashqaridan** ishga tushiriladi: cron-job.org belgilangan daqiqada GitHub API'ga `workflow_dispatch` so'rovini yuboradi va ish navbatga tushmasdan darhol boshlanadi. GitHub cron'lari zaxira bo'lib qoladi.
+GitHub cron'i 8-10 soatgacha kechikadigan bo'lib qolgach, postlar **tashqaridan** ishga tushiriladi: cron-job.org belgilangan daqiqada GitHub API'ga `workflow_dispatch` so'rovini yuboradi va ish navbatga tushmasdan darhol boshlanadi.
+
+**GitHub cron'lari butunlay olib tashlandi.** Ular zaxira sifatida qoldirilgan edi, lekin kechikib kelgan cron tashqi cron chiqargan postni ikkinchi marta chiqarib yuborardi — holat fayli git orqali saqlangani uchun ikkita run bir-birini har doim ham ko'ra olmaydi. Endi har bir workflow faqat `workflow_dispatch` bilan ishga tushadi.
 
 To'liq sozlash yo'riqnomasi: [`docs/tashqi-cron.md`](docs/tashqi-cron.md).
 

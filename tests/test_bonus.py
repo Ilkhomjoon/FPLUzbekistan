@@ -118,3 +118,42 @@ class BpsNoteTest(unittest.TestCase):
             self.assertNotIn("<blockquote>", self._post())
         finally:
             config.BPS_NOTE = original
+
+
+class StatusLabelTest(unittest.TestCase):
+    """Sarlavha holati: kun boshlangach tanaffusda ham LIVE bo'lib tursin."""
+
+    TEAMS = {1: {"short_name": "A", "name": "A"}, 2: {"short_name": "B", "name": "B"}}
+
+    def _fx(self, started, finished, ko="2026-08-29T14:00:00Z"):
+        return {"id": 1, "event": 2, "kickoff_time": ko, "started": started,
+                "finished": finished, "finished_provisional": finished,
+                "team_h": 1, "team_a": 2, "team_h_score": 0, "team_a_score": 0,
+                "stats": []}
+
+    def _title(self, fixtures):
+        from bot.formatting import _live_post
+        return _live_post(fixtures, {}, self.TEAMS, 2, {}, 0).split("\n")[0]
+
+    def test_nothing_started_yet(self):
+        from bot import config
+        self.assertIn(config.WAIT_LABEL, self._title([self._fx(False, False)]))
+
+    def test_match_in_progress(self):
+        from bot import config
+        self.assertIn(config.LIVE_LABEL, self._title([self._fx(True, False)]))
+
+    def test_between_matches_stays_live(self):
+        """Aynan 29-avgust holati: uchtasi tugagan, to'rtinchisi hali boshlanmagan."""
+        from bot import config
+
+        fixtures = [self._fx(True, True), self._fx(True, True),
+                    self._fx(True, True), self._fx(False, False)]
+        title = self._title(fixtures)
+        self.assertIn(config.LIVE_LABEL, title)
+        self.assertNotIn(config.WAIT_LABEL, title)
+
+    def test_all_finished(self):
+        from bot import config
+        self.assertIn(config.DONE_LABEL,
+                      self._title([self._fx(True, True), self._fx(True, True)]))

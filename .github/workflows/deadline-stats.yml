@@ -1,13 +1,10 @@
 name: Deadline statistikasi
 
 on:
-  schedule:
-    # STRATEGIYA: kuniga 5 marta uyg'onamiz (ilgari 56 marta edi).
-    # --wait rejimida jarayon chiqib ketmaydi: birinchi o'yingacha
-    # STATS_WAKE_LEAD (200) daqiqadan kam qolgan bo'lsa, u T-40 daqiqagacha
-    # uxlab kutadi va postni aynan o'sha daqiqada chiqaradi.
-    # Uyg'onishlar orasi 180 daqiqa < 200 — ya'ni hech bir tur o'tkazib yuborilmaydi.
-    - cron: "23 7,10,13,16,19 * * *"
+  # Jadval bo'yicha ishga tushirish tashqi cron (cron-job.org) orqali —
+  # `scheduled: true` kirituvchisi bilan. GitHub cron'lari olib tashlandi:
+  # ular 8-10 soat kechikardi va tashqi cron bilan birga ishlaganda
+  # postlar ikki marta chiqib ketardi. Sozlash: docs/tashqi-cron.md
   workflow_dispatch:
     inputs:
       dry_run:

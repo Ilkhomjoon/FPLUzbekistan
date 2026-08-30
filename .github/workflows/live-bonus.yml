@@ -1,20 +1,10 @@
 name: Jonli bonus ochkolar
 
 on:
-  schedule:
-    # STRATEGIYA: kam uyg'onamiz, lekin ERTA. Jarayon chiqib ketmaydi —
-    # birinchi o'yin boshlanishini o'zi kutadi (LIVE_START_LEAD=115 daqiqa).
-    # Shu tufayli cron 40-50 daqiqa kechiksa ham xabar aynan o'yin
-    # boshlanishida chiqadi.
-    #
-    # Ikki qator birgalikda har 90 daqiqada bitta uyg'onish beradi
-    # (08:11, 09:41, 11:11, 12:41, ... UTC). Ilgari kuniga 56 ta run bo'lgan,
-    # endi 10 ta — GitHub navbatiga yuk kamayadi, kechikish ham kamayadi.
-    - cron: "11 8,11,14,17,20 * * *"
-    - cron: "41 9,12,15,18,21 * * *"
-    # Yakuniy yangilanish: kun tugagach FPL rasmiy bonus va DefCon'ni
-    # bir necha soatdan keyin yakunlaydi. Bu uyg'onishlar shuni ushlaydi.
-    - cron: "13 1,3,5 * * *"
+  # Jadval bo'yicha ishga tushirish tashqi cron (cron-job.org) orqali —
+  # `scheduled: true` kirituvchisi bilan. GitHub cron'lari olib tashlandi:
+  # ular 8-10 soat kechikardi va tashqi cron bilan birga ishlaganda
+  # postlar ikki marta chiqib ketardi. Sozlash: docs/tashqi-cron.md
   workflow_dispatch:
     inputs:
       dry_run:
@@ -98,8 +88,6 @@ jobs:
           STATE_COMMIT_CMD: 'bash scripts/commit_state.sh "update live message state"'
         run: |
           ARGS=""
-          # tungi cron -> yakuniy yangilanish, kunduzgisi -> jonli kuzatuv
-          if [ "${{ github.event.schedule }}" = "13 1,3,5 * * *" ]; then ARGS="--final"; fi
           if [ "${{ inputs.final }}" = "true" ]; then ARGS="--final"; fi
           if [ "${{ inputs.once }}" = "true" ]; then ARGS="--once"; fi
           echo "Ishga tushirilmoqda: python -m bot.live_bonus $ARGS"
