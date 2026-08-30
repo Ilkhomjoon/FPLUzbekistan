@@ -205,6 +205,8 @@ Har bir workflow shu tamoyilda ishlaydi:
 | Differentiallar | 15:09 | `DIFF_POST_AT` gacha ushlab turadi | **20:00** |
 | Tur sharhi | 11:30 | FPL tasdig'ini kuzatadi | **~13:05** (qishda ~14:05) |
 
+**O'yin holati orqaga ketmaydi.** FPL API CDN orqali beriladi va ba'zan eski nusxani qaytaradi — shu sabab tugagan o'yin "hali boshlanmagan" bo'lib qolgan, sarlavha esa `YAKUNLANDI` dan `KUTILMOQDA` ga qaytgan edi. Endi har yangilanishda `merge_fixtures()` eski va yangi nusxani solishtirib, **ilgarilaganini** oladi: boshlangan o'yin qaytib boshlanmagan bo'lmaydi, hisob va statistika kamaymaydi. Yakuniy yangilanish ham tugamagan ko'rinishdagi nusxa kelsa xabarni tegmay qo'yadi.
+
 **Yakuniy yangilanish o'tkazib yuborilsa.** Kun tugagach xabarni oxirgi marta yangilaydigan `--final` run biror sababga ko'ra ishlamay qolsa, ertasi kuni yangi xabar holat faylini qayta yozadi va eski xabar kanal tepasida qolib ketardi. Endi yangi xabar yaratilishidan oldin `retire_previous()` eski xabarni yakuniy holatga keltirib, pindan oladi.
 
 **Jonli bonus — o'yin yo'q kunlari umuman ishlamaydi.** GitHub cron'ni shartli qilib bo'lmaydi, shuning uchun ishning birinchi qadami `scripts/matchday.py` — u bitta so'rov bilan "bugun o'yin bormi yoki oxirgi o'yin tugaganiga `LIVE_ACTIVE_AFTER` (12) soatdan kam vaqt o'tdimi" deb qaraydi. Javob yo'q bo'lsa qolgan hamma qadam o'tkazib yuboriladi — na kuzatuv, na cron kechikishi haqida ogohlantirish.

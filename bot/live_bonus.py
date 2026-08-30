@@ -82,6 +82,45 @@ def fetch_defcon(event_ids: list[int], fixtures: list[dict], players: dict,
     return out
 
 
+def _progress(fx: dict) -> tuple:
+    """O'yin qanchalik "oldinga ketgani" — solishtirish uchun."""
+    stats = 0
+    for row in fx.get("stats") or []:
+        for side in ("h", "a"):
+            for r in row.get(side) or []:
+                try:
+                    stats += abs(int(r.get("value") or 0))
+                except (TypeError, ValueError):
+                    pass
+    scores = sum(fx.get(k) is not None for k in ("team_h_score", "team_a_score"))
+    return (bool(fx.get("finished")), bool(fx.get("finished_provisional")),
+            bool(fx.get("started")), scores, stats)
+
+
+def merge_fixtures(previous: list[dict], fresh: list[dict]) -> list[dict]:
+    """O'yin holati hech qachon orqaga ketmasin.
+
+    FPL API CDN orqali beriladi va ba'zan eski nusxani qaytaradi. Shu sabab
+    boshlangan o'yin "hali boshlanmagan" bo'lib, sarlavha esa "YAKUNLANDI" dan
+    "KUTILMOQDA" ga qaytib qolgan edi. Har bir o'yin uchun ikki nusxadan
+    ilgarilaganini olamiz.
+    """
+    known = {f.get("id"): f for f in previous}
+    out: list[dict] = []
+    for fx in fresh:
+        old = known.get(fx.get("id"))
+        if old is not None and _progress(old) > _progress(fx):
+            log.warning("O'yin %s bo'yicha eski nusxa keldi — oldingi holat saqlanadi.",
+                        fx.get("id"))
+            out.append(old)
+        else:
+            out.append(fx)
+    # yangi javobdan tushib qolgan o'yinlar ham yo'qolmasin
+    seen = {f.get("id") for f in out}
+    out.extend(f for f in previous if f.get("id") not in seen)
+    return out
+
+
 def _parse_error(exc: Exception) -> bool:
     """Telegram HTML'ni tushunmadimi (masalan blockquote'ni)?"""
     text = str(exc).lower()
@@ -215,7 +254,7 @@ def run(once: bool = False) -> int:
             fresh: list[dict] = []
             for ev in event_ids or [gw]:
                 fresh.extend(fpl_api.get_fixtures(event=ev))
-            today = todays_fixtures(fresh, day) or today
+            today = merge_fixtures(today, todays_fixtures(fresh, day)) or today
 
             any_started = any(f.get("started") for f in today)
             all_done = all(is_done(f) for f in today)
@@ -359,6 +398,11 @@ def final_sweep() -> int:
     fixtures = todays_fixtures(fpl_api.get_fixtures(), day)
     if not fixtures:
         log.info("%s sanasida o'yin topilmadi.", day)
+        return 0
+    if not all(is_done(f) for f in fixtures):
+        # kun allaqachon yakunlangan — demak bu CDN'ning eski nusxasi
+        log.warning("Eski nusxa keldi (o'yinlar tugamagan ko'rinyapti) — "
+                    "xabarni yangilamaymiz, keyingi urinishda qayta ko'ramiz.")
         return 0
 
     gw = next((f["event"] for f in fixtures if f.get("event")), None)
