@@ -201,7 +201,7 @@ Har bir workflow shu tamoyilda ishlaydi:
 | Narx o'zgarishlari | 02:07 | `PRICE_POST_AT` gacha ushlab turadi, keyin solishtiradi | **06:00** |
 | Jonli bonus | o'yindan ≤115 daqiqa oldin | birinchi o'yin boshlanishini uxlab kutadi | **o'yin boshlanishida** |
 | Deadline statistikasi | o'yindan ≤200 daqiqa oldin | `T−40 daqiqa` gacha kutadi, so'ng ligalarni skanerlaydi | **T−40 daqiqa** |
-| Narx bashorati | 18:09 | `--post-at 23:00` | **23:00** |
+| Narx bashorati | 22:50 | `--post-at 23:00`, so'ng 03:30 gacha yangilaydi | **23:00** |
 | Differentiallar | 15:09 | `DIFF_POST_AT` gacha ushlab turadi | **20:00** |
 | Tur sharhi | 11:30 | FPL tasdig'ini kuzatadi | **~13:05** (qishda ~14:05) |
 
@@ -351,6 +351,9 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `PRICE_WATCH_UNTIL` | `07:30` | Shu vaqtgacha o'zgarish bo'lmasa — post yo'q |
 | `PRICE_POLL` | `120` | `--watch` necha soniyada bir tekshiradi |
 | `PRICE_WATCH_REPEAT_HOURS` | `20` | Shu soat ichida narx bashorati takrorlanmaydi |
+| `PRICE_WATCH_UPDATE_UNTIL` | `03:30` | Bashorat xabari shu vaqtgacha yangilanib turadi |
+| `PRICE_WATCH_INTERVAL` | `3600` | Yangilanishlar orasidagi vaqt (soniya) |
+| `PRICE_WATCH_NEW_MARK` | `🆕` | Keyin qo'shilganlar oldiga qo'yiladigan belgi |
 | `LIVE_HASHTAG` | `#BonusPoints` | Jonli post hashtagi |
 | `SHOW_BPS` | `true` | Bonus yonida BPS ko'rsatilsinmi (`3 · 34 BPS`) |
 | `BPS_NOTE` | "BPS — Bonus ochkolar…" | Hashtagdan yuqorida chiqadigan izoh; bo'sh qilinsa chiqmaydi |

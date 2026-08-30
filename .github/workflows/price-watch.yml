@@ -31,6 +31,7 @@ jobs:
   watch:
     runs-on: ubuntu-latest
     # 18:09 dan 23:00 gacha kutish + post
+    # 22:50 da uyg'onadi, 23:00 da post, 03:30 gacha yangilaydi
     timeout-minutes: 340
     steps:
       - uses: actions/checkout@v4
@@ -52,12 +53,18 @@ jobs:
           PRICE_WATCH_MIN: "85"
           # Har tomonda ko'pi bilan nechta futbolchi
           PRICE_WATCH_MAX: "8"
+          # post chiqqach xabar shu vaqtgacha har soatda yangilanadi
+          PRICE_WATCH_UPDATE_UNTIL: "03:30"
+          PRICE_WATCH_INTERVAL: "3600"
+          # 22:50 dan 03:30 gacha ~4 soat 40 daqiqa
+          PRICE_WATCH_MAX_MINUTES: "300"
         run: |
           ARGS=""
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
           # Tashqi cron 22:50 da chaqiradi -> 23:00 gacha ushlab turadi.
           if [ "${{ inputs.scheduled }}" = "true" ]; then
-            ARGS="$ARGS --post-at 23:00 --window 20:00-01:00"
+            # 23:00 da chiqadi va 03:30 gacha xuddi shu xabarni yangilab boradi
+            ARGS="$ARGS --post-at 23:00 --window 20:00-01:00 --update"
           fi
           python -m bot.price_watch $ARGS
 

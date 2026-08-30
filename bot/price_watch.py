@@ -17,7 +17,8 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
-from datetime import datetime, timezone
+import time
+from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
 from . import config, fpl_api, storage, telegram, waiter
@@ -76,8 +77,25 @@ def candidates(bootstrap: dict, offset: int = 0) -> tuple[list[dict], list[dict]
     return rises[: config.PRICE_WATCH_MAX], falls[: config.PRICE_WATCH_MAX]
 
 
-def run(force: bool = False, window: str | None = None) -> int:
+def _snapshot(bootstrap: dict, seen: set[int] | None = None) -> tuple[list, list, str]:
+    """Joriy holat. `seen` berilsa, unda yo'q futbolchilar 🆕 bilan belgilanadi."""
+    rises, falls = candidates(bootstrap)
+    if seen is not None:
+        for row in rises + falls:
+            row["new"] = row["id"] not in seen
+    stamp = datetime.now(timezone.utc).astimezone(ZoneInfo(config.LOCAL_TZ)).strftime("%H:%M")
+    return rises, falls, price_watch_post(rises, falls, stamp)
+
+
+def run(force: bool = False, window: str | None = None, update: bool = False) -> int:
+    """Kechqurungi bashorat posti.
+
+    `update=True` bo'lsa post chiqqandan keyin ham jarayon yashab qoladi va
+    PRICE_WATCH_UPDATE_UNTIL gacha xuddi shu xabarni har soatda tahrirlaydi —
+    foizlar tun davomida o'zgarib turadi, xabar esa yangi bo'lib qoladi.
+    """
     config.require_telegram()
+    budget_end = waiter.budget(config.PRICE_WATCH_MAX_MINUTES)
 
     local = ZoneInfo(config.LOCAL_TZ)
     now = datetime.now(timezone.utc).astimezone(local)
@@ -93,38 +111,68 @@ def run(force: bool = False, window: str | None = None) -> int:
     state = storage.load(config.PRICE_WATCH_STATE_FILE, {}) or {}
     # Kalendar kuniga emas, o'tgan vaqtga qaraymiz: 23:00 dagi post yarim tundan
     # keyin "yangi kun" bo'lgani uchun takrorlanib ketmasin.
-    if not force and waiter.recent(state.get("posted_at"), config.PRICE_WATCH_REPEAT_HOURS):
-        log.info("Oxirgi post %s da chiqqan — %g soat ichida takrorlamaymiz.",
-                 state.get("posted_at"), config.PRICE_WATCH_REPEAT_HOURS)
+    fresh = waiter.recent(state.get("posted_at"), config.PRICE_WATCH_REPEAT_HOURS)
+    message_id = state.get("message_id") if fresh else None
+    if fresh and not force and not message_id:
+        log.info("Oxirgi tekshiruv %s da bo'lgan (post chiqmagan) — takrorlamaymiz.",
+                 state.get("posted_at"))
         return 0
-    if state.get("date") == today and not force:
-        log.info("%s uchun post allaqachon chiqarilgan.", today)
-        return 0
+    if message_id:
+        log.info("Shu kechagi xabar bor (id=%s) — yangisini yubormay, tahrirlaymiz.",
+                 message_id)
 
-    bootstrap = fpl_api.get_bootstrap()
-    rises, falls = candidates(bootstrap)
-    log.info("Ko'tarilishi mumkin: %d ta, tushishi mumkin: %d ta", len(rises), len(falls))
-    for r in rises + falls:
-        log.info("  %s %.1f%%", r["label"], r["percent"])
+    update_until = waiter.local_time_today(config.PRICE_WATCH_UPDATE_UNTIL)
+    last_text = state.get("last_text") if message_id else None
+    # Birinchi postdagi futbolchilar. Keyin qo'shilganlari 🆕 bilan chiqadi.
+    seen: set[int] | None = set(state.get("seen") or []) if message_id else None
 
-    if not rises and not falls:
-        log.info("Chegaradan (%d%%) oshgan futbolchi yo'q — post yuborilmaydi.",
-                 config.PRICE_WATCH_MIN)
+    while True:
+        rises, falls, text = _snapshot(fpl_api.get_bootstrap(), seen)
+        log.info("Ko'tarilishi mumkin: %d ta, tushishi mumkin: %d ta", len(rises), len(falls))
+
+        if not rises and not falls and not message_id:
+            log.info("Chegaradan (%d%%) oshgan futbolchi yo'q — post yuborilmaydi.",
+                     config.PRICE_WATCH_MIN)
+            storage.save(config.PRICE_WATCH_STATE_FILE, {
+                "date": today, "message_id": None,
+                "posted_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            })
+            return 0
+
+        if message_id is None:
+            for r in rises + falls:
+                log.info("  %s %.1f%%", r["label"], r["percent"])
+            message_id = telegram.send_message(text).get("message_id")
+            seen = {r["id"] for r in rises + falls}
+            log.info("Narx bashorati posti yuborildi (id=%s)", message_id)
+        elif text != last_text:
+            added = [r["label"] for r in rises + falls if r.get("new")]
+            telegram.edit_message(message_id, text)
+            log.info("Xabar yangilandi (id=%s)%s", message_id,
+                     f" — yangi: {', '.join(added)}" if added else "")
+        else:
+            log.info("O'zgarish yo'q — xabar o'sha holicha qoldi.")
+
+        last_text = text
         storage.save(config.PRICE_WATCH_STATE_FILE, {
-            "date": today, "message_id": None,
+            "date": today,
+            "message_id": message_id,
+            "last_text": text,
+            "seen": sorted(seen or ()),
             "posted_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         })
-        return 0
 
-    text = price_watch_post(rises, falls, now.strftime("%H:%M"))
-    res = telegram.send_message(text)
-    storage.save(config.PRICE_WATCH_STATE_FILE, {
-        "date": today,
-        "message_id": res.get("message_id"),
-        "posted_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-    })
-    log.info("Narx bashorati posti yuborildi.")
-    return 0
+        if not update:
+            return 0
+        if not waiter.sleep_until(
+            min(update_until, waiter.now_utc() + timedelta(seconds=config.PRICE_WATCH_INTERVAL)),
+            label="Keyingi yangilanish", budget_end=budget_end,
+        ):
+            log.info("Jarayon vaqti tugadi — yangilanishlar to'xtatildi.")
+            return 0
+        if waiter.now_utc() >= update_until:
+            log.info("Yangilanish oynasi (%s) yakunlandi.", config.PRICE_WATCH_UPDATE_UNTIL)
+            return 0
 
 
 def main() -> int:
@@ -135,6 +183,8 @@ def main() -> int:
                     help="Shu vaqtgacha kutib turadi (cron kechiksa ham post o'z vaqtida chiqadi)")
     ap.add_argument("--window", default=None, metavar="HH:MM-HH:MM",
                     help="Faqat shu oynada chiqaradi (cron juda kechiksa post umuman chiqmaydi)")
+    ap.add_argument("--update", action="store_true",
+                    help="Postdan keyin xabarni PRICE_WATCH_UPDATE_UNTIL gacha yangilab boradi")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
@@ -145,7 +195,7 @@ def main() -> int:
         if not (args.force or args.dry_run):
             waiter.hold_until(args.post_at, label="Narx bashorati",
                               budget_end=waiter.budget(config.PRICE_WATCH_MAX_MINUTES))
-        return run(force=args.force, window=args.window)
+        return run(force=args.force, window=args.window, update=args.update)
     except Exception as exc:
         log.exception("Narx bashorati skriptida xatolik")
         telegram.notify_admin(f"⚠️ <b>FPL bot (narx bashorati)</b>\n<code>{telegram.esc(repr(exc))}</code>")

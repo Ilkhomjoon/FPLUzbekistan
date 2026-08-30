@@ -312,7 +312,11 @@ def deadline_stats_post(gw: int, scans, players: dict, teams: dict,
 # ---------------- narx bashorati ----------------
 
 def _watch_lines(rows: list[dict]) -> list[str]:
-    """rows: [{'label': 'Calafiori (ARS)', 'cost': 55, 'percent': 104.2}]"""
+    """rows: [{'label': 'Calafiori (ARS)', 'cost': 55, 'percent': 104.2, 'new': False}]
+
+    `new` — birinchi postdan keyin ro'yxatga qo'shilgan futbolchi. Xabar tun
+    davomida yangilanib borgani uchun o'quvchi nima qo'shilganini ko'rib tursin.
+    """
     if not rows:
         return ["<i>hozircha yo'q</i>"]
     out = []
@@ -320,7 +324,11 @@ def _watch_lines(rows: list[dict]) -> list[str]:
         pct = abs(r["percent"])
         text = f"{r['label']} {price(r['cost'])} — {pct:.0f}%"
         # chegaradan oshganlar ko'zga tashlanib tursin
-        out.append(f"<b>{text}</b>" if pct >= config.PRICE_WATCH_SURE else text)
+        if pct >= config.PRICE_WATCH_SURE:
+            text = f"<b>{text}</b>"
+        if r.get("new") and config.PRICE_WATCH_NEW_MARK:
+            text = f"{config.PRICE_WATCH_NEW_MARK} {text}"
+        out.append(text)
     return out
 
 

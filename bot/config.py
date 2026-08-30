@@ -115,6 +115,12 @@ PRICE_WATCH_SURE = _int("PRICE_WATCH_SURE", 100)       # shundan oshgani "kutilm
 PRICE_WATCH_MAX_MINUTES = _int("PRICE_WATCH_MAX_MINUTES", 300)  # jarayon maksimal ish vaqti
 # Takror postga qarshi: kalendar kuniga emas, o'tgan vaqtga qaraymiz
 PRICE_WATCH_REPEAT_HOURS = _float("PRICE_WATCH_REPEAT_HOURS", 20.0)
+# Post chiqqandan keyin xuddi shu xabar shu vaqtgacha yangilanib turadi —
+# bashorat foizlari tun davomida o'zgaradi.
+PRICE_WATCH_UPDATE_UNTIL = os.getenv("PRICE_WATCH_UPDATE_UNTIL", "03:30")
+PRICE_WATCH_INTERVAL = _int("PRICE_WATCH_INTERVAL", 3600)   # yangilanishlar orasi, soniya
+# Birinchi postdan keyin ro'yxatga qo'shilganlar shu belgi bilan ajratiladi
+PRICE_WATCH_NEW_MARK = os.getenv("PRICE_WATCH_NEW_MARK", "🆕")
 
 # --- Deadline statistikasi (sardorlar va chiplar) ---
 STATS_STATE_FILE = DATA_DIR / "deadline_stats.json"
