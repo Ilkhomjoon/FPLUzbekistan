@@ -297,7 +297,7 @@
       "team": "CHE"
     },
     "152": {
-      "cost": 55,
+      "cost": 54,
       "name": "Palestra",
       "team": "CHE"
     },
@@ -312,7 +312,7 @@
       "team": "CHE"
     },
     "155": {
-      "cost": 70,
+      "cost": 69,
       "name": "Enzo",
       "team": "CHE"
     },
@@ -332,7 +332,7 @@
       "team": "CHE"
     },
     "159": {
-      "cost": 55,
+      "cost": 54,
       "name": "Caicedo",
       "team": "CHE"
     },
@@ -672,7 +672,7 @@
       "team": "CRY"
     },
     "22": {
-      "cost": 55,
+      "cost": 54,
       "name": "Nwaneri",
       "team": "ARS"
     },
@@ -1317,7 +1317,7 @@
       "team": "LEE"
     },
     "336": {
-      "cost": 60,
+      "cost": 59,
       "name": "Okafor",
       "team": "LEE"
     },
@@ -1622,7 +1622,7 @@
       "team": "MCI"
     },
     "391": {
-      "cost": 55,
+      "cost": 56,
       "name": "Gvardiol",
       "team": "MCI"
     },
@@ -1937,7 +1937,7 @@
       "team": "NEW"
     },
     "448": {
-      "cost": 50,
+      "cost": 49,
       "name": "Burn",
       "team": "NEW"
     },
@@ -2012,7 +2012,7 @@
       "team": "NEW"
     },
     "461": {
-      "cost": 60,
+      "cost": 59,
       "name": "Touré",
       "team": "NEW"
     },
@@ -2172,7 +2172,7 @@
       "team": "AVL"
     },
     "490": {
-      "cost": 60,
+      "cost": 59,
       "name": "Wood",
       "team": "NFO"
     },
@@ -2392,7 +2392,7 @@
       "team": "SUN"
     },
     "53": {
-      "cost": 60,
+      "cost": 59,
       "name": "Manzambi",
       "team": "AVL"
     },
@@ -2911,6 +2911,11 @@
       "name": "Braithwaite",
       "team": "MCI"
     },
+    "623": {
+      "cost": 40,
+      "name": "Bentley",
+      "team": "COV"
+    },
     "63": {
       "cost": 50,
       "name": "Milosavljević",
@@ -3112,5 +3117,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-08-29T03:08:46+00:00"
+  "taken_at": "2026-08-30T01:00:46+00:00"
 }
