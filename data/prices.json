@@ -207,7 +207,7 @@
       "team": "BHA"
     },
     "136": {
-      "cost": 60,
+      "cost": 59,
       "name": "Welbeck",
       "team": "CHE"
     },
@@ -322,12 +322,12 @@
       "team": "CHE"
     },
     "157": {
-      "cost": 65,
+      "cost": 64,
       "name": "Estêvão",
       "team": "CHE"
     },
     "158": {
-      "cost": 60,
+      "cost": 59,
       "name": "Gittens",
       "team": "CHE"
     },
@@ -342,7 +342,7 @@
       "team": "ARS"
     },
     "160": {
-      "cost": 60,
+      "cost": 59,
       "name": "Garnacho",
       "team": "AVL"
     },
@@ -362,7 +362,7 @@
       "team": "CHE"
     },
     "164": {
-      "cost": 55,
+      "cost": 54,
       "name": "Quenda",
       "team": "CHE"
     },
@@ -487,7 +487,7 @@
       "team": "COV"
     },
     "187": {
-      "cost": 50,
+      "cost": 49,
       "name": "Eccles",
       "team": "COV"
     },
@@ -522,7 +522,7 @@
       "team": "COV"
     },
     "193": {
-      "cost": 55,
+      "cost": 54,
       "name": "Wright",
       "team": "COV"
     },
@@ -572,7 +572,7 @@
       "team": "CHE"
     },
     "201": {
-      "cost": 55,
+      "cost": 54,
       "name": "Muñoz",
       "team": "CRY"
     },
@@ -737,12 +737,12 @@
       "team": "EVE"
     },
     "231": {
-      "cost": 50,
+      "cost": 49,
       "name": "Keane",
       "team": "EVE"
     },
     "232": {
-      "cost": 50,
+      "cost": 49,
       "name": "O'Brien",
       "team": "EVE"
     },
@@ -812,7 +812,7 @@
       "team": "EVE"
     },
     "245": {
-      "cost": 55,
+      "cost": 54,
       "name": "Dibling",
       "team": "EVE"
     },
@@ -827,7 +827,7 @@
       "team": "EVE"
     },
     "248": {
-      "cost": 55,
+      "cost": 54,
       "name": "Beto",
       "team": "EVE"
     },
@@ -1004,7 +1004,7 @@
     "28": {
       "cost": 50,
       "name": "Martinez",
-      "team": "AVL"
+      "team": "CHE"
     },
     "280": {
       "cost": 40,
@@ -1172,7 +1172,7 @@
       "team": "IPS"
     },
     "31": {
-      "cost": 45,
+      "cost": 44,
       "name": "Konsa",
       "team": "ARS"
     },
@@ -1507,7 +1507,7 @@
       "team": "AVL"
     },
     "370": {
-      "cost": 55,
+      "cost": 54,
       "name": "Chiesa",
       "team": "LIV"
     },
@@ -1972,7 +1972,7 @@
       "team": "NEW"
     },
     "454": {
-      "cost": 60,
+      "cost": 61,
       "name": "Elanga",
       "team": "NEW"
     },
@@ -2027,7 +2027,7 @@
       "team": "NEW"
     },
     "464": {
-      "cost": 60,
+      "cost": 61,
       "name": "Wissa",
       "team": "NEW"
     },
@@ -2307,7 +2307,7 @@
       "team": "TOT"
     },
     "514": {
-      "cost": 60,
+      "cost": 59,
       "name": "Tel",
       "team": "TOT"
     },
@@ -2332,7 +2332,7 @@
       "team": "TOT"
     },
     "519": {
-      "cost": 55,
+      "cost": 54,
       "name": "Gallagher",
       "team": "TOT"
     },
@@ -2367,7 +2367,7 @@
       "team": "TOT"
     },
     "525": {
-      "cost": 60,
+      "cost": 59,
       "name": "Fernandes",
       "team": "TOT"
     },
@@ -2377,7 +2377,7 @@
       "team": "TOT"
     },
     "527": {
-      "cost": 60,
+      "cost": 59,
       "name": "Richarlison",
       "team": "TOT"
     },
@@ -2462,7 +2462,7 @@
       "team": "SUN"
     },
     "542": {
-      "cost": 60,
+      "cost": 59,
       "name": "E.Le Fée",
       "team": "SUN"
     },
@@ -2916,6 +2916,21 @@
       "name": "Bentley",
       "team": "COV"
     },
+    "624": {
+      "cost": 50,
+      "name": "Cozier-Duberry",
+      "team": "BHA"
+    },
+    "625": {
+      "cost": 40,
+      "name": "Cairns",
+      "team": "LEE"
+    },
+    "626": {
+      "cost": 45,
+      "name": "Zepa",
+      "team": "FUL"
+    },
     "63": {
       "cost": 50,
       "name": "Milosavljević",
@@ -2992,12 +3007,12 @@
       "team": "BOU"
     },
     "77": {
-      "cost": 50,
+      "cost": 49,
       "name": "Adli",
       "team": "BOU"
     },
     "78": {
-      "cost": 75,
+      "cost": 74,
       "name": "Kroupi.Jr",
       "team": "BOU"
     },
@@ -3117,5 +3132,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-08-30T01:00:46+00:00"
+  "taken_at": "2026-08-31T01:00:00+00:00"
 }
