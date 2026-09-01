@@ -92,7 +92,7 @@
       "team": "BHA"
     },
     "115": {
-      "cost": 46,
+      "cost": 47,
       "name": "De Cuyper",
       "team": "BHA"
     },
@@ -232,7 +232,7 @@
       "team": "ARS"
     },
     "140": {
-      "cost": 50,
+      "cost": 49,
       "name": "Sánchez",
       "team": "CHE"
     },
@@ -612,7 +612,7 @@
       "team": "CRY"
     },
     "209": {
-      "cost": 60,
+      "cost": 59,
       "name": "Johnson",
       "team": "EVE"
     },
@@ -662,7 +662,7 @@
       "team": "CRY"
     },
     "218": {
-      "cost": 50,
+      "cost": 49,
       "name": "Doucouré",
       "team": "CRY"
     },
@@ -692,7 +692,7 @@
       "team": "CRY"
     },
     "223": {
-      "cost": 65,
+      "cost": 64,
       "name": "Mateta",
       "team": "CRY"
     },
@@ -947,7 +947,7 @@
       "team": "FUL"
     },
     "27": {
-      "cost": 60,
+      "cost": 59,
       "name": "G.Jesus",
       "team": "ARS"
     },
@@ -997,7 +997,7 @@
       "team": "HUL"
     },
     "279": {
-      "cost": 40,
+      "cost": 41,
       "name": "Ajayi",
       "team": "HUL"
     },
@@ -1367,7 +1367,7 @@
       "team": "LEE"
     },
     "345": {
-      "cost": 50,
+      "cost": 49,
       "name": "Tanaka",
       "team": "LEE"
     },
@@ -1497,7 +1497,7 @@
       "team": "LIV"
     },
     "369": {
-      "cost": 60,
+      "cost": 59,
       "name": "Ngumoha",
       "team": "LIV"
     },
@@ -1577,7 +1577,7 @@
       "team": "LIV"
     },
     "383": {
-      "cost": 55,
+      "cost": 54,
       "name": "Elliott",
       "team": "LIV"
     },
@@ -1662,7 +1662,7 @@
       "team": "MCI"
     },
     "399": {
-      "cost": 76,
+      "cost": 77,
       "name": "Cherki",
       "team": "MCI"
     },
@@ -1732,7 +1732,7 @@
       "team": "AVL"
     },
     "410": {
-      "cost": 50,
+      "cost": 49,
       "name": "Monga",
       "team": "MCI"
     },
@@ -1787,7 +1787,7 @@
       "team": "CRY"
     },
     "420": {
-      "cost": 50,
+      "cost": 49,
       "name": "Yoro",
       "team": "MUN"
     },
@@ -1977,7 +1977,7 @@
       "team": "NEW"
     },
     "455": {
-      "cost": 55,
+      "cost": 54,
       "name": "Tonali",
       "team": "TOT"
     },
@@ -1987,12 +1987,12 @@
       "team": "NEW"
     },
     "457": {
-      "cost": 60,
+      "cost": 59,
       "name": "J.Murphy",
       "team": "NEW"
     },
     "458": {
-      "cost": 55,
+      "cost": 54,
       "name": "Joelinton",
       "team": "NEW"
     },
@@ -2022,7 +2022,7 @@
       "team": "NEW"
     },
     "463": {
-      "cost": 60,
+      "cost": 59,
       "name": "Woltemade",
       "team": "NEW"
     },
@@ -2137,7 +2137,7 @@
       "team": "NFO"
     },
     "484": {
-      "cost": 55,
+      "cost": 54,
       "name": "Hutchinson",
       "team": "NFO"
     },
@@ -2372,7 +2372,7 @@
       "team": "TOT"
     },
     "526": {
-      "cost": 60,
+      "cost": 59,
       "name": "Solanke",
       "team": "TOT"
     },
@@ -2497,12 +2497,12 @@
       "team": "SUN"
     },
     "549": {
-      "cost": 55,
+      "cost": 54,
       "name": "Talbi",
       "team": "SUN"
     },
     "55": {
-      "cost": 79,
+      "cost": 78,
       "name": "Watkins",
       "team": "AVL"
     },
@@ -2657,7 +2657,7 @@
       "team": "CRY"
     },
     "578": {
-      "cost": 55,
+      "cost": 54,
       "name": "Mudryk",
       "team": "CHE"
     },
@@ -3052,7 +3052,7 @@
       "team": "BRE"
     },
     "85": {
-      "cost": 50,
+      "cost": 49,
       "name": "Van den Berg",
       "team": "BRE"
     },
@@ -3132,5 +3132,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-08-31T01:00:00+00:00"
+  "taken_at": "2026-09-01T01:00:00+00:00"
 }
