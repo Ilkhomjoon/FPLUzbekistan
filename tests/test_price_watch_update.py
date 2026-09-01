@@ -30,9 +30,14 @@ class UpdateTest(unittest.TestCase):
             "send": price_watch.telegram.send_message,
             "edit": price_watch.telegram.edit_message,
             "sleep_until": price_watch.waiter.sleep_until,
+            "until": price_watch.waiter.local_time_today,
             "require": config.require_telegram,
         }
         config.require_telegram = lambda: None
+        # Yangilanish oynasi soatga bog'liq bo'lmasin: test qaysi vaqtda
+        # ishga tushsa ham "oyna hali ochiq" bo'lib tursin.
+        price_watch.waiter.local_time_today = lambda *a, **kw: (
+            datetime.now(timezone.utc) + timedelta(hours=2))
         price_watch.storage.load = lambda *a, **kw: {}
         price_watch.storage.save = lambda path, data: self.saved.append(data)
         price_watch.telegram.send_message = lambda text, **kw: (
@@ -47,6 +52,7 @@ class UpdateTest(unittest.TestCase):
         price_watch.telegram.send_message = self._orig["send"]
         price_watch.telegram.edit_message = self._orig["edit"]
         price_watch.waiter.sleep_until = self._orig["sleep_until"]
+        price_watch.waiter.local_time_today = self._orig["until"]
         config.require_telegram = self._orig["require"]
 
     def test_without_update_it_posts_once(self):

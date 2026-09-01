@@ -1,7 +1,15 @@
 name: Jonli bonus ochkolar
 
 on:
-  # Jadval bo'yicha ishga tushirish tashqi cron (cron-job.org) orqali —
+  schedule:
+    # Yakuniy yangilanish uchun ZAXIRA. Faqat shu bittasi GitHub cron'ida
+    # qoldirildi: yakuniy yangilanish ikki marta ishlasa ham zarar yo'q
+    # (`swept` bayrog'i takrorlashga yo'l qo'ymaydi), o'tkazib yuborilsa esa
+    # xabar kanal tepasida osilib qoladi.
+    # 23:00 UTC = 04:00 Toshkent. 3-4 soat kechiksa ham 08:00 gacha ulguradi.
+    - cron: "0 23 * * *"
+
+  # Asosiy ishga tushirish tashqi cron (cron-job.org) orqali —
   # `scheduled: true` kirituvchisi bilan. GitHub cron'lari olib tashlandi:
   # ular 8-10 soat kechikardi va tashqi cron bilan birga ishlaganda
   # postlar ikki marta chiqib ketardi. Sozlash: docs/tashqi-cron.md
@@ -88,6 +96,8 @@ jobs:
           STATE_COMMIT_CMD: 'bash scripts/commit_state.sh "update live message state"'
         run: |
           ARGS=""
+          # GitHub cron'i faqat yakuniy yangilanish uchun qoldirilgan
+          if [ "${{ github.event_name }}" = "schedule" ]; then ARGS="--final"; fi
           if [ "${{ inputs.final }}" = "true" ]; then ARGS="--final"; fi
           if [ "${{ inputs.once }}" = "true" ]; then ARGS="--once"; fi
           echo "Ishga tushirilmoqda: python -m bot.live_bonus $ARGS"

@@ -148,7 +148,7 @@ def _send_or_edit(message_id, text_builder):
 
 
 def retire_previous(previous: dict, all_fixtures: list[dict],
-                    players: dict, teams: dict) -> None:
+                    players: dict, teams: dict) -> bool:
     """Oldingi kungi xabar yakunlanmagan bo'lsa — yangi xabar yaratishdan
     oldin uni yakunlab, kanal tepasidan olamiz.
 
@@ -159,7 +159,7 @@ def retire_previous(previous: dict, all_fixtures: list[dict],
     message_id = previous.get("message_id")
     day = previous.get("date")
     if not message_id or not day or previous.get("swept"):
-        return
+        return False
 
     log.info("%s kungi xabar yakunlanmay qolgan (id=%s) — hozir yakunlaymiz.", day, message_id)
     try:
@@ -174,9 +174,14 @@ def retire_previous(previous: dict, all_fixtures: list[dict],
                 log.info("%s kungi xabar yakuniy holatga keltirildi.", day)
         if config.PIN_LIVE_MESSAGE and config.UNPIN_AFTER_FINAL:
             telegram.unpin_message(message_id)
+        previous["swept"] = True
+        storage.save(config.LIVE_STATE_FILE, previous)
+        commit_state()
+        return True
     except Exception as exc:
         # bu qo'shimcha ish — bugungi kuzatuvni to'xtatib qo'ymasin
         log.warning("%s kungi xabarni yakunlab bo'lmadi: %s", day, exc)
+    return False
 
 
 # ---------------- asosiy sikl ----------------
@@ -199,6 +204,11 @@ def run(once: bool = False) -> int:
     today = todays_fixtures(all_fixtures, day)
 
     if not today:
+        # O'yin yo'q, lekin o'tgan kungi xabar yakunlanmay qolgan bo'lishi mumkin —
+        # kanal tepasida osilib qolmasin.
+        stale = storage.load(config.LIVE_STATE_FILE, {}) or {}
+        if stale.get("date") and stale.get("date") != day:
+            retire_previous(stale, all_fixtures, players, teams)
         log.info("%s sanasida o'yin yo'q — chiqamiz.", day)
         return 0
 
@@ -378,12 +388,20 @@ def final_sweep() -> int:
     if state.get("swept"):
         log.info("%s uchun yakuniy yangilanish allaqachon qilingan.", day)
         return 0
+
+    # Kun allaqachon o'tib ketgan bo'lsa, kutish ham, "final" bayrog'i ham
+    # ahamiyatsiz: xabar kanal tepasida osilib qolgandan ko'ra yakunlagan
+    # yaxshi. Bu — jonli jarayon uzilib qolgan holat uchun zaxira.
+    over = day != matchday_key()
+
     if not state.get("final"):
-        log.info("%s hali yakunlanmagan — yakuniy yangilanish erta.", day)
-        return 0
+        if not over:
+            log.info("%s hali yakunlanmagan — yakuniy yangilanish erta.", day)
+            return 0
+        log.warning("%s kuni 'yakuniy' belgisisiz qolgan — baribir yakunlaymiz.", day)
 
     finished_at = state.get("finished_at")
-    if finished_at:
+    if finished_at and not over:
         done = datetime.fromisoformat(finished_at)
         waited = (datetime.now(timezone.utc) - done).total_seconds() / 60
         if waited < config.FINAL_SWEEP_MINUTES:

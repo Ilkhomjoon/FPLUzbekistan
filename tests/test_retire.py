@@ -22,18 +22,22 @@ class RetireTest(unittest.TestCase):
     def setUp(self):
         self.edited = []
         self.unpinned = []
+        self.saved = []
         self._orig = (live_bonus.telegram.edit_message,
                       live_bonus.telegram.unpin_message,
+                      live_bonus.storage.save,
                       live_bonus.config.SHOW_DEFCON)
         live_bonus.telegram.edit_message = lambda mid, text, **kw: (
             self.edited.append(mid) or {"message_id": mid})
         live_bonus.telegram.unpin_message = lambda mid, **kw: (
             self.unpinned.append(mid) or True)
+        # Haqiqiy holat fayliga tegmasin
+        live_bonus.storage.save = lambda path, data: self.saved.append(data)
         live_bonus.config.SHOW_DEFCON = False
 
     def tearDown(self):
         (live_bonus.telegram.edit_message, live_bonus.telegram.unpin_message,
-         live_bonus.config.SHOW_DEFCON) = self._orig
+         live_bonus.storage.save, live_bonus.config.SHOW_DEFCON) = self._orig
 
     def test_unswept_message_is_updated_and_unpinned(self):
         previous = {"date": "2026-08-28", "message_id": 3654,
@@ -67,6 +71,15 @@ class RetireTest(unittest.TestCase):
         live_bonus.telegram.edit_message = boom
         previous = {"date": "2026-08-28", "message_id": 3654, "swept": False}
         live_bonus.retire_previous(previous, FIXTURES, PLAYERS, TEAMS)  # ko'tarilmasligi kerak
+
+    def test_sweeping_marks_the_state(self):
+        """Ikkinchi marta ishga tushsa takrorlanmasin — `swept` yozib qo'yiladi."""
+        previous = {"date": "2026-08-28", "message_id": 3654, "swept": False}
+        self.assertTrue(live_bonus.retire_previous(previous, FIXTURES, PLAYERS, TEAMS))
+        self.assertTrue(previous["swept"])
+        self.assertTrue(self.saved[-1]["swept"])
+        self.assertFalse(live_bonus.retire_previous(previous, FIXTURES, PLAYERS, TEAMS))
+        self.assertEqual(self.unpinned, [3654])    # ikkinchi marta pinga tegmadi
 
 
 if __name__ == "__main__":
