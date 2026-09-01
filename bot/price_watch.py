@@ -77,6 +77,42 @@ def candidates(bootstrap: dict, offset: int = 0) -> tuple[list[dict], list[dict]
     return rises[: config.PRICE_WATCH_MAX], falls[: config.PRICE_WATCH_MAX]
 
 
+def night_key(moment: datetime | None = None) -> str:
+    """Post qaysi "kecha"ga tegishli ekanini aniqlaydi.
+
+    Post 23:00 da chiqadi va tongi 03:30 gacha yangilanib boradi — ya'ni bitta
+    post ikki kalendar kunga tegib ketadi. Shuning uchun kunni yarim tunda
+    emas, PRICE_WATCH_NIGHT_ENDS (odatda 12:00) da kesamiz:
+
+      31-avgust 23:00  -> "2026-08-31"
+      1-sentyabr 03:00 -> "2026-08-31"   (o'sha kechaning yangilanishi)
+      1-sentyabr 23:00 -> "2026-09-01"   (YANGI kecha, yangi post)
+
+    Yarim tunni chegara qilib bo'lmaydi: unda 00:17 dagi post 07:19 da
+    "yangi kun" bo'lib qaytadan chiqib ketardi (28-avgust holati).
+    """
+    local = ZoneInfo(config.LOCAL_TZ)
+    ref = (moment or datetime.now(timezone.utc)).astimezone(local)
+    hour, _, minute = config.PRICE_WATCH_NIGHT_ENDS.partition(":")
+    edge = ref.replace(hour=int(hour), minute=int(minute or 0), second=0, microsecond=0)
+    day = ref.date() if ref >= edge else ref.date() - timedelta(days=1)
+    return day.isoformat()
+
+
+def state_night(state: dict) -> str | None:
+    """Saqlangan holat qaysi kechaga tegishli. Eski fayllarda `night` yo'q —
+    u holda oxirgi yozuv vaqtidan kelib chiqamiz."""
+    if state.get("night"):
+        return state["night"]
+    stamp = state.get("posted_at")
+    if not stamp:
+        return None
+    try:
+        return night_key(datetime.fromisoformat(stamp))
+    except ValueError:
+        return None
+
+
 def _snapshot(bootstrap: dict, seen: set[int] | None = None) -> tuple[list, list, str]:
     """Joriy holat. `seen` berilsa, unda yo'q futbolchilar 🆕 bilan belgilanadi."""
     rises, falls = candidates(bootstrap)
@@ -109,22 +145,30 @@ def run(force: bool = False, window: str | None = None, update: bool = False) ->
         return 0
 
     state = storage.load(config.PRICE_WATCH_STATE_FILE, {}) or {}
-    # Kalendar kuniga emas, o'tgan vaqtga qaraymiz: 23:00 dagi post yarim tundan
-    # keyin "yangi kun" bo'lgani uchun takrorlanib ketmasin.
-    fresh = waiter.recent(state.get("posted_at"), config.PRICE_WATCH_REPEAT_HOURS)
-    message_id = state.get("message_id") if fresh else None
-    if fresh and not force and not message_id:
-        log.info("Oxirgi tekshiruv %s da bo'lgan (post chiqmagan) — takrorlamaymiz.",
-                 state.get("posted_at"))
+    # Har kecha o'ziniki: 23:00 dagi post tongi 03:30 gacha yangilanadi, keyin
+    # yopiladi. Ertasi kechqurun — YANGI post, kechagisiga tegilmaydi.
+    night = night_key(now)
+    same_night = state_night(state) == night
+    message_id = state.get("message_id") if same_night else None
+    if same_night and not force and not message_id:
+        log.info("Bu kecha (%s) allaqachon tekshirilgan, post chiqmagan — takrorlamaymiz.",
+                 night)
         return 0
     if message_id:
         log.info("Shu kechagi xabar bor (id=%s) — yangisini yubormay, tahrirlaymiz.",
                  message_id)
+    elif state.get("message_id"):
+        log.info("Oxirgi post %s kechasiniki edi — bugun (%s) yangisi chiqadi.",
+                 state_night(state), night)
 
     update_until = waiter.local_time_today(config.PRICE_WATCH_UPDATE_UNTIL)
     last_text = state.get("last_text") if message_id else None
     # Birinchi postdagi futbolchilar. Keyin qo'shilganlari 🆕 bilan chiqadi.
     seen: set[int] | None = set(state.get("seen") or []) if message_id else None
+    # Postning o'z vaqti. Soatlik yangilanishlar buni oldinga surmaydi —
+    # aks holda ertasi kechqurun "hali 20 soat o'tmagan" bo'lib qolardi va
+    # yangi post o'rniga kechagisi tahrirlanardi (1-sentyabr holati).
+    posted_at = state.get("posted_at") if same_night else None
 
     while True:
         rises, falls, text = _snapshot(fpl_api.get_bootstrap(), seen)
@@ -134,7 +178,7 @@ def run(force: bool = False, window: str | None = None, update: bool = False) ->
             log.info("Chegaradan (%d%%) oshgan futbolchi yo'q — post yuborilmaydi.",
                      config.PRICE_WATCH_MIN)
             storage.save(config.PRICE_WATCH_STATE_FILE, {
-                "date": today, "message_id": None,
+                "date": today, "night": night, "message_id": None,
                 "posted_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             })
             return 0
@@ -154,12 +198,18 @@ def run(force: bool = False, window: str | None = None, update: bool = False) ->
             log.info("O'zgarish yo'q — xabar o'sha holicha qoldi.")
 
         last_text = text
+        stamp_now = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        posted_at = posted_at or stamp_now
         storage.save(config.PRICE_WATCH_STATE_FILE, {
             "date": today,
+            "night": night,
             "message_id": message_id,
             "last_text": text,
             "seen": sorted(seen or ()),
-            "posted_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            # `posted_at` — postning o'zi chiqqan vaqt, yangilanishlar uni
+            # oldinga surmaydi; `updated_at` — oxirgi tahrir.
+            "posted_at": posted_at,
+            "updated_at": stamp_now,
         })
 
         if not update:

@@ -90,15 +90,44 @@ class UpdateTest(unittest.TestCase):
         self.assertEqual(self.edited, [])            # matn o'zgarmagan
 
     def test_existing_message_is_edited_not_reposted(self):
-        """Qayta ishga tushirilsa yangi post emas, eskisi yangilanadi."""
+        """Shu kechada qayta ishga tushirilsa yangi post emas, eskisi yangilanadi."""
         price_watch.storage.load = lambda *a, **kw: {
-            "message_id": 77, "last_text": "eski",
+            "message_id": 77, "last_text": "eski", "night": price_watch.night_key(),
             "posted_at": (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat(),
         }
         price_watch.fpl_api.get_bootstrap = lambda: _bootstrap(120)
         self.assertEqual(price_watch.run(), 0)
         self.assertEqual(self.sent, [])
         self.assertEqual(len(self.edited), 1)
+
+    def test_last_nights_message_is_left_alone(self):
+        """1-sentyabr holati: kechagi post tahrirlanmasin, yangisi chiqsin."""
+        price_watch.storage.load = lambda *a, **kw: {
+            "message_id": 3677, "last_text": "kechagi matn", "night": "2026-08-31",
+            "seen": [1],
+            "posted_at": "2026-08-31T18:00:00+00:00",
+            "updated_at": "2026-08-31T22:00:00+00:00",
+        }
+        price_watch.fpl_api.get_bootstrap = lambda: _bootstrap(120)
+        self.assertEqual(price_watch.run(force=True), 0)
+        self.assertEqual(len(self.sent), 1)          # yangi post
+        self.assertEqual(self.edited, [])            # kechagisiga tegilmadi
+        self.assertEqual(self.saved[-1]["message_id"], 77)
+        self.assertEqual(self.saved[-1]["night"], price_watch.night_key())
+        # yangi kechada hamma futbolchi "yangi" emas — 🆕 faqat post chiqqach
+        self.assertNotIn(config.PRICE_WATCH_NEW_MARK, self.sent[0])
+
+    def test_updates_do_not_move_the_post_time(self):
+        """`posted_at` post vaqtida qotib qoladi, `updated_at` esa suriladi."""
+        price_watch.fpl_api.get_bootstrap = lambda: _bootstrap(120)
+        stamp = "2026-09-01T18:00:00+00:00"
+        price_watch.storage.load = lambda *a, **kw: {
+            "message_id": 77, "last_text": "eski", "night": price_watch.night_key(),
+            "posted_at": stamp,
+        }
+        price_watch.run()
+        self.assertEqual(self.saved[-1]["posted_at"], stamp)
+        self.assertNotEqual(self.saved[-1]["updated_at"], stamp)
 
 
 if __name__ == "__main__":
@@ -149,6 +178,7 @@ class NewMarkTest(unittest.TestCase):
     def test_later_arrival_gets_the_badge(self):
         price_watch.storage.load = lambda *a, **kw: {
             "message_id": 77, "last_text": "eski", "seen": [1],
+            "night": price_watch.night_key(),
             "posted_at": (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat(),
         }
         price_watch.fpl_api.get_bootstrap = lambda: self._two(True)
@@ -162,3 +192,34 @@ class NewMarkTest(unittest.TestCase):
         price_watch.fpl_api.get_bootstrap = lambda: self._two(True)
         price_watch.run(force=True)
         self.assertEqual(self.saved[-1]["seen"], [1, 2])
+
+
+class NightKeyTest(unittest.TestCase):
+    """Bitta post — bitta kecha. Kecha 12:00 da tugaydi."""
+
+    def _at(self, iso):
+        from zoneinfo import ZoneInfo
+        local = datetime.fromisoformat(iso).replace(tzinfo=ZoneInfo(config.LOCAL_TZ))
+        return price_watch.night_key(local)
+
+    def test_evening_post_belongs_to_that_day(self):
+        self.assertEqual(self._at("2026-08-31T23:00"), "2026-08-31")
+
+    def test_after_midnight_update_stays_in_the_same_night(self):
+        self.assertEqual(self._at("2026-09-01T03:00"), "2026-08-31")
+
+    def test_morning_still_counts_as_last_night(self):
+        # 28-avgust holati: 00:17 dagi post 07:19 da takrorlanmasin
+        self.assertEqual(self._at("2026-09-01T07:19"), "2026-08-31")
+
+    def test_the_next_evening_is_a_new_night(self):
+        self.assertEqual(self._at("2026-09-01T23:00"), "2026-09-01")
+
+    def test_state_night_falls_back_to_the_post_time(self):
+        # eski holat fayllarida `night` yo'q
+        self.assertEqual(
+            price_watch.state_night({"posted_at": "2026-08-31T18:00:00+00:00"}),
+            "2026-08-31")
+
+    def test_state_night_is_none_when_there_is_nothing_to_go_on(self):
+        self.assertIsNone(price_watch.state_night({}))

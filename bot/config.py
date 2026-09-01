@@ -113,8 +113,10 @@ PRICE_WATCH_MIN = _int("PRICE_WATCH_MIN", 85)          # shu foizdan pastlari ro
 PRICE_WATCH_MAX = _int("PRICE_WATCH_MAX", 8)           # har tomonda ko'pi bilan nechta futbolchi
 PRICE_WATCH_SURE = _int("PRICE_WATCH_SURE", 100)       # shundan oshgani "kutilmoqda" deb qalin yoziladi
 PRICE_WATCH_MAX_MINUTES = _int("PRICE_WATCH_MAX_MINUTES", 300)  # jarayon maksimal ish vaqti
-# Takror postga qarshi: kalendar kuniga emas, o'tgan vaqtga qaraymiz
-PRICE_WATCH_REPEAT_HOURS = _float("PRICE_WATCH_REPEAT_HOURS", 20.0)
+# Takror postga qarshi: bitta post bitta "kecha"ga tegishli. Kecha yarim tunda
+# emas, shu vaqtda tugaydi — 23:00 dagi post va uning tongi 03:30 gacha bo'lgan
+# yangilanishlari bitta kechada qoladi, ertasi kechqurun esa yangisi chiqadi.
+PRICE_WATCH_NIGHT_ENDS = os.getenv("PRICE_WATCH_NIGHT_ENDS", "12:00")
 # Post chiqqandan keyin xuddi shu xabar shu vaqtgacha yangilanib turadi —
 # bashorat foizlari tun davomida o'zgaradi.
 PRICE_WATCH_UPDATE_UNTIL = os.getenv("PRICE_WATCH_UPDATE_UNTIL", "03:30")

@@ -76,9 +76,12 @@ class PriceWatchGuardTest(unittest.TestCase):
         config.require_telegram = self._orig["require"]
 
     def test_a_post_from_last_night_blocks_a_repeat(self):
-        """Aynan 28-avgust holati: 00:17 da chiqqan post 07:19 da takrorlanmasin."""
+        """Aynan 28-avgust holati: 00:17 da chiqqan post 07:19 da takrorlanmasin.
+
+        Ikkalasi ham bitta kechaga tegishli (kecha 12:00 da tugaydi).
+        """
         price_watch.storage.load = lambda *a, **kw: {
-            "date": "2026-08-27",
+            "date": "2026-08-27", "night": price_watch.night_key(),
             "posted_at": (datetime.now(timezone.utc) - timedelta(hours=7)).isoformat(),
         }
         self.assertEqual(price_watch.run(), 0)
@@ -86,7 +89,7 @@ class PriceWatchGuardTest(unittest.TestCase):
 
     def test_an_old_post_does_not_block(self):
         price_watch.storage.load = lambda *a, **kw: {
-            "date": "2026-08-20",
+            "date": "2026-08-20", "night": "2026-08-20",
             "posted_at": (datetime.now(timezone.utc) - timedelta(hours=30)).isoformat(),
         }
         # o'zgarish yo'q -> post yo'q, lekin takror himoyasi to'sqinlik qilmagan
