@@ -367,7 +367,7 @@
       "team": "CHE"
     },
     "165": {
-      "cost": 76,
+      "cost": 77,
       "name": "João Pedro",
       "team": "CHE"
     },
@@ -447,7 +447,7 @@
       "team": "COV"
     },
     "18": {
-      "cost": 64,
+      "cost": 63,
       "name": "Martinelli",
       "team": "ARS"
     },
@@ -477,7 +477,7 @@
       "team": "COV"
     },
     "185": {
-      "cost": 50,
+      "cost": 49,
       "name": "Sakamoto",
       "team": "COV"
     },
@@ -574,7 +574,7 @@
     "201": {
       "cost": 54,
       "name": "Muñoz",
-      "team": "CRY"
+      "team": "NFO"
     },
     "202": {
       "cost": 50,
@@ -602,12 +602,12 @@
       "team": "CRY"
     },
     "207": {
-      "cost": 45,
+      "cost": 44,
       "name": "Mingueza",
       "team": "CRY"
     },
     "208": {
-      "cost": 64,
+      "cost": 63,
       "name": "Sarr",
       "team": "CRY"
     },
@@ -617,7 +617,7 @@
       "team": "EVE"
     },
     "21": {
-      "cost": 50,
+      "cost": 49,
       "name": "Nørgaard",
       "team": "EVE"
     },
@@ -637,7 +637,7 @@
       "team": "CRY"
     },
     "213": {
-      "cost": 50,
+      "cost": 49,
       "name": "Lerma",
       "team": "CRY"
     },
@@ -837,7 +837,7 @@
       "team": "EVE"
     },
     "25": {
-      "cost": 74,
+      "cost": 73,
       "name": "Gyökeres",
       "team": "ARS"
     },
@@ -897,7 +897,7 @@
       "team": "ARS"
     },
     "260": {
-      "cost": 65,
+      "cost": 64,
       "name": "Wilson",
       "team": "LEE"
     },
@@ -1197,7 +1197,7 @@
       "team": "IPS"
     },
     "314": {
-      "cost": 50,
+      "cost": 49,
       "name": "Ogbene",
       "team": "IPS"
     },
@@ -1217,7 +1217,7 @@
       "team": "IPS"
     },
     "318": {
-      "cost": 55,
+      "cost": 54,
       "name": "Philogene",
       "team": "IPS"
     },
@@ -1252,7 +1252,7 @@
       "team": "IPS"
     },
     "324": {
-      "cost": 50,
+      "cost": 49,
       "name": "Mehmeti",
       "team": "IPS"
     },
@@ -1712,7 +1712,7 @@
       "team": "MCI"
     },
     "407": {
-      "cost": 50,
+      "cost": 49,
       "name": "Echeverri",
       "team": "MCI"
     },
@@ -1942,7 +1942,7 @@
       "team": "NEW"
     },
     "449": {
-      "cost": 50,
+      "cost": 51,
       "name": "Hall",
       "team": "NEW"
     },
@@ -1952,7 +1952,7 @@
       "team": "AVL"
     },
     "450": {
-      "cost": 50,
+      "cost": 49,
       "name": "Livramento",
       "team": "NEW"
     },
@@ -2177,7 +2177,7 @@
       "team": "NFO"
     },
     "491": {
-      "cost": 60,
+      "cost": 59,
       "name": "Igor Jesus",
       "team": "NFO"
     },
@@ -2212,7 +2212,7 @@
       "team": "TOT"
     },
     "498": {
-      "cost": 60,
+      "cost": 59,
       "name": "Senesi",
       "team": "TOT"
     },
@@ -2517,7 +2517,7 @@
       "team": "SUN"
     },
     "552": {
-      "cost": 60,
+      "cost": 59,
       "name": "Brobbey",
       "team": "SUN"
     },
@@ -2587,7 +2587,7 @@
       "team": "IPS"
     },
     "565": {
-      "cost": 56,
+      "cost": 57,
       "name": "M.Sangaré",
       "team": "BRE"
     },
@@ -2662,7 +2662,7 @@
       "team": "CHE"
     },
     "579": {
-      "cost": 55,
+      "cost": 54,
       "name": "Araujo",
       "team": "LIV"
     },
@@ -2931,6 +2931,21 @@
       "name": "Zepa",
       "team": "FUL"
     },
+    "627": {
+      "cost": 80,
+      "name": "Barcola",
+      "team": "LIV"
+    },
+    "628": {
+      "cost": 60,
+      "name": "Allan",
+      "team": "MCI"
+    },
+    "629": {
+      "cost": 40,
+      "name": "Zetterer",
+      "team": "LEE"
+    },
     "63": {
       "cost": 50,
       "name": "Milosavljević",
@@ -3132,5 +3147,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-01T01:00:00+00:00"
+  "taken_at": "2026-09-02T01:00:00+00:00"
 }
