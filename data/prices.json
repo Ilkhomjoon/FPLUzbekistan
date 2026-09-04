@@ -22,7 +22,7 @@
       "team": "CHE"
     },
     "102": {
-      "cost": 50,
+      "cost": 49,
       "name": "Yarmoliuk",
       "team": "BRE"
     },
@@ -167,7 +167,7 @@
       "team": "BHA"
     },
     "129": {
-      "cost": 55,
+      "cost": 54,
       "name": "Ayari",
       "team": "BHA"
     },
@@ -337,7 +337,7 @@
       "team": "CHE"
     },
     "16": {
-      "cost": 64,
+      "cost": 63,
       "name": "Madueke",
       "team": "ARS"
     },
@@ -482,7 +482,7 @@
       "team": "COV"
     },
     "186": {
-      "cost": 55,
+      "cost": 54,
       "name": "Mason-Clark",
       "team": "COV"
     },
@@ -492,7 +492,7 @@
       "team": "COV"
     },
     "188": {
-      "cost": 55,
+      "cost": 54,
       "name": "Torp",
       "team": "COV"
     },
@@ -1072,7 +1072,7 @@
       "team": "HUL"
     },
     "292": {
-      "cost": 50,
+      "cost": 49,
       "name": "Ömür",
       "team": "HUL"
     },
@@ -1487,7 +1487,7 @@
       "team": "LIV"
     },
     "367": {
-      "cost": 70,
+      "cost": 71,
       "name": "Gakpo",
       "team": "LIV"
     },
@@ -1607,7 +1607,7 @@
       "team": "MCI"
     },
     "389": {
-      "cost": 60,
+      "cost": 59,
       "name": "Matheus N.",
       "team": "MCI"
     },
@@ -1842,7 +1842,7 @@
       "team": "MUN"
     },
     "430": {
-      "cost": 55,
+      "cost": 54,
       "name": "Mount",
       "team": "MUN"
     },
@@ -1947,7 +1947,7 @@
       "team": "NEW"
     },
     "45": {
-      "cost": 55,
+      "cost": 54,
       "name": "McGinn",
       "team": "AVL"
     },
@@ -2187,7 +2187,7 @@
       "team": "COV"
     },
     "493": {
-      "cost": 55,
+      "cost": 54,
       "name": "Kalimuendo",
       "team": "NFO"
     },
@@ -2342,7 +2342,7 @@
       "team": "AVL"
     },
     "520": {
-      "cost": 55,
+      "cost": 54,
       "name": "Bergvall",
       "team": "TOT"
     },
@@ -2622,7 +2622,7 @@
       "team": "FUL"
     },
     "571": {
-      "cost": 50,
+      "cost": 49,
       "name": "Florentino",
       "team": "IPS"
     },
@@ -2677,7 +2677,7 @@
       "team": "FUL"
     },
     "581": {
-      "cost": 55,
+      "cost": 54,
       "name": "Diomande",
       "team": "NFO"
     },
@@ -3071,6 +3071,11 @@
       "name": "J.Angulo",
       "team": "SUN"
     },
+    "652": {
+      "cost": 55,
+      "name": "Azeez",
+      "team": "BHA"
+    },
     "66": {
       "cost": 40,
       "name": "Soler",
@@ -3147,7 +3152,7 @@
       "team": "BOU"
     },
     "8": {
-      "cost": 56,
+      "cost": 57,
       "name": "Calafiori",
       "team": "ARS"
     },
@@ -3257,5 +3262,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-03T01:00:00+00:00"
+  "taken_at": "2026-09-04T01:00:00+00:00"
 }
