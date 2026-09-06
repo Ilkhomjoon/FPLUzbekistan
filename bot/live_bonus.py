@@ -82,19 +82,23 @@ def fetch_defcon(event_ids: list[int], fixtures: list[dict], players: dict,
     return out
 
 
-def _progress(fx: dict) -> tuple:
-    """O'yin qanchalik "oldinga ketgani" — solishtirish uchun."""
-    stats = 0
-    for row in fx.get("stats") or []:
-        for side in ("h", "a"):
-            for r in row.get(side) or []:
-                try:
-                    stats += abs(int(r.get("value") or 0))
-                except (TypeError, ValueError):
-                    pass
+def _stage(fx: dict) -> tuple:
+    """O'yin bosqichi — faqat oldinga yurishi mumkin bo'lgan belgilar.
+
+    Bu yerga BPS (yoki umuman `stats` yig'indisi) QO'SHIB BO'LMAYDI: BPS o'yin
+    davomida kamayishi ham mumkin — raqib gol ursa, darvozabon va himoyachilar
+    ball yo'qotadi. 6-sentyabrda aynan shu bo'ldi: Everton gol urgan zahoti
+    jami BPS tushdi, yangi nusxa "orqaga ketibdi" deb rad etildi va xabar
+    0:1 da butun o'yin davomida muzlab qoldi.
+
+    Gollar soni esa qoladi — eski nusxa hisobni orqaga qaytarib yuborishi
+    mumkin. VAR goli bekor qilinsa hisob bir muddat eski holicha turadi, lekin
+    o'yin yakunlanishi bilan (bosqich o'zgaradi) yangi nusxa qabul qilinadi.
+    """
+    goals = (fx.get("team_h_score") or 0) + (fx.get("team_a_score") or 0)
     scores = sum(fx.get(k) is not None for k in ("team_h_score", "team_a_score"))
     return (bool(fx.get("finished")), bool(fx.get("finished_provisional")),
-            bool(fx.get("started")), scores, stats)
+            bool(fx.get("started")), scores, goals)
 
 
 def merge_fixtures(previous: list[dict], fresh: list[dict]) -> list[dict]:
@@ -109,9 +113,10 @@ def merge_fixtures(previous: list[dict], fresh: list[dict]) -> list[dict]:
     out: list[dict] = []
     for fx in fresh:
         old = known.get(fx.get("id"))
-        if old is not None and _progress(old) > _progress(fx):
-            log.warning("O'yin %s bo'yicha eski nusxa keldi — oldingi holat saqlanadi.",
-                        fx.get("id"))
+        if old is not None and _stage(old) > _stage(fx):
+            log.warning("O'yin %s bo'yicha eski nusxa keldi (%s -> %s) — "
+                        "oldingi holat saqlanadi.",
+                        fx.get("id"), _stage(old), _stage(fx))
             out.append(old)
         else:
             out.append(fx)

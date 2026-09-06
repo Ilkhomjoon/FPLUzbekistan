@@ -48,6 +48,31 @@ class MergeTest(unittest.TestCase):
         merged = live_bonus.merge_fixtures(before, after)
         self.assertEqual(merged[0]["stats"][0]["h"][0]["value"], 25)
 
+    def test_a_goal_that_lowers_the_bps_total_is_still_accepted(self):
+        """6-sentyabr holati: Everton gol urdi -> MUN darvozaboni BPS yo'qotdi.
+
+        Jami BPS tushgani uchun yangi nusxa "eski" deb rad etilardi va xabar
+        0:1 da muzlab qolgandi. Endi BPS solishtirishga umuman kirmaydi.
+        """
+        before = [_fx(1, started=True, hs=0, aws=1, bps=33)]
+        after = [_fx(1, started=True, hs=1, aws=1, bps=21)]   # gol + BPS tushdi
+        merged = live_bonus.merge_fixtures(before, after)
+        self.assertEqual(merged[0]["team_h_score"], 1)
+        self.assertEqual(merged[0]["stats"][0]["h"][0]["value"], 21)
+
+    def test_the_score_never_goes_back(self):
+        """Eski nusxa hisobni 1:2 dan 0:0 ga qaytarib yubormasin."""
+        before = [_fx(1, started=True, hs=1, aws=2)]
+        merged = live_bonus.merge_fixtures(before, [_fx(1, started=True, hs=0, aws=0)])
+        self.assertEqual((merged[0]["team_h_score"], merged[0]["team_a_score"]), (1, 2))
+
+    def test_a_finished_copy_wins_even_with_a_lower_score(self):
+        """VAR goli bekor qilinsa — o'yin yakunlangach yangi hisob qabul qilinadi."""
+        before = [_fx(1, started=True, hs=1, aws=2)]
+        after = [_fx(1, started=True, finished=True, hs=1, aws=1)]
+        merged = live_bonus.merge_fixtures(before, after)
+        self.assertEqual(merged[0]["team_a_score"], 1)
+
     def test_fixture_missing_from_the_fresh_copy_is_kept(self):
         before = [_fx(1, started=True, finished=True), _fx(2, started=True)]
         merged = live_bonus.merge_fixtures(before, [_fx(1, started=True, finished=True)])
