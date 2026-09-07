@@ -6,7 +6,8 @@ iborat bo'ladi:
   🔥 Kam olingan, ko'p bergan — egalik DIFF_MAX_OWN% dan past, o'tgan turda
      DIFF_MIN_POINTS+ ochko olgan futbolchilar
   👑 Top-100 ning yashirin qurollari — dunyo bo'yicha eng kuchli menejerlarda
-     ko'p uchraydigan, lekin umumiy egaligi past futbolchilar
+     ko'p uchraydigan, umumiy egaligi past VA ochko keltirayotgan futbolchilar.
+     Ro'yxat kam chiqsa top-1000 gacha kengayadi (DIFF_ELITE_TIERS).
   📈 Kech qolmang — hali differential, ammo eng ko'p sotib olinayotganlar
   📅 Keyingi turlar — kalendar va raqiblar qiyinligi
   🇺🇿 Bizning ligada — shu differentiallar bizning ligada qanchada bor
@@ -45,7 +46,8 @@ class Diff:
     points: int           # o'tgan turdagi ochko
     total: int            # mavsum boshidan
     transfers_in: int     # shu hafta sotib olinishlar
-    elite: float = 0.0    # top-100 dagi egalik, %
+    form: float = 0.0     # FPL "form" — oxirgi 30 kundagi o'rtacha ochko
+    elite: float = 0.0    # top ro'yxatdagi egalik, %
     local: float = 0.0    # bizning ligadagi egalik, %
     local_count: int = 0
     fixtures_text: str = ""
@@ -68,6 +70,7 @@ class Picks:
     local: list[Diff] = field(default_factory=list)
     local_label: str = ""
     local_scanned: int = 0
+    elite_size: int = 0     # 👑 bo'limi nechta menejer bo'yicha hisoblangan
 
     def any(self) -> bool:
         return bool(self.low_owned or self.top100 or self.rising)
@@ -98,6 +101,7 @@ def pool(bootstrap: dict) -> list[Diff]:
             points=_num(p.get("event_points"), 0),
             total=_num(p.get("total_points"), 0),
             transfers_in=_num(p.get("transfers_in_event"), 0),
+            form=_num(p.get("form"), 0.0),
         ))
     return out
 
@@ -158,19 +162,31 @@ def top_entries(size: int) -> list[int]:
     return entries[:size]
 
 
-def elite_differentials(players: list[Diff], gw: int) -> list[Diff]:
-    """Top-100 da ko'p, umumiy egaligi past futbolchilar."""
-    entries = top_entries(config.DIFF_TOP100_SIZE)
-    if not entries:
-        log.warning("Top-100 ro'yxati olinmadi.")
-        return []
+def elite_tiers() -> list[int]:
+    """DIFF_ELITE_TIERS -> [100, 1000]. Xato yozilgan qiymatlar tashlab yuboriladi."""
+    out = []
+    for part in (config.DIFF_ELITE_TIERS or "").split(","):
+        try:
+            size = int(part.strip())
+        except ValueError:
+            continue
+        if size > 0:
+            out.append(size)
+    return sorted(set(out)) or [100]
 
-    counts, scanned = scan_picks(entries, gw)
-    if not scanned:
-        log.warning("Top-100 tarkiblari o'qilmadi.")
-        return []
-    log.info("Top-%d: %d ta jamoa tekshirildi", config.DIFF_TOP100_SIZE, scanned)
 
+def _elite_rows(players: list[Diff], counts: Counter, scanned: int) -> list[Diff]:
+    """Skanerlangan tarkiblardan "kuchlilarda bor, ochko ham keltirgan" ro'yxati.
+
+    Uchta shart birga ishlaydi:
+      · top ro'yxatda DIFF_TOP100_MIN% dan ko'p, umumiy egaligi DIFF_MAX_OWN% dan past
+        — ya'ni ularda bor, boshqalarda yo'q;
+      · o'tgan turda DIFF_ELITE_MIN_POINTS+ ochko — bir turlik natija;
+      · forma DIFF_ELITE_MIN_FORM dan baland — bitta omadli tur emas, barqarorlik.
+
+    Ilgari faqat birinchi shart bor edi va ochko keltirmagan futbolchilar ham
+    ro'yxatga tushib ketardi.
+    """
     by_id = {d.element_id: d for d in players}
     rows: list[Diff] = []
     for element_id, count in counts.items():
@@ -178,10 +194,53 @@ def elite_differentials(players: list[Diff], gw: int) -> list[Diff]:
         if not d or d.owned >= config.DIFF_MAX_OWN:
             continue
         d.elite = count / scanned * 100
-        if d.elite >= config.DIFF_TOP100_MIN:
+        if (d.elite >= config.DIFF_TOP100_MIN
+                and d.points >= config.DIFF_ELITE_MIN_POINTS
+                and d.form >= config.DIFF_ELITE_MIN_FORM):
             rows.append(d)
-    rows.sort(key=lambda d: -(d.elite - d.owned))
+    rows.sort(key=lambda d: (-d.points, -(d.elite - d.owned)))
     return rows[: config.DIFF_TOP_N]
+
+
+def elite_differentials(players: list[Diff], gw: int) -> tuple[list[Diff], int]:
+    """Kuchli menejerlarda bor, ochko ham keltirgan futbolchilar.
+
+    Top-100 dan DIFF_ELITE_MIN_ROWS ta ham chiqmasa, ro'yxat top-1000 gacha
+    kengaytiriladi (DIFF_ELITE_TIERS). Allaqachon o'qilgan tarkiblar qayta
+    so'ralmaydi — faqat qo'shimcha jamoalar skanerlanadi.
+
+    Qaytaradi: (ro'yxat, nechta jamoa tekshirilgani).
+    """
+    tiers = elite_tiers()
+    entries = top_entries(tiers[-1])
+    if not entries:
+        log.warning("Dunyo bo'yicha reyting olinmadi.")
+        return [], 0
+
+    counts: Counter = Counter()
+    scanned = 0
+    done = 0
+    rows: list[Diff] = []
+
+    for size in tiers:
+        chunk = entries[done:size]
+        if not chunk:
+            continue
+        part_counts, part_scanned = scan_picks(chunk, gw)
+        counts.update(part_counts)
+        scanned += part_scanned
+        done = size
+        if not scanned:
+            continue
+        rows = _elite_rows(players, counts, scanned)
+        log.info("Top-%d: %d ta jamoa tekshirildi -> %d ta nomzod", size, scanned, len(rows))
+        if len(rows) >= config.DIFF_ELITE_MIN_ROWS:
+            break
+
+    if not scanned:
+        log.warning("Top menejerlar tarkiblari o'qilmadi.")
+        return [], 0
+    return rows, done
 
 
 def local_ownership(rows: list[Diff], gw: int) -> tuple[str, int]:
@@ -261,10 +320,10 @@ def collect(bootstrap: dict, gw: int, fixtures: list[dict], teams: dict) -> Pick
     log.info("Kam olingan, ko'p bergan: %d ta", len(picks.low_owned))
 
     try:
-        picks.top100 = elite_differentials(players, gw)
+        picks.top100, picks.elite_size = elite_differentials(players, gw)
     except Exception as exc:
-        log.error("Top-100 bo'limi tayyorlanmadi: %s", exc)
-    log.info("Top-100 qurollari: %d ta", len(picks.top100))
+        log.error("Kuchli menejerlar bo'limi tayyorlanmadi: %s", exc)
+    log.info("Top-%d qurollari: %d ta", picks.elite_size, len(picks.top100))
 
     picks.rising = rising(players)
 

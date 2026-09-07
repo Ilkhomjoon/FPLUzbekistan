@@ -408,10 +408,15 @@ def differentials_post(gw: int, next_gw: int, picks, teams: dict) -> str:
         blocks.append("\n".join(lines))
 
     if picks.top100:
-        lines = ["<b>👑 Top-100 ning yashirin qurollari</b>",
-                 "<i>Dunyo bo'yicha eng kuchli menejerlar nimani ushlab turibdi</i>", ""]
+        # bu yerda `num()` ishlatilmaydi — "Top-1 000" emas, "Top-1000" bo'lsin
+        size = str(picks.elite_size or 100)
+        lines = [f"<b>👑 Top-{size} ning yashirin qurollari</b>",
+                 f"<i>Ularda bor, boshqalarda yo'q — va GW{gw} da "
+                 f"{config.DIFF_ELITE_MIN_POINTS}+ ochko keltirgan</i>", ""]
         for d in picks.top100:
-            lines.append(f"{d.label(teams)} — top-100: <b>{d.elite:.0f}%</b> · "
+            lines.append(f"{d.label(teams)} {price(d.cost)} — "
+                         f"<b>{d.points}</b> ochko · forma {d.form:.1f}")
+            lines.append(f"   top-{size}: <b>{d.elite:.0f}%</b> · "
                          f"umumiy: {d.owned:.1f}% (+{d.elite - d.owned:.0f})")
         blocks.append("\n".join(lines))
 

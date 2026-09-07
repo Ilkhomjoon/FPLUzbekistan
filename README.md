@@ -377,8 +377,11 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `DIFF_LATEST` | `23:00` | Bundan kech bo'lsa post ertangi kunga suriladi |
 | `DIFF_MAX_OWN` | `10` | "Differential" hisoblanish chegarasi, egalik % |
 | `DIFF_MIN_POINTS` | `7` | O'tgan turda shundan kam olgani ro'yxatga tushmaydi |
-| `DIFF_TOP100_SIZE` | `100` | Dunyo bo'yicha nechta menejer tarkibi skanerlanadi |
-| `DIFF_TOP100_MIN` | `12` | Top-100 da shundan ko'p bo'lsa qiziq deb hisoblanadi |
+| `DIFF_ELITE_TIERS` | `100,1000` | Avval top-100, ro'yxat kam chiqsa top-1000 skanerlanadi |
+| `DIFF_TOP100_MIN` | `12` | Top ro'yxatda shundan ko'p bo'lsa qiziq deb hisoblanadi |
+| `DIFF_ELITE_MIN_POINTS` | `5` | 👑 bo'limi: o'tgan turdagi ochko chegarasi |
+| `DIFF_ELITE_MIN_FORM` | `3.5` | 👑 bo'limi: forma chegarasi |
+| `DIFF_ELITE_MIN_ROWS` | `3` | Shundan kam topilsa ro'yxat keyingi bosqichga kengayadi |
 | `DIFF_LOCAL_LEAGUE` | `true` | "Bizning ligada" bo'limi chiqsinmi |
 | `DIFF_POLL` | `true` | Postdan keyin so'rovnoma yuborilsinmi |
 | `LOCAL_TZ` | `Asia/Tashkent` | Xabardagi vaqtlar shu zonada ko'rsatiladi |

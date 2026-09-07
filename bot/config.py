@@ -160,8 +160,13 @@ DIFF_LATEST = os.getenv("DIFF_LATEST", "23:00")       # bundan kech bo'lsa ertag
 DIFF_MAX_OWN = _float("DIFF_MAX_OWN", 10.0)           # "differential" chegarasi, %
 DIFF_MIN_POINTS = _int("DIFF_MIN_POINTS", 7)          # o'tgan turda shundan kam olgani chiqmaydi
 DIFF_TOP_N = _int("DIFF_TOP_N", 5)                    # har bo'limda nechta qator
-DIFF_TOP100_SIZE = _int("DIFF_TOP100_SIZE", 100)      # dunyo bo'yicha nechta menejer skanerlansin
-DIFF_TOP100_MIN = _float("DIFF_TOP100_MIN", 12.0)     # top-100 da shundan ko'p bo'lsa qiziq
+# 👑 bo'limi. Ro'yxat yetarli chiqmasa keyingi bosqichga o'tiladi: avval top-100,
+# kerak bo'lsa top-1000. Kam bo'lsa ham mayli — asosiysi ochko keltirgani chiqsin.
+DIFF_ELITE_TIERS = os.getenv("DIFF_ELITE_TIERS", "100,1000")
+DIFF_TOP100_MIN = _float("DIFF_TOP100_MIN", 12.0)     # top ro'yxatda shundan ko'p bo'lsa qiziq
+DIFF_ELITE_MIN_POINTS = _int("DIFF_ELITE_MIN_POINTS", 5)   # o'tgan turdagi ochko chegarasi
+DIFF_ELITE_MIN_FORM = _float("DIFF_ELITE_MIN_FORM", 3.5)   # forma chegarasi
+DIFF_ELITE_MIN_ROWS = _int("DIFF_ELITE_MIN_ROWS", 3)       # shundan kam bo'lsa ro'yxat kengayadi
 DIFF_RISING_N = _int("DIFF_RISING_N", 3)              # "kech qolmang" bo'limidagi qatorlar
 DIFF_FIXTURES = _int("DIFF_FIXTURES", 3)              # kalendar necha turni ko'rsatsin
 DIFF_CALENDAR_N = _int("DIFF_CALENDAR_N", 3)          # nechta futbolchi uchun kalendar

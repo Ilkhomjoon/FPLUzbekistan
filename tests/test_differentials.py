@@ -15,10 +15,11 @@ TEAMS = {
 }
 
 
-def _element(pid, name, team, cost, owned, points, total=0, tin=0, status="a"):
+def _element(pid, name, team, cost, owned, points, total=0, tin=0, status="a", form=None):
     return {"id": pid, "web_name": name, "team": team, "now_cost": cost,
             "selected_by_percent": str(owned), "event_points": points,
-            "total_points": total, "transfers_in_event": tin, "status": status}
+            "total_points": total, "transfers_in_event": tin, "status": status,
+            "form": str(points if form is None else form)}
 
 
 BOOTSTRAP = {"elements": [
@@ -28,6 +29,10 @@ BOOTSTRAP = {"elements": [
     _element(4, "Rogers", 3, 55, 3.1, 7, 7, 64220),
     _element(5, "Nobody", 4, 45, 0.4, 1, 1, 12),
     _element(6, "Injured", 4, 60, 2.0, 12, 12, 5, status="u"),
+    # kuchlilarda bor, lekin ochko keltirmayapti — 👑 bo'limiga tushmasligi kerak
+    _element(7, "Passenger", 4, 70, 4.0, 1, 20, 300, form=1.2),
+    # ochkosi yaxshi, lekin forma past — bitta omadli tur
+    _element(8, "Onehit", 2, 50, 2.5, 8, 9, 800, form=2.0),
 ]}
 
 
@@ -62,27 +67,80 @@ class SelectionTest(unittest.TestCase):
 class EliteTest(unittest.TestCase):
     def setUp(self):
         self.players = differentials.pool(BOOTSTRAP)
-        self._orig = (differentials.top_entries, differentials.scan_picks)
-        differentials.top_entries = lambda size: list(range(1, 11))
+        self._orig = (differentials.top_entries, differentials.scan_picks,
+                      config.DIFF_ELITE_TIERS, config.DIFF_ELITE_MIN_ROWS)
+        differentials.top_entries = lambda size: list(range(1, size + 1))
+        config.DIFF_ELITE_TIERS = "10"
+        config.DIFF_ELITE_MIN_ROWS = 1
 
     def tearDown(self):
-        differentials.top_entries, differentials.scan_picks = self._orig
+        (differentials.top_entries, differentials.scan_picks,
+         config.DIFF_ELITE_TIERS, config.DIFF_ELITE_MIN_ROWS) = self._orig
+
+    def _scan(self, mapping: dict, scanned: int):
+        differentials.scan_picks = lambda entries, gw, workers=None: (
+            Counter({k: v for k, v in mapping.items()}), scanned)
 
     def test_gap_between_elite_and_global_ownership(self):
         # 10 menejerdan 4 tasida Ødegaard, 1 tasida Haaland
-        differentials.scan_picks = lambda entries, gw, workers=None: (
-            Counter({1: 4, 3: 1}), 10)
-        rows = differentials.elite_differentials(self.players, gw=1)
+        self._scan({1: 4, 3: 1}, 10)
+        rows, size = differentials.elite_differentials(self.players, gw=1)
         self.assertEqual([d.name for d in rows], ["Ødegaard"])
         self.assertAlmostEqual(rows[0].elite, 40.0)
+        self.assertEqual(size, 10)
 
     def test_below_threshold_is_ignored(self):
-        differentials.scan_picks = lambda entries, gw, workers=None: (Counter({1: 1}), 10)
-        self.assertEqual(differentials.elite_differentials(self.players, gw=1), [])
+        self._scan({1: 1}, 10)
+        rows, _ = differentials.elite_differentials(self.players, gw=1)
+        self.assertEqual(rows, [])
 
     def test_no_managers_scanned_returns_empty(self):
-        differentials.scan_picks = lambda entries, gw, workers=None: (Counter(), 0)
-        self.assertEqual(differentials.elite_differentials(self.players, gw=1), [])
+        self._scan({}, 0)
+        self.assertEqual(differentials.elite_differentials(self.players, gw=1), ([], 0))
+
+    def test_a_player_without_points_is_dropped(self):
+        """Foydalanuvchining shikoyati: kuchlilarda bor, lekin ochko keltirmagan."""
+        self._scan({7: 5}, 10)                    # Passenger — 1 ochko
+        rows, _ = differentials.elite_differentials(self.players, gw=1)
+        self.assertEqual(rows, [])
+
+    def test_a_one_off_haul_without_form_is_dropped(self):
+        self._scan({8: 5}, 10)                    # Onehit — 8 ochko, forma 2.0
+        rows, _ = differentials.elite_differentials(self.players, gw=1)
+        self.assertEqual(rows, [])
+
+    def test_the_list_widens_when_the_first_tier_is_thin(self):
+        """Top-100 dan 2 tadan kam chiqsa — top-1000 ga o'tiladi."""
+        config.DIFF_ELITE_TIERS = "10,20"
+        config.DIFF_ELITE_MIN_ROWS = 2
+        calls = []
+
+        def fake_scan(entries, gw, workers=None):
+            calls.append(list(entries))
+            # birinchi bosqichda faqat Ødegaard, keyingisida White ham qo'shiladi
+            return (Counter({1: 4}) if len(calls) == 1 else Counter({1: 4, 2: 4})), 10
+        differentials.scan_picks = fake_scan
+
+        rows, size = differentials.elite_differentials(self.players, gw=1)
+        self.assertEqual(len(calls), 2)
+        self.assertEqual(calls[0], list(range(1, 11)))     # 1-10
+        self.assertEqual(calls[1], list(range(11, 21)))    # faqat qolgani qayta o'qildi
+        self.assertEqual(sorted(d.name for d in rows), ["White", "Ødegaard"])
+        self.assertEqual(size, 20)
+
+    def test_the_first_tier_is_enough_when_it_is_full(self):
+        config.DIFF_ELITE_TIERS = "10,20"
+        config.DIFF_ELITE_MIN_ROWS = 2
+        self._scan({1: 4, 2: 4}, 10)
+        rows, size = differentials.elite_differentials(self.players, gw=1)
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(size, 10)                 # kengaytirishga hojat qolmadi
+
+    def test_rows_are_sorted_by_points(self):
+        config.DIFF_ELITE_MIN_ROWS = 1
+        self._scan({1: 4, 4: 4}, 10)               # Ødegaard 11 ochko, Rogers 7
+        rows, _ = differentials.elite_differentials(self.players, gw=1)
+        self.assertEqual([d.name for d in rows], ["Ødegaard", "Rogers"])
 
 
 class FixturesTest(unittest.TestCase):
