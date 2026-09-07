@@ -400,7 +400,7 @@ def differentials_post(gw: int, next_gw: int, picks, teams: dict) -> str:
               f"<i>GW{gw} natijalari va egalik foizi asosida</i>"]
 
     if picks.low_owned:
-        lines = [f"<b>🔥 Kam olingan, ko'p bergan</b>",
+        lines = [f"<b>🔥 Egalik foizi kam ammo ko'proq ochko bergan</b>",
                  f"<i>Egalik {config.DIFF_MAX_OWN:.0f}% dan past, "
                  f"GW{gw} da {config.DIFF_MIN_POINTS}+ ochko</i>", ""]
         for d in picks.low_owned:
@@ -429,7 +429,7 @@ def differentials_post(gw: int, next_gw: int, picks, teams: dict) -> str:
         blocks.append("\n".join(lines))
 
     if picks.calendar:
-        lines = [f"<b>📅 Keyingi {config.DIFF_FIXTURES} tur</b>", ""]
+        lines = [f"<b>📅 Keyingi {config.DIFF_FIXTURES} ta tur</b>", ""]
         for d in picks.calendar:
             lines.append(f"{d.label(teams)}: {d.fixtures_text}")
         blocks.append("\n".join(lines))
