@@ -32,7 +32,7 @@
       "team": "BRE"
     },
     "104": {
-      "cost": 50,
+      "cost": 49,
       "name": "Onyeka",
       "team": "COV"
     },
@@ -42,7 +42,7 @@
       "team": "BRE"
     },
     "106": {
-      "cost": 80,
+      "cost": 79,
       "name": "Thiago",
       "team": "BRE"
     },
@@ -62,7 +62,7 @@
       "team": "BHA"
     },
     "11": {
-      "cost": 55,
+      "cost": 54,
       "name": "Mosquera",
       "team": "ARS"
     },
@@ -562,7 +562,7 @@
       "team": "ARS"
     },
     "20": {
-      "cost": 54,
+      "cost": 53,
       "name": "Dowman",
       "team": "ARS"
     },
@@ -957,7 +957,7 @@
       "team": "FUL"
     },
     "271": {
-      "cost": 55,
+      "cost": 54,
       "name": "Muniz",
       "team": "FUL"
     },
@@ -987,7 +987,7 @@
       "team": "HUL"
     },
     "277": {
-      "cost": 40,
+      "cost": 41,
       "name": "Egan",
       "team": "HUL"
     },
@@ -1377,7 +1377,7 @@
       "team": "LEE"
     },
     "347": {
-      "cost": 55,
+      "cost": 54,
       "name": "Nmecha",
       "team": "LEE"
     },
@@ -1437,7 +1437,7 @@
       "team": "LIV"
     },
     "358": {
-      "cost": 55,
+      "cost": 54,
       "name": "Kerkez",
       "team": "LIV"
     },
@@ -1472,7 +1472,7 @@
       "team": "LIV"
     },
     "364": {
-      "cost": 50,
+      "cost": 49,
       "name": "Tsimikas",
       "team": "LIV"
     },
@@ -1487,7 +1487,7 @@
       "team": "LIV"
     },
     "367": {
-      "cost": 71,
+      "cost": 72,
       "name": "Gakpo",
       "team": "LIV"
     },
@@ -1497,7 +1497,7 @@
       "team": "LIV"
     },
     "369": {
-      "cost": 59,
+      "cost": 58,
       "name": "Ngumoha",
       "team": "LIV"
     },
@@ -1517,7 +1517,7 @@
       "team": "LIV"
     },
     "372": {
-      "cost": 55,
+      "cost": 54,
       "name": "Mac Allister",
       "team": "LIV"
     },
@@ -1562,7 +1562,7 @@
       "team": "AVL"
     },
     "380": {
-      "cost": 75,
+      "cost": 74,
       "name": "Ekitiké",
       "team": "LIV"
     },
@@ -1672,7 +1672,7 @@
       "team": "ARS"
     },
     "40": {
-      "cost": 75,
+      "cost": 76,
       "name": "Rogers",
       "team": "CHE"
     },
@@ -1802,7 +1802,7 @@
       "team": "MUN"
     },
     "423": {
-      "cost": 45,
+      "cost": 44,
       "name": "Shaw",
       "team": "MUN"
     },
@@ -1907,7 +1907,7 @@
       "team": "MUN"
     },
     "442": {
-      "cost": 50,
+      "cost": 49,
       "name": "Pope",
       "team": "NEW"
     },
@@ -2122,7 +2122,7 @@
       "team": "NFO"
     },
     "481": {
-      "cost": 64,
+      "cost": 63,
       "name": "Anderson",
       "team": "MCI"
     },
@@ -2407,7 +2407,7 @@
       "team": "SUN"
     },
     "532": {
-      "cost": 50,
+      "cost": 49,
       "name": "Ballard",
       "team": "SUN"
     },
@@ -2487,12 +2487,12 @@
       "team": "SUN"
     },
     "547": {
-      "cost": 50,
+      "cost": 49,
       "name": "Mundle",
       "team": "SUN"
     },
     "548": {
-      "cost": 50,
+      "cost": 49,
       "name": "Rigg",
       "team": "SUN"
     },
@@ -2642,7 +2642,7 @@
       "team": "HUL"
     },
     "575": {
-      "cost": 50,
+      "cost": 49,
       "name": "Yirenkyi",
       "team": "COV"
     },
@@ -2692,7 +2692,7 @@
       "team": "CHE"
     },
     "584": {
-      "cost": 55,
+      "cost": 54,
       "name": "Hamer",
       "team": "COV"
     },
@@ -3057,7 +3057,7 @@
       "team": "EVE"
     },
     "65": {
-      "cost": 45,
+      "cost": 44,
       "name": "J.Araujo",
       "team": "BOU"
     },
@@ -3081,13 +3081,18 @@
       "name": "Samba",
       "team": "MCI"
     },
+    "654": {
+      "cost": 45,
+      "name": "Graham",
+      "team": "EVE"
+    },
     "66": {
       "cost": 40,
       "name": "Soler",
       "team": "BOU"
     },
     "67": {
-      "cost": 65,
+      "cost": 64,
       "name": "Rayan",
       "team": "BOU"
     },
@@ -3117,7 +3122,7 @@
       "team": "BOU"
     },
     "72": {
-      "cost": 50,
+      "cost": 49,
       "name": "Gannon-Doak",
       "team": "BOU"
     },
@@ -3267,5 +3272,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-06T01:00:00+00:00"
+  "taken_at": "2026-09-07T01:00:00+00:00"
 }
