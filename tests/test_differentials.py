@@ -189,7 +189,8 @@ class PostTest(unittest.TestCase):
 
     def test_every_section_appears(self):
         text = differentials_post(gw=1, next_gw=2, picks=self._picks(), teams=TEAMS)
-        for marker in ("GW2 — differentiallar", "🔥 Kam olingan", "👑 Top-100",
+        # sarlavha matnlari o'zgarishi mumkin — emoji bo'yicha tekshiramiz
+        for marker in ("GW2 — differentiallar", "🔥 Egalik foizi kam", "👑 Top-100",
                        "📈 Kech qolmang", "📅 Keyingi", "🇺🇿 🏆 FPLUzbekistan"):
             self.assertIn(marker, text)
         self.assertIn("<b>Ødegaard</b> (ARS) £6.5M — 9.8%", text)
@@ -210,9 +211,20 @@ class PostTest(unittest.TestCase):
         question, options = differentials_poll(2, self._picks(), TEAMS)
         self.assertEqual(question, "GW2 ga kimni olasiz?")
         self.assertEqual(len(options), config.DIFF_POLL_OPTIONS + 1)
-        self.assertEqual(options[0], "White (ARS) £5.5M")
         self.assertIn("Hech kimni", options[-1])
         self.assertTrue(all(len(o) <= 100 for o in options))
+
+    def test_poll_starts_with_the_elite_differentials(self):
+        """So'rovnoma 👑 bo'limidan boshlanadi — o'tgan tur ochkolaridan emas."""
+        _, options = differentials_poll(2, self._picks(), TEAMS)
+        self.assertEqual(options[0], "Ødegaard (ARS) £6.5M")
+
+    def test_poll_falls_back_when_there_are_no_elite_rows(self):
+        picks = self._picks()
+        picks.top100 = []
+        _, options = differentials_poll(2, picks, TEAMS)
+        self.assertEqual(options[0], "White (ARS) £5.5M")
+        self.assertEqual(len(options), config.DIFF_POLL_OPTIONS + 1)
 
     def test_poll_does_not_repeat_a_player(self):
         _, options = differentials_poll(2, self._picks(), TEAMS)

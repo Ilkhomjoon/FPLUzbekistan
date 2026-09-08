@@ -451,7 +451,11 @@ def differentials_poll(next_gw: int, picks, teams: dict) -> tuple[str, list[str]
     question = f"GW{next_gw} ga kimni olasiz?"
     options: list[str] = []
     seen: set[int] = set()
-    for d in list(picks.low_owned) + list(picks.top100):
+    # Avval 👑 bo'limi — kuchli menejerlarda bor differentiallar. So'rovnoma
+    # "keyingi turga kimni olaman?" degan savol, ya'ni oldinga qaraydi;
+    # o'tgan turda ko'p ochko olgani javob emas. "Egalik kam, ochko ko'p"
+    # ro'yxati faqat variantlar yetmay qolsa qo'shiladi.
+    for d in list(picks.top100) + list(picks.low_owned):
         if d.element_id in seen:
             continue
         seen.add(d.element_id)
