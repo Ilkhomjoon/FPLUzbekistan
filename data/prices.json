@@ -92,7 +92,7 @@
       "team": "BHA"
     },
     "115": {
-      "cost": 47,
+      "cost": 48,
       "name": "De Cuyper",
       "team": "BHA"
     },
@@ -1177,7 +1177,7 @@
       "team": "ARS"
     },
     "310": {
-      "cost": 50,
+      "cost": 49,
       "name": "Matusiwa",
       "team": "IPS"
     },
@@ -1552,7 +1552,7 @@
       "team": "LIV"
     },
     "379": {
-      "cost": 90,
+      "cost": 91,
       "name": "Isak",
       "team": "LIV"
     },
@@ -1627,7 +1627,7 @@
       "team": "MCI"
     },
     "392": {
-      "cost": 54,
+      "cost": 53,
       "name": "Aït-Nouri",
       "team": "MCI"
     },
@@ -1727,7 +1727,7 @@
       "team": "MCI"
     },
     "41": {
-      "cost": 60,
+      "cost": 59,
       "name": "Buendía",
       "team": "AVL"
     },
@@ -1757,7 +1757,7 @@
       "team": "MUN"
     },
     "415": {
-      "cost": 59,
+      "cost": 58,
       "name": "Dorgu",
       "team": "MUN"
     },
@@ -1772,7 +1772,7 @@
       "team": "MUN"
     },
     "418": {
-      "cost": 50,
+      "cost": 49,
       "name": "Maguire",
       "team": "MUN"
     },
@@ -1867,7 +1867,7 @@
       "team": "MUN"
     },
     "435": {
-      "cost": 50,
+      "cost": 49,
       "name": "Lacey",
       "team": "MUN"
     },
@@ -2542,7 +2542,7 @@
       "team": "HUL"
     },
     "557": {
-      "cost": 65,
+      "cost": 64,
       "name": "Tzolis",
       "team": "ARS"
     },
@@ -3272,5 +3272,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-07T01:00:00+00:00"
+  "taken_at": "2026-09-08T01:00:00+00:00"
 }
