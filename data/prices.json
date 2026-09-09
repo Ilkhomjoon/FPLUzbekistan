@@ -17,7 +17,7 @@
       "team": "BRE"
     },
     "101": {
-      "cost": 50,
+      "cost": 49,
       "name": "Henderson",
       "team": "CHE"
     },
@@ -872,7 +872,7 @@
       "team": "FUL"
     },
     "256": {
-      "cost": 45,
+      "cost": 44,
       "name": "Tete",
       "team": "FUL"
     },
@@ -897,7 +897,7 @@
       "team": "ARS"
     },
     "260": {
-      "cost": 64,
+      "cost": 63,
       "name": "Wilson",
       "team": "LEE"
     },
@@ -2307,12 +2307,12 @@
       "team": "TOT"
     },
     "514": {
-      "cost": 59,
+      "cost": 58,
       "name": "Tel",
       "team": "TOT"
     },
     "515": {
-      "cost": 64,
+      "cost": 63,
       "name": "Maddison",
       "team": "TOT"
     },
@@ -2777,7 +2777,7 @@
       "team": "COV"
     },
     "6": {
-      "cost": 60,
+      "cost": 59,
       "name": "Saliba",
       "team": "ARS"
     },
@@ -3272,5 +3272,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-08T01:00:00+00:00"
+  "taken_at": "2026-09-09T01:00:00+00:00"
 }
