@@ -142,7 +142,7 @@
       "team": "BHA"
     },
     "124": {
-      "cost": 55,
+      "cost": 56,
       "name": "Groß",
       "team": "BHA"
     },
@@ -667,7 +667,7 @@
       "team": "CRY"
     },
     "219": {
-      "cost": 50,
+      "cost": 49,
       "name": "J.Rak-Sakyi",
       "team": "CRY"
     },
@@ -1797,7 +1797,7 @@
       "team": "MUN"
     },
     "422": {
-      "cost": 45,
+      "cost": 44,
       "name": "Mazraoui",
       "team": "MUN"
     },
@@ -1862,7 +1862,7 @@
       "team": "MUN"
     },
     "434": {
-      "cost": 50,
+      "cost": 49,
       "name": "J.Fletcher",
       "team": "MUN"
     },
@@ -2012,7 +2012,7 @@
       "team": "NEW"
     },
     "461": {
-      "cost": 59,
+      "cost": 58,
       "name": "Touré",
       "team": "NEW"
     },
@@ -2367,7 +2367,7 @@
       "team": "TOT"
     },
     "525": {
-      "cost": 59,
+      "cost": 58,
       "name": "Fernandes",
       "team": "TOT"
     },
@@ -2477,7 +2477,7 @@
       "team": "SUN"
     },
     "545": {
-      "cost": 50,
+      "cost": 49,
       "name": "Sadiki",
       "team": "SUN"
     },
@@ -3272,5 +3272,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-09T01:00:00+00:00"
+  "taken_at": "2026-09-10T01:00:00+00:00"
 }
