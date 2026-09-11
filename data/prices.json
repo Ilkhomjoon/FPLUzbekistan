@@ -282,7 +282,7 @@
       "team": "CHE"
     },
     "15": {
-      "cost": 66,
+      "cost": 67,
       "name": "Ødegaard",
       "team": "ARS"
     },
@@ -307,7 +307,7 @@
       "team": "CRY"
     },
     "154": {
-      "cost": 96,
+      "cost": 97,
       "name": "Palmer",
       "team": "CHE"
     },
@@ -507,7 +507,7 @@
       "team": "ARS"
     },
     "190": {
-      "cost": 55,
+      "cost": 54,
       "name": "Tchaouna",
       "team": "COV"
     },
@@ -837,7 +837,7 @@
       "team": "EVE"
     },
     "25": {
-      "cost": 73,
+      "cost": 72,
       "name": "Gyökeres",
       "team": "ARS"
     },
@@ -902,7 +902,7 @@
       "team": "LEE"
     },
     "261": {
-      "cost": 55,
+      "cost": 54,
       "name": "Iwobi",
       "team": "FUL"
     },
@@ -1597,7 +1597,7 @@
       "team": "MCI"
     },
     "387": {
-      "cost": 65,
+      "cost": 64,
       "name": "O'Reilly",
       "team": "MCI"
     },
@@ -2417,7 +2417,7 @@
       "team": "SUN"
     },
     "534": {
-      "cost": 45,
+      "cost": 44,
       "name": "Hume",
       "team": "SUN"
     },
@@ -2702,7 +2702,7 @@
       "team": "HUL"
     },
     "586": {
-      "cost": 40,
+      "cost": 41,
       "name": "Mendy",
       "team": "HUL"
     },
@@ -3086,6 +3086,11 @@
       "name": "Graham",
       "team": "EVE"
     },
+    "655": {
+      "cost": 55,
+      "name": "Gboho",
+      "team": "COV"
+    },
     "66": {
       "cost": 40,
       "name": "Soler",
@@ -3102,7 +3107,7 @@
       "team": "BOU"
     },
     "69": {
-      "cost": 60,
+      "cost": 61,
       "name": "Scott",
       "team": "BOU"
     },
@@ -3162,7 +3167,7 @@
       "team": "BOU"
     },
     "8": {
-      "cost": 57,
+      "cost": 58,
       "name": "Calafiori",
       "team": "ARS"
     },
@@ -3272,5 +3277,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-10T01:00:00+00:00"
+  "taken_at": "2026-09-11T01:00:00+00:00"
 }
