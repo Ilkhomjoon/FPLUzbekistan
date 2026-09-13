@@ -1,5 +1,5 @@
 {
-  "event": 3,
+  "event": 4,
   "players": {
     "1": {
       "cost": 60,
@@ -37,7 +37,7 @@
       "team": "COV"
     },
     "105": {
-      "cost": 60,
+      "cost": 59,
       "name": "Anthony",
       "team": "BRE"
     },
@@ -212,7 +212,7 @@
       "team": "CHE"
     },
     "137": {
-      "cost": 55,
+      "cost": 54,
       "name": "Tzimas",
       "team": "BHA"
     },
@@ -297,7 +297,7 @@
       "team": "CHE"
     },
     "152": {
-      "cost": 54,
+      "cost": 53,
       "name": "Palestra",
       "team": "CHE"
     },
@@ -322,7 +322,7 @@
       "team": "CHE"
     },
     "157": {
-      "cost": 64,
+      "cost": 63,
       "name": "Estêvão",
       "team": "CHE"
     },
@@ -342,7 +342,7 @@
       "team": "ARS"
     },
     "160": {
-      "cost": 59,
+      "cost": 58,
       "name": "Garnacho",
       "team": "AVL"
     },
@@ -367,7 +367,7 @@
       "team": "CHE"
     },
     "165": {
-      "cost": 77,
+      "cost": 78,
       "name": "João Pedro",
       "team": "CHE"
     },
@@ -472,7 +472,7 @@
       "team": "COV"
     },
     "184": {
-      "cost": 50,
+      "cost": 49,
       "name": "Grimes",
       "team": "COV"
     },
@@ -502,7 +502,7 @@
       "team": "COV"
     },
     "19": {
-      "cost": 54,
+      "cost": 53,
       "name": "Zubimendi",
       "team": "ARS"
     },
@@ -607,7 +607,7 @@
       "team": "CRY"
     },
     "208": {
-      "cost": 63,
+      "cost": 62,
       "name": "Sarr",
       "team": "CRY"
     },
@@ -692,7 +692,7 @@
       "team": "CRY"
     },
     "223": {
-      "cost": 64,
+      "cost": 63,
       "name": "Mateta",
       "team": "CRY"
     },
@@ -737,7 +737,7 @@
       "team": "EVE"
     },
     "231": {
-      "cost": 49,
+      "cost": 48,
       "name": "Keane",
       "team": "EVE"
     },
@@ -892,7 +892,7 @@
       "team": "IPS"
     },
     "26": {
-      "cost": 75,
+      "cost": 76,
       "name": "Havertz",
       "team": "ARS"
     },
@@ -912,7 +912,7 @@
       "team": "FUL"
     },
     "263": {
-      "cost": 54,
+      "cost": 53,
       "name": "Kevin",
       "team": "FUL"
     },
@@ -992,7 +992,7 @@
       "team": "HUL"
     },
     "278": {
-      "cost": 40,
+      "cost": 39,
       "name": "Hughes",
       "team": "HUL"
     },
@@ -1317,7 +1317,7 @@
       "team": "LEE"
     },
     "336": {
-      "cost": 59,
+      "cost": 58,
       "name": "Okafor",
       "team": "LEE"
     },
@@ -1357,7 +1357,7 @@
       "team": "LEE"
     },
     "343": {
-      "cost": 50,
+      "cost": 49,
       "name": "James",
       "team": "LEE"
     },
@@ -1672,7 +1672,7 @@
       "team": "ARS"
     },
     "40": {
-      "cost": 76,
+      "cost": 77,
       "name": "Rogers",
       "team": "CHE"
     },
@@ -1742,7 +1742,7 @@
       "team": "MCI"
     },
     "412": {
-      "cost": 50,
+      "cost": 49,
       "name": "Lammens",
       "team": "MUN"
     },
@@ -1962,7 +1962,7 @@
       "team": "NEW"
     },
     "452": {
-      "cost": 68,
+      "cost": 67,
       "name": "Bruno G.",
       "team": "ARS"
     },
@@ -2112,7 +2112,7 @@
       "team": "NFO"
     },
     "48": {
-      "cost": 50,
+      "cost": 49,
       "name": "Onana",
       "team": "AVL"
     },
@@ -2127,7 +2127,7 @@
       "team": "MCI"
     },
     "482": {
-      "cost": 59,
+      "cost": 58,
       "name": "Hudson-Odoi",
       "team": "NFO"
     },
@@ -2172,12 +2172,12 @@
       "team": "AVL"
     },
     "490": {
-      "cost": 59,
+      "cost": 58,
       "name": "Wood",
       "team": "NFO"
     },
     "491": {
-      "cost": 59,
+      "cost": 58,
       "name": "Igor Jesus",
       "team": "NFO"
     },
@@ -2212,7 +2212,7 @@
       "team": "TOT"
     },
     "498": {
-      "cost": 59,
+      "cost": 58,
       "name": "Senesi",
       "team": "TOT"
     },
@@ -2352,7 +2352,7 @@
       "team": "TOT"
     },
     "522": {
-      "cost": 50,
+      "cost": 49,
       "name": "Gray",
       "team": "TOT"
     },
@@ -2682,7 +2682,7 @@
       "team": "NFO"
     },
     "582": {
-      "cost": 55,
+      "cost": 54,
       "name": "Madjo",
       "team": "AVL"
     },
@@ -2947,7 +2947,7 @@
       "team": "LEE"
     },
     "63": {
-      "cost": 50,
+      "cost": 49,
       "name": "Milosavljević",
       "team": "BOU"
     },
@@ -3095,6 +3095,11 @@
       "cost": 40,
       "name": "Mfuni",
       "team": "COV"
+    },
+    "657": {
+      "cost": 45,
+      "name": "Nunes",
+      "team": "BRE"
     },
     "66": {
       "cost": 40,
@@ -3282,5 +3287,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-12T01:00:00+00:00"
+  "taken_at": "2026-09-13T01:00:00+00:00"
 }
