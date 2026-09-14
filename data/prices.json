@@ -137,7 +137,7 @@
       "team": "BHA"
     },
     "123": {
-      "cost": 60,
+      "cost": 59,
       "name": "Hinshelwood",
       "team": "BHA"
     },
@@ -182,7 +182,7 @@
       "team": "BHA"
     },
     "131": {
-      "cost": 50,
+      "cost": 49,
       "name": "Baleba",
       "team": "MUN"
     },
@@ -352,7 +352,7 @@
       "team": "CHE"
     },
     "162": {
-      "cost": 49,
+      "cost": 48,
       "name": "Andrey Santos",
       "team": "MUN"
     },
@@ -362,7 +362,7 @@
       "team": "CHE"
     },
     "164": {
-      "cost": 54,
+      "cost": 53,
       "name": "Quenda",
       "team": "CHE"
     },
@@ -722,7 +722,7 @@
       "team": "EVE"
     },
     "229": {
-      "cost": 60,
+      "cost": 61,
       "name": "Tarkowski",
       "team": "EVE"
     },
@@ -817,7 +817,7 @@
       "team": "EVE"
     },
     "246": {
-      "cost": 50,
+      "cost": 49,
       "name": "Röhl",
       "team": "EVE"
     },
@@ -952,7 +952,7 @@
       "team": "ARS"
     },
     "270": {
-      "cost": 45,
+      "cost": 44,
       "name": "Reed",
       "team": "FUL"
     },
@@ -1137,7 +1137,7 @@
       "team": "IPS"
     },
     "303": {
-      "cost": 40,
+      "cost": 39,
       "name": "Kipré",
       "team": "IPS"
     },
@@ -1442,7 +1442,7 @@
       "team": "LIV"
     },
     "359": {
-      "cost": 50,
+      "cost": 49,
       "name": "Gomez",
       "team": "LIV"
     },
@@ -1622,7 +1622,7 @@
       "team": "MCI"
     },
     "391": {
-      "cost": 56,
+      "cost": 57,
       "name": "Gvardiol",
       "team": "MCI"
     },
@@ -2102,7 +2102,7 @@
       "team": "NFO"
     },
     "478": {
-      "cost": 45,
+      "cost": 44,
       "name": "Netz",
       "team": "NFO"
     },
@@ -2387,7 +2387,7 @@
       "team": "TOT"
     },
     "529": {
-      "cost": 50,
+      "cost": 49,
       "name": "Roefs",
       "team": "SUN"
     },
@@ -2412,7 +2412,7 @@
       "team": "SUN"
     },
     "533": {
-      "cost": 55,
+      "cost": 54,
       "name": "Mukiele",
       "team": "SUN"
     },
@@ -2497,7 +2497,7 @@
       "team": "SUN"
     },
     "549": {
-      "cost": 54,
+      "cost": 53,
       "name": "Talbi",
       "team": "SUN"
     },
@@ -2617,7 +2617,7 @@
       "team": "BOU"
     },
     "570": {
-      "cost": 55,
+      "cost": 54,
       "name": "Palacios",
       "team": "FUL"
     },
@@ -2632,7 +2632,7 @@
       "team": "HUL"
     },
     "573": {
-      "cost": 45,
+      "cost": 44,
       "name": "Sanchez",
       "team": "BOU"
     },
@@ -3101,6 +3101,11 @@
       "name": "Nunes",
       "team": "BRE"
     },
+    "658": {
+      "cost": 45,
+      "name": "Ibrahim",
+      "team": "BHA"
+    },
     "66": {
       "cost": 40,
       "name": "Soler",
@@ -3112,7 +3117,7 @@
       "team": "BOU"
     },
     "68": {
-      "cost": 60,
+      "cost": 61,
       "name": "Tavernier",
       "team": "BOU"
     },
@@ -3227,7 +3232,7 @@
       "team": "BRE"
     },
     "89": {
-      "cost": 45,
+      "cost": 44,
       "name": "Henry",
       "team": "BRE"
     },
@@ -3287,5 +3292,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-13T01:00:00+00:00"
+  "taken_at": "2026-09-14T01:00:00+00:00"
 }
