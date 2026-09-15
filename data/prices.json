@@ -22,7 +22,7 @@
       "team": "CHE"
     },
     "102": {
-      "cost": 49,
+      "cost": 48,
       "name": "Yarmoliuk",
       "team": "BRE"
     },
@@ -332,12 +332,12 @@
       "team": "CHE"
     },
     "159": {
-      "cost": 54,
+      "cost": 53,
       "name": "Caicedo",
       "team": "CHE"
     },
     "16": {
-      "cost": 63,
+      "cost": 62,
       "name": "Madueke",
       "team": "ARS"
     },
@@ -632,7 +632,7 @@
       "team": "CRY"
     },
     "212": {
-      "cost": 45,
+      "cost": 44,
       "name": "Hughes",
       "team": "CRY"
     },
@@ -1167,7 +1167,7 @@
       "team": "IPS"
     },
     "309": {
-      "cost": 50,
+      "cost": 49,
       "name": "Núñez",
       "team": "IPS"
     },
@@ -1272,7 +1272,7 @@
       "team": "LEE"
     },
     "328": {
-      "cost": 50,
+      "cost": 49,
       "name": "Struijk",
       "team": "BHA"
     },
@@ -1547,7 +1547,7 @@
       "team": "LIV"
     },
     "378": {
-      "cost": 45,
+      "cost": 44,
       "name": "McConnell",
       "team": "LIV"
     },
@@ -1837,7 +1837,7 @@
       "team": "MUN"
     },
     "43": {
-      "cost": 59,
+      "cost": 58,
       "name": "Tielemans",
       "team": "MUN"
     },
@@ -2262,7 +2262,7 @@
       "team": "TOT"
     },
     "506": {
-      "cost": 45,
+      "cost": 44,
       "name": "Udogie",
       "team": "TOT"
     },
@@ -2372,7 +2372,7 @@
       "team": "TOT"
     },
     "526": {
-      "cost": 59,
+      "cost": 58,
       "name": "Solanke",
       "team": "TOT"
     },
@@ -2602,7 +2602,7 @@
       "team": "NEW"
     },
     "568": {
-      "cost": 55,
+      "cost": 54,
       "name": "Barco",
       "team": "CHE"
     },
@@ -3106,6 +3106,11 @@
       "name": "Ibrahim",
       "team": "BHA"
     },
+    "659": {
+      "cost": 45,
+      "name": "Miley",
+      "team": "NEW"
+    },
     "66": {
       "cost": 40,
       "name": "Soler",
@@ -3292,5 +3297,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-14T01:00:00+00:00"
+  "taken_at": "2026-09-15T01:00:00+00:00"
 }
