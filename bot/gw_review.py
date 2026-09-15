@@ -1,6 +1,8 @@
 """Tur yakunlangach — liga sharhi.
 
-Tur tugagan kunning ertasiga chiqadi va quyidagilarni ko'rsatadi:
+FPL turni rasman yopgan zahoti chiqadi (2026/27 da bu — oxirgi o'yindan
+keyingi kuni Britaniya vaqti bilan 09:00, Toshkentda 13:00/14:00) va
+quyidagilarni ko'rsatadi:
 
   - Overall: o'rtacha va eng yuqori ochko, yetakchi, turning eng zo'r futbolchisi
   - Har bir liga: jamoalar soni, o'rtacha ochko, turning eng zo'r menejeri, top-5
@@ -209,12 +211,21 @@ def run(force: bool = False, window: str | None = None) -> int:
         log.info("GW%d sharhi allaqachon chiqarilgan.", gw)
         return 0
 
-    local = ZoneInfo(config.LOCAL_TZ)
-    today = datetime.now(timezone.utc).astimezone(local).date().isoformat()
-    end_date = event_end_date(fpl_api.get_fixtures(event=gw), config.LOCAL_TZ)
-    if not force and end_date and today <= end_date:
-        log.info("GW%d %s da tugadi — sharh ertasiga chiqadi.", gw, end_date)
-        return 0
+    # FPL rasman tasdiqlagan bo'lsa (points='r', bonus qo'shilgan, jadvallar
+    # yangilanib bo'lgan) — kutib o'tirmaymiz, o'sha kuniyoq chiqaramiz.
+    # Kun almashishini kutish faqat zaxira yo'l uchun qoldirilgan: /event-status/
+    # javob bermasa, `finished` bayrog'iga tayanamiz va u ishonchsiz.
+    status_event, ready, _ = fpl_api.status_verdict(status or {})
+    confirmed = bool(ready and status_event == gw)
+
+    if not confirmed:
+        local = ZoneInfo(config.LOCAL_TZ)
+        today = datetime.now(timezone.utc).astimezone(local).date().isoformat()
+        end_date = event_end_date(fpl_api.get_fixtures(event=gw), config.LOCAL_TZ)
+        if not force and end_date and today <= end_date:
+            log.info("GW%d %s da tugadi, FPL hali rasman tasdiqlagani yo'q — "
+                     "sharh ertasiga qoladi.", gw, end_date)
+            return 0
 
     if not event.get("data_checked"):
         log.warning("GW%d hali FPL tomonidan to'liq tasdiqlanmagan — "

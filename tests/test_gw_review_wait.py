@@ -233,5 +233,75 @@ class ConfirmationTest(unittest.TestCase):
                           config.GW_REVIEW_CONFIRM_WAIT])
 
 
+class SameDayTest(unittest.TestCase):
+    """FPL tasdiqlagan zahoti — o'sha kuniyoq chiqsin, ertaga emas.
+
+    15-sentyabr holati: oxirgi o'yin tunda tugadi, FPL turni o'sha kuni
+    soat 14:00 da (Toshkent) yopdi, bot esa "sharh ertasiga chiqadi" deb
+    chiqib ketardi va post faqat qo'lda ishga tushirilganda chiqardi.
+    """
+
+    def setUp(self):
+        self.sent = []
+        self.saved = []
+        self._orig = {
+            "bootstrap": gw_review.fpl_api.get_bootstrap,
+            "fixtures": gw_review.fpl_api.get_fixtures,
+            "status": gw_review.fpl_api.get_event_status,
+            "leader": gw_review.overall_leader,
+            "review": gw_review.review_league,
+            "load": gw_review.storage.load,
+            "save": gw_review.storage.save,
+            "send": gw_review.telegram.send_message,
+            "require": config.require_telegram,
+        }
+        config.require_telegram = lambda: None
+        gw_review.storage.load = lambda *a, **kw: {}
+        gw_review.storage.save = lambda path, data: self.saved.append(data)
+        gw_review.telegram.send_message = lambda text, **kw: (
+            self.sent.append(text) or {"message_id": 5})
+        gw_review.overall_leader = lambda: None
+        gw_review.review_league = lambda *a, **kw: gw_review.LeagueReview(
+            label="Liga", name="Liga", total_managers=1, average=50.0)
+        gw_review.fpl_api.get_bootstrap = lambda: {
+            "events": [{"id": 1, "is_current": True, "finished": True,
+                        "data_checked": True, "average_entry_score": 50,
+                        "highest_score": 100}],
+            "elements": [], "teams": [],
+        }
+        # oxirgi o'yin AYNAN bugun tugagan
+        today = datetime.now(timezone.utc).astimezone(
+            gw_review.ZoneInfo(config.LOCAL_TZ))
+        kickoff = (today - timedelta(hours=3)).astimezone(timezone.utc)
+        gw_review.fpl_api.get_fixtures = lambda **kw: [
+            {"id": 1, "event": 1, "finished": True, "finished_provisional": True,
+             "kickoff_time": kickoff.isoformat().replace("+00:00", "Z")}]
+
+    def tearDown(self):
+        gw_review.fpl_api.get_bootstrap = self._orig["bootstrap"]
+        gw_review.fpl_api.get_fixtures = self._orig["fixtures"]
+        gw_review.fpl_api.get_event_status = self._orig["status"]
+        gw_review.overall_leader = self._orig["leader"]
+        gw_review.review_league = self._orig["review"]
+        gw_review.storage.load = self._orig["load"]
+        gw_review.storage.save = self._orig["save"]
+        gw_review.telegram.send_message = self._orig["send"]
+        config.require_telegram = self._orig["require"]
+
+    def test_confirmed_by_fpl_posts_the_same_day(self):
+        gw_review.fpl_api.get_event_status = lambda: _status(points="r", bonus=True)
+        self.assertEqual(gw_review.run(), 0)
+        self.assertEqual(len(self.sent), 1)
+        self.assertEqual(self.saved[-1]["event"], 1)
+
+    def test_without_confirmation_it_still_waits_for_the_next_day(self):
+        """Zaxira yo'l (`finished` bayrog'i) — unga ishonch kam, kun almashsin."""
+        gw_review.fpl_api.get_event_status = lambda: {}
+        with self.assertLogs("gw_review", level=logging.INFO) as logs:
+            self.assertEqual(gw_review.run(), 0)
+        self.assertEqual(self.sent, [])
+        self.assertIn("ertasiga", " ".join(logs.output))
+
+
 if __name__ == "__main__":
     unittest.main()
