@@ -127,12 +127,15 @@ POLL_MAX_OPTIONS = 10
 
 
 def send_poll(question: str, options: list[str], chat_id: str | None = None,
-              silent: bool = False) -> dict:
+              silent: bool = False, multiple: bool = False) -> dict:
     """Kanalga so'rovnoma yuboradi (anonim).
 
     Telegram savolni 300, har bir variantni 100 belgigacha qabul qiladi va
     kamida 2 ta variant talab qiladi — shuning uchun bu yerda qirqib qo'yamiz.
     Savol/variantlarda HTML ishlatilmaydi, oddiy matn bo'lishi kerak.
+
+    `multiple=True` — bir nechta variantni belgilash mumkin. Bir turda bir
+    nechta transfer qilinadi, shuning uchun bitta javob kamlik qiladi.
     """
     chat_id = chat_id or config.CHANNEL_ID
     question = question[:POLL_QUESTION_LIMIT]
@@ -144,9 +147,9 @@ def send_poll(question: str, options: list[str], chat_id: str | None = None,
         print("\n" + "=" * 48)
         print(f"[DRY-RUN] so'rovnoma -> {chat_id}")
         print("=" * 48)
-        print(question)
+        print(question + ("  (bir nechtasini tanlash mumkin)" if multiple else ""))
         for o in clean:
-            print(f"  ◦ {o}")
+            print(f"  {'☐' if multiple else '◦'} {o}")
         print("=" * 48 + "\n")
         return {"message_id": 0, "dry_run": True}
 
@@ -156,7 +159,7 @@ def send_poll(question: str, options: list[str], chat_id: str | None = None,
         question=question,
         options=json.dumps(clean, ensure_ascii=False),
         is_anonymous=True,
-        allows_multiple_answers=False,
+        allows_multiple_answers=multiple,
         disable_notification=silent,
     )
 

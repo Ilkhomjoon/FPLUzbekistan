@@ -384,6 +384,8 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `DIFF_ELITE_MIN_ROWS` | `3` | Shundan kam topilsa ro'yxat keyingi bosqichga kengayadi |
 | `DIFF_LOCAL_LEAGUE` | `true` | "Bizning ligada" bo'limi chiqsinmi |
 | `DIFF_POLL` | `true` | Postdan keyin so'rovnoma yuborilsinmi |
+| `DIFF_POLL_MULTI` | `true` | So'rovnomada bir nechta variant tanlansa bo'ladimi |
+| `DIFF_POLL_OPTIONS` | `3` | So'rovnomadagi futbolchilar soni |
 | `LOCAL_TZ` | `Asia/Tashkent` | Xabardagi vaqtlar shu zonada ko'rsatiladi |
 | `MATCHDAY_TZ` | `Europe/London` | "O'yin kuni" shu zona bo'yicha aniqlanadi |
 

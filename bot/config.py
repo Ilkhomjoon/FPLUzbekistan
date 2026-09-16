@@ -173,6 +173,8 @@ DIFF_CALENDAR_N = _int("DIFF_CALENDAR_N", 3)          # nechta futbolchi uchun k
 DIFF_LOCAL_LEAGUE = _bool("DIFF_LOCAL_LEAGUE", True)  # "bizning ligada" bo'limi chiqsinmi
 DIFF_POLL = _bool("DIFF_POLL", True)                  # so'rovnoma yuborilsinmi
 DIFF_POLL_OPTIONS = _int("DIFF_POLL_OPTIONS", 3)      # so'rovnomadagi futbolchilar soni
+# Bir turda bir nechta transfer qilinadi — bitta javob bilan cheklamaymiz
+DIFF_POLL_MULTI = _bool("DIFF_POLL_MULTI", True)
 DIFF_WORKERS = _int("DIFF_WORKERS", 6)                # parallel so'rovlar
 DIFF_MAX_MINUTES = _int("DIFF_MAX_MINUTES", 300)      # jarayon maksimal ish vaqti
 

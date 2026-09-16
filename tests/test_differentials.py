@@ -209,7 +209,7 @@ class PostTest(unittest.TestCase):
 
     def test_poll_has_players_plus_an_opt_out(self):
         question, options = differentials_poll(2, self._picks(), TEAMS)
-        self.assertEqual(question, "GW2 ga kimni olasiz?")
+        self.assertTrue(question.startswith("GW2 ga kimni olasiz?"))
         self.assertEqual(len(options), config.DIFF_POLL_OPTIONS + 1)
         self.assertIn("Hech kimni", options[-1])
         self.assertTrue(all(len(o) <= 100 for o in options))
@@ -243,3 +243,37 @@ class PostTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MultiPollTest(unittest.TestCase):
+    """Bir turda bir nechta transfer qilinadi — so'rovnoma ham ko'p javobli."""
+
+    def setUp(self):
+        from bot import telegram
+        self.telegram = telegram
+        self.calls = []
+        self._orig = (telegram._call, config.DIFF_POLL_MULTI, config.DRY_RUN)
+        telegram._call = lambda method, **payload: (
+            self.calls.append((method, payload)) or {"message_id": 9})
+        config.DRY_RUN = False
+
+    def tearDown(self):
+        self.telegram._call, config.DIFF_POLL_MULTI, config.DRY_RUN = self._orig
+
+    def test_multiple_answers_are_allowed(self):
+        self.telegram.send_poll("Kim?", ["A", "B"], multiple=True)
+        self.assertTrue(self.calls[0][1]["allows_multiple_answers"])
+
+    def test_single_answer_is_still_possible(self):
+        self.telegram.send_poll("Kim?", ["A", "B"])
+        self.assertFalse(self.calls[0][1]["allows_multiple_answers"])
+
+    def test_the_question_says_several_can_be_picked(self):
+        config.DIFF_POLL_MULTI = True
+        question, _ = differentials_poll(5, differentials.Picks(), TEAMS)
+        self.assertIn("bir nechtasini", question)
+
+    def test_the_hint_disappears_when_the_setting_is_off(self):
+        config.DIFF_POLL_MULTI = False
+        question, _ = differentials_poll(5, differentials.Picks(), TEAMS)
+        self.assertEqual(question, "GW5 ga kimni olasiz?")

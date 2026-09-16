@@ -403,7 +403,9 @@ def run(force: bool = False) -> int:
         question, options = differentials_poll(next_gw, picks, teams)
         if len(options) >= 2:
             try:
-                poll_id = telegram.send_poll(question, options).get("message_id")
+                poll_id = telegram.send_poll(
+                    question, options, multiple=config.DIFF_POLL_MULTI
+                ).get("message_id")
             except telegram.TelegramError as exc:
                 # so'rovnoma chiqmasa ham asosiy post joyida qolsin
                 log.warning("So'rovnoma yuborilmadi: %s", exc)
