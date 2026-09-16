@@ -448,11 +448,10 @@ def differentials_post(gw: int, next_gw: int, picks, teams: dict) -> str:
 
 def differentials_poll(next_gw: int, picks, teams: dict) -> tuple[str, list[str]]:
     """So'rovnoma: savol va variantlar (oddiy matn, HTML emas)."""
-    question = f"GW{next_gw} ga kimni olasiz?"
-    if config.DIFF_POLL_MULTI:
-        # Telegram "bir nechtasini tanlash mumkin"ligini o'zi yozmaydi —
-        # savolning o'zida aytib qo'yamiz.
-        question += " (bir nechtasini tanlash mumkin)"
+    # Ko'p javobli so'rovnomada Telegram buni o'zi aytmaydi — "kim(lar)ni"
+    # degan qisqa ishora yetarli.
+    who = "kim(lar)ni" if config.DIFF_POLL_MULTI else "kimni"
+    question = f"GW{next_gw} ga {who} olasiz?"
     options: list[str] = []
     seen: set[int] = set()
     # Avval 👑 bo'limi — kuchli menejerlarda bor differentiallar. So'rovnoma

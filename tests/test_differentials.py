@@ -209,7 +209,7 @@ class PostTest(unittest.TestCase):
 
     def test_poll_has_players_plus_an_opt_out(self):
         question, options = differentials_poll(2, self._picks(), TEAMS)
-        self.assertTrue(question.startswith("GW2 ga kimni olasiz?"))
+        self.assertIn("GW2 ga kim", question)
         self.assertEqual(len(options), config.DIFF_POLL_OPTIONS + 1)
         self.assertIn("Hech kimni", options[-1])
         self.assertTrue(all(len(o) <= 100 for o in options))
@@ -271,7 +271,7 @@ class MultiPollTest(unittest.TestCase):
     def test_the_question_says_several_can_be_picked(self):
         config.DIFF_POLL_MULTI = True
         question, _ = differentials_poll(5, differentials.Picks(), TEAMS)
-        self.assertIn("bir nechtasini", question)
+        self.assertEqual(question, "GW5 ga kim(lar)ni olasiz?")
 
     def test_the_hint_disappears_when_the_setting_is_off(self):
         config.DIFF_POLL_MULTI = False
