@@ -42,7 +42,7 @@
       "team": "BRE"
     },
     "106": {
-      "cost": 79,
+      "cost": 78,
       "name": "Thiago",
       "team": "BRE"
     },
@@ -282,7 +282,7 @@
       "team": "CHE"
     },
     "15": {
-      "cost": 67,
+      "cost": 68,
       "name": "Ødegaard",
       "team": "ARS"
     },
@@ -467,7 +467,7 @@
       "team": "COV"
     },
     "183": {
-      "cost": 50,
+      "cost": 49,
       "name": "Rudoni",
       "team": "COV"
     },
@@ -477,7 +477,7 @@
       "team": "COV"
     },
     "185": {
-      "cost": 49,
+      "cost": 48,
       "name": "Sakamoto",
       "team": "COV"
     },
@@ -497,7 +497,7 @@
       "team": "COV"
     },
     "189": {
-      "cost": 45,
+      "cost": 44,
       "name": "Shepherd",
       "team": "COV"
     },
@@ -897,7 +897,7 @@
       "team": "ARS"
     },
     "260": {
-      "cost": 63,
+      "cost": 62,
       "name": "Wilson",
       "team": "LEE"
     },
@@ -1162,7 +1162,7 @@
       "team": "IPS"
     },
     "308": {
-      "cost": 40,
+      "cost": 39,
       "name": "Furlong",
       "team": "IPS"
     },
@@ -1202,7 +1202,7 @@
       "team": "IPS"
     },
     "315": {
-      "cost": 55,
+      "cost": 54,
       "name": "Fatawu",
       "team": "IPS"
     },
@@ -1287,7 +1287,7 @@
       "team": "AVL"
     },
     "330": {
-      "cost": 45,
+      "cost": 46,
       "name": "Bogle",
       "team": "LEE"
     },
@@ -1432,7 +1432,7 @@
       "team": "LIV"
     },
     "357": {
-      "cost": 54,
+      "cost": 53,
       "name": "Frimpong",
       "team": "LIV"
     },
@@ -1482,7 +1482,7 @@
       "team": "LIV"
     },
     "366": {
-      "cost": 74,
+      "cost": 73,
       "name": "Wirtz",
       "team": "LIV"
     },
@@ -1657,7 +1657,7 @@
       "team": "MCI"
     },
     "398": {
-      "cost": 70,
+      "cost": 69,
       "name": "Foden",
       "team": "MCI"
     },
@@ -1737,7 +1737,7 @@
       "team": "MCI"
     },
     "411": {
-      "cost": 155,
+      "cost": 156,
       "name": "Haaland",
       "team": "MCI"
     },
@@ -1782,7 +1782,7 @@
       "team": "MUN"
     },
     "42": {
-      "cost": 55,
+      "cost": 54,
       "name": "Guessand",
       "team": "CRY"
     },
@@ -2217,7 +2217,7 @@
       "team": "TOT"
     },
     "499": {
-      "cost": 55,
+      "cost": 54,
       "name": "Pedro Porro",
       "team": "TOT"
     },
@@ -2332,7 +2332,7 @@
       "team": "TOT"
     },
     "519": {
-      "cost": 54,
+      "cost": 53,
       "name": "Gallagher",
       "team": "TOT"
     },
@@ -3277,7 +3277,7 @@
       "team": "BRE"
     },
     "96": {
-      "cost": 55,
+      "cost": 54,
       "name": "Damsgaard",
       "team": "BRE"
     },
@@ -3297,5 +3297,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-17T01:00:00+00:00"
+  "taken_at": "2026-09-18T01:00:00+00:00"
 }
