@@ -95,6 +95,45 @@ FIXTURE_EVENTS = (
 CARD_EVENTS = {"yellow_cards", "red_cards"}
 
 
+def is_halftime(fx: dict) -> bool:
+    """Birinchi bo'lim tugab, ikkinchisi hali boshlanmagan payt.
+
+    FPL `minutes` ni 45 da to'xtatib turadi — tanaffusni shundan bilamiz.
+    """
+    if fx.get("finished") or fx.get("finished_provisional"):
+        return False
+    try:
+        return int(fx.get("minutes") or 0) == 45
+    except (TypeError, ValueError):
+        return False
+
+
+def match_clock(fx: dict) -> str:
+    """O'yin nechanchi daqiqada ketayotgani: "37'", "Tanaffus", "90+".
+
+    FPL `minutes` maydonini daqiqama-daqiqa yangilab boradi va birinchi bo'lim
+    tugagach uni 45 da to'xtatib turadi — tanaffusni shundan bilamiz. Ya'ni
+    45-daqiqaning o'zida (va qo'shimcha vaqtda) ham "Tanaffus" ko'rinadi;
+    bu bir daqiqalik noaniqlik, lekin tanaffusni ko'rsatishga arziydi.
+
+    Tugagan o'yinda daqiqa yozilmaydi — yashil doira va hisobning o'zi yetarli.
+    """
+    minutes = fx.get("minutes")
+    if minutes is None:
+        return ""
+    try:
+        minutes = int(minutes)
+    except (TypeError, ValueError):
+        return ""
+    if minutes <= 0:
+        return ""
+    if minutes >= config.FULLTIME_MINUTE:
+        return f"{config.FULLTIME_MINUTE}+"
+    if minutes == 45:
+        return config.HALFTIME_LABEL
+    return f"{minutes}'"
+
+
 def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] | None = None,
                    level: int = 0) -> list[str]:
     from .bonus import fixture_bonus
@@ -111,11 +150,22 @@ def _fixture_block(fx: dict, players: dict, teams: dict, defcon: dict[int, int] 
         when = ko.strftime("%H:%M") if ko else "TBC"
         return [f"⚪️ {esc(home)} — {esc(away)} ({when})"]
 
-    emoji = "🟢" if finished else "🔴"
+    # Tanaffusda "jonli" qizil emas, sariq tursin — o'yin to'xtab turibdi
+    if finished:
+        emoji = "🟢"
+    elif is_halftime(fx):
+        emoji = config.HALFTIME_EMOJI
+    else:
+        emoji = "🔴"
     hs = fx.get("team_h_score")
     aws = fx.get("team_a_score")
     score = f"{hs if hs is not None else 0}:{aws if aws is not None else 0}"
-    header = f"<b>{emoji} {esc(home)} {score} {esc(away)}</b>"
+    line = f"{emoji} {esc(home)} {score} {esc(away)}"
+    # Tugagan o'yinda daqiqa kerak emas — 🟢 va hisobning o'zi aytib turadi
+    clock = "" if finished or not config.SHOW_CLOCK else match_clock(fx)
+    if clock:
+        line = f"{line} · {esc(clock)}"
+    header = f"<b>{line}</b>"
 
     bonuses, official = fixture_bonus(fx, config.BONUS_MIN_BPS)
     bps_map = {int(r["element"]): int(r["value"]) for r in fixture_stat(fx, "bps")}

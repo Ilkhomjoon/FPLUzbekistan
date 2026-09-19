@@ -75,6 +75,11 @@ LIVE_HASHTAG = os.getenv("LIVE_HASHTAG", "#BonusPoints")
 LIVE_LABEL = os.getenv("LIVE_LABEL", "🔴 LIVE")      # o'yin ketayotgandagi sarlavha belgisi
 DONE_LABEL = os.getenv("DONE_LABEL", "✅ YAKUNLANDI")  # hammasi tugagandagi belgi
 WAIT_LABEL = os.getenv("WAIT_LABEL", "⚪️ KUTILMOQDA")  # hali boshlanmagan
+# O'yin daqiqasi hisob yonida chiqsinmi: "Spurs 0:0 Aston Villa · 37'"
+SHOW_CLOCK = _bool("SHOW_CLOCK", True)
+HALFTIME_LABEL = os.getenv("HALFTIME_LABEL", "Tanaffus")   # birinchi bo'lim tugagach
+HALFTIME_EMOJI = os.getenv("HALFTIME_EMOJI", "🟡")          # tanaffusda qizil emas, sariq
+FULLTIME_MINUTE = _int("FULLTIME_MINUTE", 90)              # shundan keyin "90+" yoziladi
 SHOW_BPS = _bool("SHOW_BPS", True)                   # bonus yonida BPS ham ko'rsatilsinmi
 # Xabar oxirida, hashtagdan oldin chiqadigan qisqa izoh — "BPS nima?" degan
 # savol juda ko'p kelgani uchun. Bo'sh qilib qo'yilsa umuman chiqmaydi.

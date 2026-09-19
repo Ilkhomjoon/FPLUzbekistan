@@ -357,6 +357,9 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `PRICE_WATCH_INTERVAL` | `3600` | Yangilanishlar orasidagi vaqt (soniya) |
 | `PRICE_WATCH_NEW_MARK` | `🆕` | Keyin qo'shilganlar oldiga qo'yiladigan belgi |
 | `LIVE_HASHTAG` | `#BonusPoints` | Jonli post hashtagi |
+| `SHOW_CLOCK` | `true` | Hisob yonida o'yin daqiqasi chiqsinmi (`· 37'`) |
+| `HALFTIME_LABEL` | `Tanaffus` | Birinchi bo'lim tugagach daqiqa o'rniga yoziladi |
+| `HALFTIME_EMOJI` | `🟡` | Tanaffusda 🔴 o'rniga shu belgi turadi |
 | `SHOW_BPS` | `true` | Bonus yonida BPS ko'rsatilsinmi (`3 · 34 BPS`) |
 | `BPS_NOTE` | "BPS — Bonus ochkolar…" | Hashtagdan yuqorida chiqadigan izoh; bo'sh qilinsa chiqmaydi |
 | `SHOW_DEFCON` | `true` | 🛡 DefCon qatori chiqsinmi |
