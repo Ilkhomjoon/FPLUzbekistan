@@ -2,7 +2,7 @@
   "event": 5,
   "players": {
     "1": {
-      "cost": 60,
+      "cost": 61,
       "name": "Raya",
       "team": "ARS"
     },
@@ -217,7 +217,7 @@
       "team": "BHA"
     },
     "138": {
-      "cost": 55,
+      "cost": 56,
       "name": "Kostoulas",
       "team": "BHA"
     },
@@ -327,7 +327,7 @@
       "team": "CHE"
     },
     "158": {
-      "cost": 59,
+      "cost": 58,
       "name": "Gittens",
       "team": "CHE"
     },
@@ -742,7 +742,7 @@
       "team": "EVE"
     },
     "232": {
-      "cost": 49,
+      "cost": 48,
       "name": "O'Brien",
       "team": "EVE"
     },
@@ -822,7 +822,7 @@
       "team": "EVE"
     },
     "247": {
-      "cost": 55,
+      "cost": 54,
       "name": "Hackney",
       "team": "EVE"
     },
@@ -942,7 +942,7 @@
       "team": "FUL"
     },
     "269": {
-      "cost": 44,
+      "cost": 43,
       "name": "Sessegnon",
       "team": "FUL"
     },
@@ -1322,7 +1322,7 @@
       "team": "LEE"
     },
     "337": {
-      "cost": 54,
+      "cost": 53,
       "name": "Aaronson",
       "team": "LEE"
     },
@@ -1937,7 +1937,7 @@
       "team": "NEW"
     },
     "448": {
-      "cost": 49,
+      "cost": 48,
       "name": "Burn",
       "team": "NEW"
     },
@@ -2367,7 +2367,7 @@
       "team": "TOT"
     },
     "525": {
-      "cost": 58,
+      "cost": 57,
       "name": "Fernandes",
       "team": "TOT"
     },
@@ -2622,7 +2622,7 @@
       "team": "FUL"
     },
     "571": {
-      "cost": 49,
+      "cost": 48,
       "name": "Florentino",
       "team": "IPS"
     },
@@ -2642,7 +2642,7 @@
       "team": "HUL"
     },
     "575": {
-      "cost": 49,
+      "cost": 48,
       "name": "Yirenkyi",
       "team": "COV"
     },
@@ -2892,7 +2892,7 @@
       "team": "IPS"
     },
     "62": {
-      "cost": 50,
+      "cost": 49,
       "name": "Diakité",
       "team": "BOU"
     },
@@ -3282,7 +3282,7 @@
       "team": "BRE"
     },
     "9": {
-      "cost": 53,
+      "cost": 52,
       "name": "Hincapie",
       "team": "ARS"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-20T01:00:00+00:00"
+  "taken_at": "2026-09-21T01:00:00+00:00"
 }
