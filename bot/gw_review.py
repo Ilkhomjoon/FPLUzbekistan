@@ -304,6 +304,19 @@ def watch(window: str | None = None) -> int:
             if confirmations >= config.GW_REVIEW_CONFIRM:
                 log.info("FPL turni yakunladi (%d marta tasdiqlandi) — sharh chiqarilmoqda.",
                          confirmations)
+                if not waiter.in_window(window):
+                    # Sharh tayyor, lekin oyna yopiq — jim o'tib ketmasin.
+                    # 21-sentyabrda aynan shunday bo'ldi va buni faqat log'dan bildik.
+                    log.warning("Sharh tayyor, lekin post oynasi (%s) yopiq — chiqarilmadi.",
+                                window)
+                    telegram.notify_admin(
+                        "⚠️ <b>Tur sharhi</b>\n"
+                        f"FPL turni yakunladi, lekin post oynasi (<code>{telegram.esc(window)}</code>) "
+                        "yopiq — sharh chiqmadi.\n"
+                        "Actions → «Tur yakunlari sharhi» → Run workflow (<code>force</code>) "
+                        "bilan qo'lda chiqaring yoki tashqi cron vaqtini oynaga moslang."
+                    )
+                    return 0
                 return run(window=window)
             log.info("Tayyorga o'xshaydi (%d/%d) — %d soniyadan keyin qayta tekshiramiz.",
                      confirmations, config.GW_REVIEW_CONFIRM, config.GW_REVIEW_CONFIRM_WAIT)

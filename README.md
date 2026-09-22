@@ -211,7 +211,7 @@ Har bir workflow shu tamoyilda ishlaydi:
 
 **Jonli bonus — o'yin yo'q kunlari umuman ishlamaydi.** GitHub cron'ni shartli qilib bo'lmaydi, shuning uchun ishning birinchi qadami `scripts/matchday.py` — u bitta so'rov bilan "bugun o'yin bormi yoki oxirgi o'yin tugaganiga `LIVE_ACTIVE_AFTER` (12) soatdan kam vaqt o'tdimi" deb qaraydi. Javob yo'q bo'lsa qolgan hamma qadam o'tkazib yuboriladi — na kuzatuv, na cron kechikishi haqida ogohlantirish.
 
-**Tur sharhi — alohida holat.** 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni **Britaniya vaqti bilan 09:00** da yakuniy qiladi ("lockdown"). Toshkentda bu yozda 13:00, qishda 14:00 — ya'ni aniq soatni cron'ga yozib bo'lmaydi. Shuning uchun 12:30 da uyg'onib, har 3 daqiqada tekshiramiz va tayyor bo'lishi bilan chiqaramiz (`GW_REVIEW_UNTIL` gacha).
+**Tur sharhi — alohida holat.** 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni **Britaniya vaqti bilan 09:00** da yakuniy qiladi ("lockdown"). Toshkentda bu yozda 13:00, qishda 14:00 — ya'ni aniq soatni cron'ga yozib bo'lmaydi. Shuning uchun uyg'onib, har 3 daqiqada tekshiramiz va tayyor bo'lishi bilan chiqaramiz (`GW_REVIEW_UNTIL` gacha). Post oynasi `09:00-23:00` — tashqi cron 12:30 ga ham, 19:00 ga ham qo'yilsa ishlaydi. Tasdiq kelib, oyna yopiq bo'lsa, bot jim o'tib ketmaydi — adminga xabar yuboradi.
 
 **Muhim:** `bootstrap-static` dagi `finished` bayrog'i lockdown'dan ancha keyin qo'yiladi — unga tayanib bo'lmaydi. Turning yakunlanganini `/event-status/` bo'yicha aniqlaymiz:
 
@@ -373,7 +373,7 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `STATS_WAKE_LEAD` | `300` (workflow'da `200`) | `--wait` rejimida shundan kam qolsa kutib turadi |
 | `ERROR_ALERT_AFTER` | `3` | Necha marta ketma-ket xatodan keyin ogohlantirsin |
 | `CRON_ALERT_MINUTES` | `20` (workflow'da `90`) | Cron kechikishi haqida ogohlantirish chegarasi |
-| `GW_REVIEW_UNTIL` | `18:00` | FPL tasdig'ini shu vaqtgacha kutadi |
+| `GW_REVIEW_UNTIL` | `22:00` | FPL tasdig'ini shu vaqtgacha kutadi |
 | `GW_REVIEW_POLL` | `180` | Tasdiqlanganini necha soniyada bir tekshiradi |
 | `GW_REVIEW_CONFIRM` | `2` | Necha marta ketma-ket tasdiq talab qilinadi (CDN uchun) |
 | `DIFF_POST_AT` | `20:00` | Differentiallar posti qachon chiqadi |

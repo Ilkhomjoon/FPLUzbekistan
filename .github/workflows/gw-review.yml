@@ -51,8 +51,10 @@ jobs:
           # Birinchi liga "bizniki" — eng katta ko'tarilish faqat unda yoziladi
           STATS_LEAGUES: "137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan"
           GW_REVIEW_TOP_N: "5"
-          # FPL tasdig'ini shu vaqtgacha kutamiz (Toshkent)
-          GW_REVIEW_UNTIL: "18:00"
+          # FPL tasdig'ini shu vaqtgacha kutamiz (Toshkent). Tasdiq odatda
+          # 14:00 (yoz) / 15:00 (qish) da keladi. Kechqurun ham chiqarsa
+          # bo'lsin — tashqi cron vaqtini o'zgartirganda bu yer to'sib qo'ymasin.
+          GW_REVIEW_UNTIL: "22:00"
           GW_REVIEW_POLL: "180"
           # CDN eski nusxa qaytarishi mumkin — ikki marta ketma-ket tasdiq talab qilamiz
           GW_REVIEW_CONFIRM: "2"
@@ -60,7 +62,10 @@ jobs:
           ARGS=""
           if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
           if [ "${{ inputs.scheduled }}" = "true" ]; then
-            ARGS="$ARGS --watch --window 09:00-19:00"
+            # Oyna keng: tashqi cron 12:30 da ham, 19:00 da ham ishlasin.
+            # 21-sentyabrda cron 19:00 ga qo'yilgan edi, oyna esa 19:00 da
+            # yopilardi — FPL allaqachon tasdiqlagan bo'lsa ham post chiqmadi.
+            ARGS="$ARGS --watch --window 09:00-23:00"
           fi
           python -m bot.gw_review $ARGS
 

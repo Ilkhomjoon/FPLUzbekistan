@@ -221,6 +221,34 @@ class ConfirmationTest(unittest.TestCase):
         # birinchi tasdiqdan keyin qisqa tanaffus bo'lishi kerak
         self.assertEqual(self.slept, [config.GW_REVIEW_CONFIRM_WAIT])
 
+    def test_a_closed_window_is_reported_not_swallowed(self):
+        """21-sentyabr holati: FPL tasdiqladi, oyna yopiq — admin bilishi kerak."""
+        ready = _status(points="r", bonus=True)
+        self._sequence([ready, ready])
+        alerts = []
+        orig_notify, orig_window = gw_review.telegram.notify_admin, gw_review.waiter.in_window
+        gw_review.telegram.notify_admin = lambda text: alerts.append(text)
+        gw_review.waiter.in_window = lambda window, now=None: False
+        try:
+            self.assertEqual(gw_review.watch(window="09:00-19:00"), 0)
+        finally:
+            gw_review.telegram.notify_admin = orig_notify
+            gw_review.waiter.in_window = orig_window
+        self.assertEqual(self.ran, [])                  # post chiqmadi
+        self.assertEqual(len(alerts), 1)                # lekin admin xabardor
+        self.assertIn("09:00-19:00", alerts[0])
+
+    def test_an_open_window_posts_as_usual(self):
+        ready = _status(points="r", bonus=True)
+        self._sequence([ready, ready])
+        orig_window = gw_review.waiter.in_window
+        gw_review.waiter.in_window = lambda window, now=None: True
+        try:
+            gw_review.watch(window="09:00-23:00")
+        finally:
+            gw_review.waiter.in_window = orig_window
+        self.assertEqual(len(self.ran), 1)
+
     def test_a_stale_answer_resets_the_count(self):
         ready = _status(points="r", bonus=True)
         stale = _status(points="p", bonus=False)
