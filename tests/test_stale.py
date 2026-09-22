@@ -95,3 +95,73 @@ class MergeTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class VarTest(unittest.TestCase):
+    """26-sentyabr holati: Barryning ikkinchi goli VAR bilan bekor qilindi,
+    xabar esa o'yin oxirigacha 2:0 ko'rsatib turdi."""
+
+    def setUp(self):
+        from bot import config
+        self.config = config
+        self._orig = config.LIVE_GOAL_DROP_CONFIRM
+        config.LIVE_GOAL_DROP_CONFIRM = 3
+
+    def tearDown(self):
+        self.config.LIVE_GOAL_DROP_CONFIRM = self._orig
+
+    def _cycle(self, today, fresh, drops):
+        return live_bonus.merge_fixtures(today, fresh, drops)
+
+    def test_a_disallowed_goal_is_corrected_within_a_few_cycles(self):
+        drops: dict = {}
+        today = [_fx(1, started=True, hs=2, aws=0)]
+        var = [_fx(1, started=True, hs=1, aws=0)]
+        today = self._cycle(today, var, drops)
+        self.assertEqual(today[0]["team_h_score"], 2)      # 1/3 — hali ishonmaymiz
+        today = self._cycle(today, var, drops)
+        self.assertEqual(today[0]["team_h_score"], 2)      # 2/3
+        today = self._cycle(today, var, drops)
+        self.assertEqual(today[0]["team_h_score"], 1)      # 3/3 — VAR, tuzatildi
+        self.assertEqual(drops, {})
+
+    def test_a_single_stale_copy_does_not_lower_the_score(self):
+        drops: dict = {}
+        today = [_fx(1, started=True, hs=2, aws=0)]
+        today = self._cycle(today, [_fx(1, started=True, hs=1, aws=0)], drops)   # eski nusxa
+        today = self._cycle(today, [_fx(1, started=True, hs=2, aws=0)], drops)   # to'g'risi
+        self.assertEqual(today[0]["team_h_score"], 2)
+        self.assertEqual(drops, {})                        # hisoblagich nolga qaytdi
+
+    def test_interleaved_stale_copies_never_add_up(self):
+        """Eski va yangi nusxa almashinib kelsa — hisob qotib qolmaydi va kamaymaydi."""
+        drops: dict = {}
+        today = [_fx(1, started=True, hs=2, aws=0)]
+        for _ in range(5):
+            today = self._cycle(today, [_fx(1, started=True, hs=1, aws=0)], drops)
+            today = self._cycle(today, [_fx(1, started=True, hs=2, aws=0)], drops)
+        self.assertEqual(today[0]["team_h_score"], 2)
+
+    def test_a_new_goal_is_taken_immediately(self):
+        drops: dict = {}
+        today = [_fx(1, started=True, hs=1, aws=0)]
+        today = self._cycle(today, [_fx(1, started=True, hs=2, aws=0)], drops)
+        self.assertEqual(today[0]["team_h_score"], 2)
+
+    def test_a_started_match_still_never_goes_back(self):
+        """VAR qoidasi bosqichga tegmaydi — boshlangan o'yin boshlanmaganga qaytmaydi."""
+        drops: dict = {}
+        today = [_fx(1, started=True, hs=1, aws=0)]
+        for _ in range(5):
+            today = self._cycle(today, [_fx(1)], drops)
+        self.assertTrue(today[0]["started"])
+
+    def test_each_match_has_its_own_counter(self):
+        drops: dict = {}
+        today = [_fx(1, started=True, hs=2, aws=0), _fx(2, started=True, hs=1, aws=1)]
+        var_one = [_fx(1, started=True, hs=1, aws=0), _fx(2, started=True, hs=1, aws=1)]
+        for _ in range(3):
+            today = self._cycle(today, var_one, drops)
+        by_id = {f["id"]: f for f in today}
+        self.assertEqual(by_id[1]["team_h_score"], 1)
+        self.assertEqual((by_id[2]["team_h_score"], by_id[2]["team_a_score"]), (1, 1))

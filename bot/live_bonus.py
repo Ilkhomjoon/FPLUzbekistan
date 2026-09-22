@@ -83,7 +83,7 @@ def fetch_defcon(event_ids: list[int], fixtures: list[dict], players: dict,
 
 
 def _stage(fx: dict) -> tuple:
-    """O'yin bosqichi — faqat oldinga yurishi mumkin bo'lgan belgilar.
+    """O'yin bosqichi — HECH QACHON orqaga qaytmaydigan belgilar.
 
     Bu yerga BPS (yoki umuman `stats` yig'indisi) QO'SHIB BO'LMAYDI: BPS o'yin
     davomida kamayishi ham mumkin — raqib gol ursa, darvozabon va himoyachilar
@@ -91,38 +91,83 @@ def _stage(fx: dict) -> tuple:
     jami BPS tushdi, yangi nusxa "orqaga ketibdi" deb rad etildi va xabar
     0:1 da butun o'yin davomida muzlab qoldi.
 
-    Gollar soni esa qoladi — eski nusxa hisobni orqaga qaytarib yuborishi
-    mumkin. VAR goli bekor qilinsa hisob bir muddat eski holicha turadi, lekin
-    o'yin yakunlanishi bilan (bosqich o'zgaradi) yangi nusxa qabul qilinadi.
+    Gollar soni ham bu yerda YO'Q — u kamayishi mumkin (VAR), shuning uchun
+    alohida, `_goals` va tasdiq hisoblagichi orqali tekshiriladi.
     """
-    goals = (fx.get("team_h_score") or 0) + (fx.get("team_a_score") or 0)
     scores = sum(fx.get(k) is not None for k in ("team_h_score", "team_a_score"))
     return (bool(fx.get("finished")), bool(fx.get("finished_provisional")),
-            bool(fx.get("started")), scores, goals)
+            bool(fx.get("started")), scores)
 
 
-def merge_fixtures(previous: list[dict], fresh: list[dict]) -> list[dict]:
-    """O'yin holati hech qachon orqaga ketmasin.
+def _goals(fx: dict) -> int:
+    return (fx.get("team_h_score") or 0) + (fx.get("team_a_score") or 0)
 
-    FPL API CDN orqali beriladi va ba'zan eski nusxani qaytaradi. Shu sabab
-    boshlangan o'yin "hali boshlanmagan" bo'lib, sarlavha esa "YAKUNLANDI" dan
-    "KUTILMOQDA" ga qaytib qolgan edi. Har bir o'yin uchun ikki nusxadan
-    ilgarilaganini olamiz.
+
+def merge_fixtures(previous: list[dict], fresh: list[dict],
+                   goal_drops: dict | None = None) -> list[dict]:
+    """O'yin holati eski nusxa tufayli orqaga ketmasin — lekin haqiqiy
+    o'zgarish (VAR goli bekor qilgani) albatta qabul qilinsin.
+
+    FPL API CDN orqali beriladi va ba'zan eski nusxani qaytaradi. Ikki xil
+    "orqaga qaytish" bor va ular turlicha ko'rib chiqiladi:
+
+      · bosqich (boshlandi/tugadi) — hech qachon orqaga qaytmaydi, eski
+        nusxa darhol rad etiladi (29-avgust: tugagan o'yin "boshlanmagan"
+        bo'lib qolgan edi);
+
+      · gollar soni — kamayishi mumkin: VAR golni bekor qiladi. Eski nusxa
+        bir-ikki so'rovda o'tib ketadi, VAR esa har bir keyingi javobda
+        takrorlanadi. Shuning uchun gol kamaygan javob ketma-ket
+        LIVE_GOAL_DROP_CONFIRM marta kelsa — qabul qilamiz.
+
+    Ilgari gollar ham "hech qachon qaytmaydi" guruhida edi va 26-sentyabrda
+    Barryning bekor qilingan ikkinchi goli o'yin oxirigacha 2:0 bo'lib turdi.
+
+    `goal_drops` — chaqiruvchi sikl davomida saqlab boradigan hisoblagich
+    (o'yin id -> ketma-ket nechta kam gol ko'rilgan). Berilmasa xotira yo'q,
+    ya'ni bitta javob hech qachon hisobni kamaytirmaydi.
     """
+    drops = goal_drops if goal_drops is not None else {}
+    need = max(1, config.LIVE_GOAL_DROP_CONFIRM)
     known = {f.get("id"): f for f in previous}
     out: list[dict] = []
     for fx in fresh:
-        old = known.get(fx.get("id"))
-        if old is not None and _stage(old) > _stage(fx):
-            log.warning("O'yin %s bo'yicha eski nusxa keldi (%s -> %s) — "
-                        "oldingi holat saqlanadi.",
-                        fx.get("id"), _stage(old), _stage(fx))
-            out.append(old)
-        else:
+        fid = fx.get("id")
+        old = known.get(fid)
+        if old is None:
             out.append(fx)
+            continue
+
+        if _stage(old) > _stage(fx):
+            log.warning("O'yin %s bo'yicha eski nusxa keldi (%s -> %s) — "
+                        "oldingi holat saqlanadi.", fid, _stage(old), _stage(fx))
+            out.append(old)
+            continue
+
+        # bosqich oldinga yurgan bo'lsa (masalan o'yin tugadi) — yangi nusxa
+        # to'liq qabul qilinadi, gol soni kamaygan bo'lsa ham
+        if _stage(fx) > _stage(old) or _goals(fx) >= _goals(old):
+            drops.pop(fid, None)
+            out.append(fx)
+            continue
+
+        seen = drops.get(fid, 0) + 1
+        if seen >= need:
+            log.warning("O'yin %s: gol soni %d -> %d, %d marta tasdiqlandi — "
+                        "gol bekor qilingan (VAR), hisob tuzatildi.",
+                        fid, _goals(old), _goals(fx), seen)
+            drops.pop(fid, None)
+            out.append(fx)
+        else:
+            log.info("O'yin %s: gol soni %d -> %d (%d/%d) — eski nusxa bo'lishi "
+                     "mumkin, hozircha oldingi hisob qoladi.",
+                     fid, _goals(old), _goals(fx), seen, need)
+            drops[fid] = seen
+            out.append(old)
+
     # yangi javobdan tushib qolgan o'yinlar ham yo'qolmasin
-    seen = {f.get("id") for f in out}
-    out.extend(f for f in previous if f.get("id") not in seen)
+    ids = {f.get("id") for f in out}
+    out.extend(f for f in previous if f.get("id") not in ids)
     return out
 
 
@@ -255,6 +300,8 @@ def run(once: bool = False) -> int:
     # -inf: birinchi aylanishda albatta olinsin. 0.0 bo'lsa yangi ishga tushgan
     # serverda time.monotonic() kichik bo'lib, DefCon bir necha daqiqa kechikardi.
     defcon_at = float("-inf")
+    # o'yin id -> ketma-ket necha marta gol soni kamaygan javob keldi (VAR uchun)
+    goal_drops: dict[int, int] = {}
 
     while True:
         try:
@@ -269,7 +316,7 @@ def run(once: bool = False) -> int:
             fresh: list[dict] = []
             for ev in event_ids or [gw]:
                 fresh.extend(fpl_api.get_fixtures(event=ev))
-            today = merge_fixtures(today, todays_fixtures(fresh, day)) or today
+            today = merge_fixtures(today, todays_fixtures(fresh, day), goal_drops) or today
 
             any_started = any(f.get("started") for f in today)
             all_done = all(is_done(f) for f in today)

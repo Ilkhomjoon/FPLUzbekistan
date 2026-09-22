@@ -102,6 +102,9 @@ LIVE_START_LEAD = _int("LIVE_START_LEAD", 5)         # o'yin boshlanishiga necha
 LIVE_PREKICK_POLL = _int("LIVE_PREKICK_POLL", 60)    # o'yingacha shuncha soniya qolganda
                                                      # tez-tez so'ray boshlaymiz (undan oldin uxlaymiz)
 LIVE_FINISH_GRACE = _int("LIVE_FINISH_GRACE", 10)    # oxirgi o'yin tugagach yana necha daqiqa kuzatsin
+# Gol soni kamaygan javob (VAR) shuncha marta ketma-ket kelsa qabul qilinadi.
+# LIVE_INTERVAL=60 da bu ~3 daqiqa: eski CDN nusxasi o'tib ketadi, VAR esa qoladi.
+LIVE_GOAL_DROP_CONFIRM = _int("LIVE_GOAL_DROP_CONFIRM", 3)
 COLLAPSE_FINISHED = _bool("COLLAPSE_FINISHED", True)  # tugagan o'yinlar yig'ilgan holda tursinmi
 PIN_LIVE_MESSAGE = _bool("PIN_LIVE_MESSAGE", True)   # jonli xabar kanal tepasiga qadalsinmi
 UNPIN_AFTER_FINAL = _bool("UNPIN_AFTER_FINAL", True) # yakuniy yangilanishdan keyin olinsinmi

@@ -360,6 +360,7 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `SHOW_CLOCK` | `true` | Hisob yonida o'yin daqiqasi chiqsinmi (`· 37'`) |
 | `HALFTIME_LABEL` | `Tanaffus` | Birinchi bo'lim tugagach daqiqa o'rniga yoziladi |
 | `HALFTIME_EMOJI` | `🟡` | Tanaffusda 🔴 o'rniga shu belgi turadi |
+| `LIVE_GOAL_DROP_CONFIRM` | `3` | Gol bekor qilinsa (VAR) hisob shuncha yangilanishdan keyin tuzatiladi (~3 daqiqa) |
 | `SHOW_BPS` | `true` | Bonus yonida BPS ko'rsatilsinmi (`3 · 34 BPS`) |
 | `BPS_NOTE` | "BPS — Bonus ochkolar…" | Hashtagdan yuqorida chiqadigan izoh; bo'sh qilinsa chiqmaydi |
 | `SHOW_DEFCON` | `true` | 🛡 DefCon qatori chiqsinmi |
