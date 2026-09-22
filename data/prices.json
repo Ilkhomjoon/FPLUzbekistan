@@ -252,7 +252,7 @@
       "team": "CHE"
     },
     "144": {
-      "cost": 50,
+      "cost": 49,
       "name": "Gusto",
       "team": "CHE"
     },
@@ -367,7 +367,7 @@
       "team": "CHE"
     },
     "165": {
-      "cost": 78,
+      "cost": 77,
       "name": "João Pedro",
       "team": "CHE"
     },
@@ -482,7 +482,7 @@
       "team": "COV"
     },
     "186": {
-      "cost": 54,
+      "cost": 53,
       "name": "Mason-Clark",
       "team": "COV"
     },
@@ -532,7 +532,7 @@
       "team": "COV"
     },
     "195": {
-      "cost": 50,
+      "cost": 49,
       "name": "Simms",
       "team": "COV"
     },
@@ -637,7 +637,7 @@
       "team": "CRY"
     },
     "213": {
-      "cost": 49,
+      "cost": 48,
       "name": "Lerma",
       "team": "CRY"
     },
@@ -662,7 +662,7 @@
       "team": "CRY"
     },
     "218": {
-      "cost": 49,
+      "cost": 48,
       "name": "Doucouré",
       "team": "CRY"
     },
@@ -1247,7 +1247,7 @@
       "team": "IPS"
     },
     "323": {
-      "cost": 45,
+      "cost": 44,
       "name": "McAteer",
       "team": "IPS"
     },
@@ -1392,7 +1392,7 @@
       "team": "LEE"
     },
     "35": {
-      "cost": 50,
+      "cost": 49,
       "name": "Bogarde",
       "team": "AVL"
     },
@@ -1597,7 +1597,7 @@
       "team": "MCI"
     },
     "387": {
-      "cost": 64,
+      "cost": 63,
       "name": "O'Reilly",
       "team": "MCI"
     },
@@ -1817,7 +1817,7 @@
       "team": "MUN"
     },
     "426": {
-      "cost": 120,
+      "cost": 119,
       "name": "B.Fernandes",
       "team": "MUN"
     },
@@ -1942,7 +1942,7 @@
       "team": "NEW"
     },
     "449": {
-      "cost": 52,
+      "cost": 53,
       "name": "Hall",
       "team": "NEW"
     },
@@ -2077,7 +2077,7 @@
       "team": "NFO"
     },
     "473": {
-      "cost": 45,
+      "cost": 44,
       "name": "Aina",
       "team": "NFO"
     },
@@ -2342,7 +2342,7 @@
       "team": "AVL"
     },
     "520": {
-      "cost": 54,
+      "cost": 53,
       "name": "Bergvall",
       "team": "TOT"
     },
@@ -2837,7 +2837,7 @@
       "team": "NEW"
     },
     "61": {
-      "cost": 55,
+      "cost": 54,
       "name": "Truffert",
       "team": "BOU"
     },
@@ -3307,7 +3307,7 @@
       "team": "BRE"
     },
     "94": {
-      "cost": 61,
+      "cost": 62,
       "name": "Schade",
       "team": "BRE"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-21T01:00:00+00:00"
+  "taken_at": "2026-09-22T01:00:00+00:00"
 }
