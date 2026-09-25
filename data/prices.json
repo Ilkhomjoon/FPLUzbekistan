@@ -907,7 +907,7 @@
       "team": "FUL"
     },
     "262": {
-      "cost": 54,
+      "cost": 53,
       "name": "Smith Rowe",
       "team": "FUL"
     },
@@ -2627,7 +2627,7 @@
       "team": "IPS"
     },
     "572": {
-      "cost": 46,
+      "cost": 47,
       "name": "Tzolakis",
       "team": "HUL"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-24T01:00:00+00:00"
+  "taken_at": "2026-09-25T01:00:00+00:00"
 }
