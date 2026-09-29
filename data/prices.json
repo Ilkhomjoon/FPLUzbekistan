@@ -617,7 +617,7 @@
       "team": "EVE"
     },
     "21": {
-      "cost": 49,
+      "cost": 48,
       "name": "Nørgaard",
       "team": "EVE"
     },
@@ -2402,7 +2402,7 @@
       "team": "SUN"
     },
     "531": {
-      "cost": 45,
+      "cost": 44,
       "name": "Ellborg",
       "team": "SUN"
     },
@@ -2467,7 +2467,7 @@
       "team": "SUN"
     },
     "543": {
-      "cost": 54,
+      "cost": 53,
       "name": "Diarra",
       "team": "SUN"
     },
@@ -2577,7 +2577,7 @@
       "team": "IPS"
     },
     "563": {
-      "cost": 50,
+      "cost": 49,
       "name": "Morita",
       "team": "HUL"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-28T01:00:00+00:00"
+  "taken_at": "2026-09-29T01:00:00+00:00"
 }
