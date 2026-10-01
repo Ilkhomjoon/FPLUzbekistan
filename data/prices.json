@@ -392,7 +392,7 @@
       "team": "CHE"
     },
     "17": {
-      "cost": 58,
+      "cost": 57,
       "name": "Merino",
       "team": "ARS"
     },
@@ -577,7 +577,7 @@
       "team": "NFO"
     },
     "202": {
-      "cost": 50,
+      "cost": 49,
       "name": "Richards",
       "team": "CRY"
     },
@@ -722,7 +722,7 @@
       "team": "EVE"
     },
     "229": {
-      "cost": 61,
+      "cost": 62,
       "name": "Tarkowski",
       "team": "EVE"
     },
@@ -1792,7 +1792,7 @@
       "team": "MUN"
     },
     "421": {
-      "cost": 44,
+      "cost": 43,
       "name": "Heaven",
       "team": "MUN"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-09-30T01:00:00+00:00"
+  "taken_at": "2026-10-01T01:00:00+00:00"
 }
