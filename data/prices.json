@@ -547,7 +547,7 @@
       "team": "COV"
     },
     "198": {
-      "cost": 50,
+      "cost": 49,
       "name": "Henderson",
       "team": "CRY"
     },
@@ -1332,7 +1332,7 @@
       "team": "LEE"
     },
     "339": {
-      "cost": 49,
+      "cost": 48,
       "name": "Longstaff",
       "team": "LEE"
     },
@@ -1402,7 +1402,7 @@
       "team": "LIV"
     },
     "351": {
-      "cost": 49,
+      "cost": 48,
       "name": "Mamardashvili",
       "team": "LIV"
     },
@@ -1492,7 +1492,7 @@
       "team": "LIV"
     },
     "368": {
-      "cost": 70,
+      "cost": 69,
       "name": "Szoboszlai",
       "team": "LIV"
     },
@@ -1627,7 +1627,7 @@
       "team": "MCI"
     },
     "392": {
-      "cost": 53,
+      "cost": 52,
       "name": "Aït-Nouri",
       "team": "MCI"
     },
@@ -2157,7 +2157,7 @@
       "team": "NFO"
     },
     "488": {
-      "cost": 49,
+      "cost": 48,
       "name": "I.Sangaré",
       "team": "NFO"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-02T02:30:00+00:00"
+  "taken_at": "2026-10-03T01:00:00+00:00"
 }
