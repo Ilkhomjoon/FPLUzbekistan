@@ -142,7 +142,7 @@
       "team": "BHA"
     },
     "124": {
-      "cost": 58,
+      "cost": 59,
       "name": "Groß",
       "team": "BHA"
     },
@@ -242,7 +242,7 @@
       "team": "CHE"
     },
     "142": {
-      "cost": 54,
+      "cost": 53,
       "name": "James",
       "team": "CHE"
     },
@@ -452,7 +452,7 @@
       "team": "ARS"
     },
     "180": {
-      "cost": 40,
+      "cost": 39,
       "name": "Woolfenden",
       "team": "COV"
     },
@@ -792,7 +792,7 @@
       "team": "HUL"
     },
     "241": {
-      "cost": 54,
+      "cost": 53,
       "name": "McNeil",
       "team": "CRY"
     },
@@ -1047,7 +1047,7 @@
       "team": "HUL"
     },
     "288": {
-      "cost": 45,
+      "cost": 44,
       "name": "Dowell",
       "team": "HUL"
     },
@@ -1707,7 +1707,7 @@
       "team": "NEW"
     },
     "406": {
-      "cost": 54,
+      "cost": 53,
       "name": "Kovačić",
       "team": "MCI"
     },
@@ -1777,7 +1777,7 @@
       "team": "MUN"
     },
     "419": {
-      "cost": 50,
+      "cost": 49,
       "name": "Martinez",
       "team": "MUN"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-03T01:00:00+00:00"
+  "taken_at": "2026-10-04T01:00:00+00:00"
 }
