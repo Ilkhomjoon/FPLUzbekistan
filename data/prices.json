@@ -117,7 +117,7 @@
       "team": "BHA"
     },
     "12": {
-      "cost": 95,
+      "cost": 96,
       "name": "Saka",
       "team": "ARS"
     },
@@ -1982,7 +1982,7 @@
       "team": "TOT"
     },
     "456": {
-      "cost": 49,
+      "cost": 48,
       "name": "J.Ramsey",
       "team": "NEW"
     },
@@ -3227,7 +3227,7 @@
       "team": "BOU"
     },
     "8": {
-      "cost": 58,
+      "cost": 59,
       "name": "Calafiori",
       "team": "ARS"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-05T01:00:00+00:00"
+  "taken_at": "2026-10-06T01:00:00+00:00"
 }
