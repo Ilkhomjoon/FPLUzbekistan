@@ -602,7 +602,7 @@
       "team": "CRY"
     },
     "207": {
-      "cost": 44,
+      "cost": 43,
       "name": "Mingueza",
       "team": "CRY"
     },
@@ -812,7 +812,7 @@
       "team": "EVE"
     },
     "245": {
-      "cost": 54,
+      "cost": 53,
       "name": "Dibling",
       "team": "EVE"
     },
@@ -1832,7 +1832,7 @@
       "team": "MUN"
     },
     "429": {
-      "cost": 70,
+      "cost": 69,
       "name": "Rashford",
       "team": "MUN"
     },
@@ -2162,7 +2162,7 @@
       "team": "NFO"
     },
     "489": {
-      "cost": 45,
+      "cost": 44,
       "name": "Yates",
       "team": "NFO"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-08T01:00:00+00:00"
+  "taken_at": "2026-10-09T01:00:00+00:00"
 }
