@@ -7,7 +7,7 @@
       "team": "ARS"
     },
     "10": {
-      "cost": 55,
+      "cost": 54,
       "name": "White",
       "team": "ARS"
     },
@@ -197,7 +197,7 @@
       "team": "BHA"
     },
     "134": {
-      "cost": 45,
+      "cost": 44,
       "name": "Oriola",
       "team": "BHA"
     },
@@ -507,7 +507,7 @@
       "team": "ARS"
     },
     "190": {
-      "cost": 54,
+      "cost": 53,
       "name": "Tchaouna",
       "team": "COV"
     },
@@ -1192,7 +1192,7 @@
       "team": "IPS"
     },
     "313": {
-      "cost": 54,
+      "cost": 53,
       "name": "Clarke",
       "team": "IPS"
     },
@@ -1207,7 +1207,7 @@
       "team": "IPS"
     },
     "316": {
-      "cost": 55,
+      "cost": 56,
       "name": "Emersonn",
       "team": "IPS"
     },
@@ -1532,7 +1532,7 @@
       "team": "LIV"
     },
     "375": {
-      "cost": 49,
+      "cost": 48,
       "name": "Nyoni",
       "team": "LIV"
     },
@@ -2487,7 +2487,7 @@
       "team": "SUN"
     },
     "547": {
-      "cost": 49,
+      "cost": 48,
       "name": "Mundle",
       "team": "SUN"
     },
@@ -2507,7 +2507,7 @@
       "team": "AVL"
     },
     "550": {
-      "cost": 50,
+      "cost": 49,
       "name": "Jocelin.T",
       "team": "SUN"
     },
@@ -2607,7 +2607,7 @@
       "team": "CHE"
     },
     "569": {
-      "cost": 60,
+      "cost": 61,
       "name": "Gonzalo",
       "team": "FUL"
     },
@@ -2692,7 +2692,7 @@
       "team": "CHE"
     },
     "584": {
-      "cost": 54,
+      "cost": 53,
       "name": "Hamer",
       "team": "COV"
     },
@@ -3177,7 +3177,7 @@
       "team": "ARS"
     },
     "70": {
-      "cost": 60,
+      "cost": 59,
       "name": "Kluivert",
       "team": "BOU"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-09T01:00:00+00:00"
+  "taken_at": "2026-10-10T01:00:00+00:00"
 }
