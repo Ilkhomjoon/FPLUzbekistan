@@ -1,5 +1,5 @@
 {
-  "event": 5,
+  "event": 6,
   "players": {
     "1": {
       "cost": 61,
@@ -142,7 +142,7 @@
       "team": "BHA"
     },
     "124": {
-      "cost": 59,
+      "cost": 60,
       "name": "Groß",
       "team": "BHA"
     },
@@ -172,7 +172,7 @@
       "team": "BHA"
     },
     "13": {
-      "cost": 74,
+      "cost": 73,
       "name": "Rice",
       "team": "ARS"
     },
@@ -302,7 +302,7 @@
       "team": "CHE"
     },
     "153": {
-      "cost": 45,
+      "cost": 44,
       "name": "Disasi",
       "team": "CRY"
     },
@@ -892,7 +892,7 @@
       "team": "IPS"
     },
     "26": {
-      "cost": 76,
+      "cost": 75,
       "name": "Havertz",
       "team": "ARS"
     },
@@ -1452,7 +1452,7 @@
       "team": "AVL"
     },
     "360": {
-      "cost": 50,
+      "cost": 49,
       "name": "Bradley",
       "team": "LIV"
     },
@@ -1552,7 +1552,7 @@
       "team": "LIV"
     },
     "379": {
-      "cost": 91,
+      "cost": 90,
       "name": "Isak",
       "team": "LIV"
     },
@@ -1622,7 +1622,7 @@
       "team": "MCI"
     },
     "391": {
-      "cost": 57,
+      "cost": 58,
       "name": "Gvardiol",
       "team": "MCI"
     },
@@ -1657,7 +1657,7 @@
       "team": "MCI"
     },
     "398": {
-      "cost": 69,
+      "cost": 68,
       "name": "Foden",
       "team": "MCI"
     },
@@ -1667,7 +1667,7 @@
       "team": "MCI"
     },
     "4": {
-      "cost": 80,
+      "cost": 79,
       "name": "Gabriel",
       "team": "ARS"
     },
@@ -2027,7 +2027,7 @@
       "team": "NEW"
     },
     "464": {
-      "cost": 62,
+      "cost": 63,
       "name": "Wissa",
       "team": "NEW"
     },
@@ -2227,7 +2227,7 @@
       "team": "ARS"
     },
     "50": {
-      "cost": 45,
+      "cost": 44,
       "name": "Burrowes",
       "team": "AVL"
     },
@@ -2407,7 +2407,7 @@
       "team": "SUN"
     },
     "532": {
-      "cost": 49,
+      "cost": 48,
       "name": "Ballard",
       "team": "SUN"
     },
@@ -2472,12 +2472,12 @@
       "team": "SUN"
     },
     "544": {
-      "cost": 55,
+      "cost": 54,
       "name": "Xhaka",
       "team": "SUN"
     },
     "545": {
-      "cost": 49,
+      "cost": 48,
       "name": "Sadiki",
       "team": "SUN"
     },
@@ -2492,7 +2492,7 @@
       "team": "SUN"
     },
     "548": {
-      "cost": 49,
+      "cost": 48,
       "name": "Rigg",
       "team": "SUN"
     },
@@ -2637,7 +2637,7 @@
       "team": "BOU"
     },
     "574": {
-      "cost": 49,
+      "cost": 48,
       "name": "Hjertø-Dahl",
       "team": "HUL"
     },
@@ -2707,7 +2707,7 @@
       "team": "HUL"
     },
     "587": {
-      "cost": 50,
+      "cost": 49,
       "name": "Rulli",
       "team": "MCI"
     },
@@ -2717,7 +2717,7 @@
       "team": "CRY"
     },
     "589": {
-      "cost": 50,
+      "cost": 49,
       "name": "Gourna-Douath",
       "team": "HUL"
     },
@@ -3022,7 +3022,7 @@
       "team": "HUL"
     },
     "643": {
-      "cost": 45,
+      "cost": 44,
       "name": "Chilwell",
       "team": "CRY"
     },
@@ -3042,12 +3042,12 @@
       "team": "SUN"
     },
     "647": {
-      "cost": 55,
+      "cost": 54,
       "name": "Osorio",
       "team": "CRY"
     },
     "648": {
-      "cost": 50,
+      "cost": 49,
       "name": "Bahoya",
       "team": "LEE"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-10T01:00:00+00:00"
+  "taken_at": "2026-10-11T01:00:00+00:00"
 }
