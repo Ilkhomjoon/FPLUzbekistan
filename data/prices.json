@@ -92,7 +92,7 @@
       "team": "BHA"
     },
     "115": {
-      "cost": 50,
+      "cost": 51,
       "name": "De Cuyper",
       "team": "BHA"
     },
@@ -342,7 +342,7 @@
       "team": "ARS"
     },
     "160": {
-      "cost": 58,
+      "cost": 57,
       "name": "Garnacho",
       "team": "AVL"
     },
@@ -352,7 +352,7 @@
       "team": "CHE"
     },
     "162": {
-      "cost": 48,
+      "cost": 47,
       "name": "Andrey Santos",
       "team": "MUN"
     },
@@ -367,12 +367,12 @@
       "team": "CHE"
     },
     "165": {
-      "cost": 77,
+      "cost": 78,
       "name": "João Pedro",
       "team": "CHE"
     },
     "166": {
-      "cost": 65,
+      "cost": 66,
       "name": "N.Jackson",
       "team": "AVL"
     },
@@ -1037,7 +1037,7 @@
       "team": "HUL"
     },
     "286": {
-      "cost": 51,
+      "cost": 52,
       "name": "Belloumi",
       "team": "HUL"
     },
@@ -1287,7 +1287,7 @@
       "team": "AVL"
     },
     "330": {
-      "cost": 46,
+      "cost": 47,
       "name": "Bogle",
       "team": "LEE"
     },
@@ -1487,7 +1487,7 @@
       "team": "LIV"
     },
     "367": {
-      "cost": 72,
+      "cost": 71,
       "name": "Gakpo",
       "team": "LIV"
     },
@@ -1592,7 +1592,7 @@
       "team": "LEE"
     },
     "386": {
-      "cost": 45,
+      "cost": 44,
       "name": "Bettinelli",
       "team": "MCI"
     },
@@ -1647,12 +1647,12 @@
       "team": "MCI"
     },
     "396": {
-      "cost": 45,
+      "cost": 44,
       "name": "Vitor Reis",
       "team": "MCI"
     },
     "397": {
-      "cost": 84,
+      "cost": 83,
       "name": "Semenyo",
       "team": "MCI"
     },
@@ -1672,7 +1672,7 @@
       "team": "ARS"
     },
     "40": {
-      "cost": 78,
+      "cost": 79,
       "name": "Rogers",
       "team": "CHE"
     },
@@ -1767,7 +1767,7 @@
       "team": "MUN"
     },
     "417": {
-      "cost": 49,
+      "cost": 48,
       "name": "Dalot",
       "team": "MUN"
     },
@@ -2152,7 +2152,7 @@
       "team": "NFO"
     },
     "487": {
-      "cost": 49,
+      "cost": 48,
       "name": "Dominguez",
       "team": "NFO"
     },
@@ -2552,7 +2552,7 @@
       "team": "NFO"
     },
     "559": {
-      "cost": 49,
+      "cost": 48,
       "name": "Bamba",
       "team": "NEW"
     },
@@ -2962,7 +2962,7 @@
       "team": "AVL"
     },
     "632": {
-      "cost": 50,
+      "cost": 49,
       "name": "Ansah",
       "team": "HUL"
     },
@@ -3167,7 +3167,7 @@
       "team": "BOU"
     },
     "69": {
-      "cost": 61,
+      "cost": 60,
       "name": "Scott",
       "team": "BOU"
     },
@@ -3187,7 +3187,7 @@
       "team": "BOU"
     },
     "72": {
-      "cost": 49,
+      "cost": 48,
       "name": "Gannon-Doak",
       "team": "BOU"
     },
@@ -3212,7 +3212,7 @@
       "team": "BOU"
     },
     "77": {
-      "cost": 49,
+      "cost": 48,
       "name": "Adli",
       "team": "BOU"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-11T01:00:00+00:00"
+  "taken_at": "2026-10-12T01:00:00+00:00"
 }
