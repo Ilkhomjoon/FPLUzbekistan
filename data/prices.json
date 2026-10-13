@@ -217,7 +217,7 @@
       "team": "BHA"
     },
     "138": {
-      "cost": 56,
+      "cost": 57,
       "name": "Kostoulas",
       "team": "BHA"
     },
@@ -422,7 +422,7 @@
       "team": "COV"
     },
     "175": {
-      "cost": 40,
+      "cost": 39,
       "name": "van Ewijk",
       "team": "COV"
     },
@@ -1757,7 +1757,7 @@
       "team": "MUN"
     },
     "415": {
-      "cost": 58,
+      "cost": 57,
       "name": "Dorgu",
       "team": "MUN"
     },
@@ -2787,7 +2787,7 @@
       "team": "BOU"
     },
     "600": {
-      "cost": 50,
+      "cost": 49,
       "name": "Osman",
       "team": "BHA"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-12T01:00:00+00:00"
+  "taken_at": "2026-10-13T01:00:00+00:00"
 }
