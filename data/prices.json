@@ -57,7 +57,7 @@
       "team": "BRE"
     },
     "109": {
-      "cost": 45,
+      "cost": 46,
       "name": "Verbruggen",
       "team": "BHA"
     },
@@ -462,7 +462,7 @@
       "team": "COV"
     },
     "182": {
-      "cost": 40,
+      "cost": 39,
       "name": "Amenda",
       "team": "COV"
     },
@@ -962,7 +962,7 @@
       "team": "FUL"
     },
     "272": {
-      "cost": 45,
+      "cost": 44,
       "name": "Kusi-Asare",
       "team": "FUL"
     },
@@ -1642,7 +1642,7 @@
       "team": "MCI"
     },
     "395": {
-      "cost": 44,
+      "cost": 43,
       "name": "Lewis",
       "team": "MCI"
     },
@@ -1662,7 +1662,7 @@
       "team": "MCI"
     },
     "399": {
-      "cost": 78,
+      "cost": 79,
       "name": "Cherki",
       "team": "MCI"
     },
@@ -2252,7 +2252,7 @@
       "team": "TOT"
     },
     "504": {
-      "cost": 50,
+      "cost": 51,
       "name": "Vuskovic",
       "team": "BHA"
     },
@@ -3312,7 +3312,7 @@
       "team": "BRE"
     },
     "95": {
-      "cost": 63,
+      "cost": 62,
       "name": "O.Dango",
       "team": "BRE"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-13T01:00:00+00:00"
+  "taken_at": "2026-10-14T01:00:00+00:00"
 }
