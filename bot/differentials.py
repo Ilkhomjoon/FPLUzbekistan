@@ -352,6 +352,28 @@ def collect(bootstrap: dict, gw: int, fixtures: list[dict], teams: dict) -> Pick
     return picks
 
 
+def _played_but_not_closed(bootstrap: dict, posted_gw: int) -> int | None:
+    """O'ynab bo'lingan, lekin FPL hali rasman yopmagan tur (bo'lsa — raqami).
+
+    FPL turni oxirgi o'yindan keyingi kuni Britaniya vaqti bilan 09:00 da
+    yopadi (Toshkentda 13:00/14:00). Cron shundan oldin ishga tushsa, bot
+    hali oldingi turni "oxirgi yakunlangan" deb ko'radi va "allaqachon
+    chiqarilgan" deb jim chiqib ketadi — 13-oktyabrda aynan shunday bo'ldi.
+    """
+    current = next((e for e in bootstrap.get("events", []) if e.get("is_current")), None)
+    if not current or current.get("id") == posted_gw:
+        return None
+    try:
+        fixtures = fpl_api.get_fixtures(event=current["id"])
+    except Exception:
+        return None
+    if not fixtures:
+        return None
+    if all(f.get("finished") or f.get("finished_provisional") for f in fixtures):
+        return current["id"]
+    return None
+
+
 def run(force: bool = False) -> int:
     config.require_telegram()
 
@@ -367,7 +389,18 @@ def run(force: bool = False) -> int:
 
     state = storage.load(config.DIFF_STATE_FILE, {}) or {}
     if state.get("event") == gw and not force:
-        log.info("GW%d differentiallari allaqachon chiqarilgan.", gw)
+        pending = _played_but_not_closed(bootstrap, gw)
+        if pending:
+            log.warning("GW%d o'ynab bo'lingan, lekin FPL hali rasman yopmagan — "
+                        "cron juda erta ishga tushgan, post chiqmadi.", pending)
+            telegram.notify_admin(
+                f"⚠️ <b>Differentiallar</b>\nGW{pending} o'ynab bo'lindi, lekin FPL uni hali "
+                "rasman yopmagan (yopilish — Toshkent vaqti bilan 13:00/14:00).\n"
+                "Cron shundan oldin ishga tushgan, shuning uchun post chiqmadi. "
+                "Tashqi cron vaqtini kechroqqa (19:50) suring."
+            )
+        else:
+            log.info("GW%d differentiallari allaqachon chiqarilgan.", gw)
         return 0
 
     if nxt and not force:
@@ -379,7 +412,22 @@ def run(force: bool = False) -> int:
 
     if not force:
         post_at = waiter.local_time_today(config.DIFF_POST_AT)
-        if waiter.now_utc() < post_at:
+        now = waiter.now_utc()
+        if now < post_at:
+            minutes = (post_at - now).total_seconds() / 60
+            if minutes > config.DIFF_MAX_MINUTES:
+                # 5 soat uxlab, byudjet tugagach tasodifiy vaqtda post qilgandan
+                # ko'ra — darhol aytamiz. Avval shu holat jimgina 15:00 da post
+                # chiqarib yuborardi va Actions daqiqalarini ham yeb ketardi.
+                log.warning("Post vaqtigacha (%s) %.0f daqiqa bor, jarayon byudjeti esa %d daqiqa — "
+                            "cron juda erta ishga tushgan.", config.DIFF_POST_AT, minutes,
+                            config.DIFF_MAX_MINUTES)
+                telegram.notify_admin(
+                    f"⚠️ <b>Differentiallar</b>\nPost vaqti {config.DIFF_POST_AT}, cron esa "
+                    f"undan {minutes/60:.1f} soat oldin ishga tushdi — jarayon shuncha kuta olmaydi.\n"
+                    "Tashqi cron vaqtini 19:50 ga surgin."
+                )
+                return 0
             waiter.sleep_until(post_at, label="Differentiallar posti",
                                budget_end=waiter.budget(config.DIFF_MAX_MINUTES))
         elif _too_late():
