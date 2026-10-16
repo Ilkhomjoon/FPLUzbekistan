@@ -1887,7 +1887,7 @@
       "team": "MUN"
     },
     "439": {
-      "cost": 70,
+      "cost": 69,
       "name": "Šeško",
       "team": "MUN"
     },
@@ -2177,7 +2177,7 @@
       "team": "NFO"
     },
     "491": {
-      "cost": 58,
+      "cost": 57,
       "name": "Igor Jesus",
       "team": "NFO"
     },
@@ -2542,7 +2542,7 @@
       "team": "HUL"
     },
     "557": {
-      "cost": 63,
+      "cost": 62,
       "name": "Tzolis",
       "team": "ARS"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-15T01:00:00+00:00"
+  "taken_at": "2026-10-16T01:00:00+00:00"
 }
