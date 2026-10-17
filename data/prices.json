@@ -62,7 +62,7 @@
       "team": "BHA"
     },
     "11": {
-      "cost": 53,
+      "cost": 52,
       "name": "Mosquera",
       "team": "ARS"
     },
@@ -92,7 +92,7 @@
       "team": "BHA"
     },
     "115": {
-      "cost": 51,
+      "cost": 52,
       "name": "De Cuyper",
       "team": "BHA"
     },
@@ -142,7 +142,7 @@
       "team": "BHA"
     },
     "124": {
-      "cost": 60,
+      "cost": 61,
       "name": "Groß",
       "team": "BHA"
     },
@@ -377,7 +377,7 @@
       "team": "AVL"
     },
     "167": {
-      "cost": 56,
+      "cost": 55,
       "name": "Delap",
       "team": "NFO"
     },
@@ -442,7 +442,7 @@
       "team": "COV"
     },
     "179": {
-      "cost": 40,
+      "cost": 39,
       "name": "Latibeaudiere",
       "team": "COV"
     },
@@ -1167,7 +1167,7 @@
       "team": "IPS"
     },
     "309": {
-      "cost": 49,
+      "cost": 48,
       "name": "Núñez",
       "team": "IPS"
     },
@@ -1432,7 +1432,7 @@
       "team": "LIV"
     },
     "357": {
-      "cost": 53,
+      "cost": 52,
       "name": "Frimpong",
       "team": "LIV"
     },
@@ -1482,7 +1482,7 @@
       "team": "LIV"
     },
     "366": {
-      "cost": 73,
+      "cost": 72,
       "name": "Wirtz",
       "team": "LIV"
     },
@@ -1492,7 +1492,7 @@
       "team": "LIV"
     },
     "368": {
-      "cost": 69,
+      "cost": 68,
       "name": "Szoboszlai",
       "team": "LIV"
     },
@@ -1737,7 +1737,7 @@
       "team": "MCI"
     },
     "411": {
-      "cost": 156,
+      "cost": 157,
       "name": "Haaland",
       "team": "MCI"
     },
@@ -1817,12 +1817,12 @@
       "team": "MUN"
     },
     "426": {
-      "cost": 119,
+      "cost": 118,
       "name": "B.Fernandes",
       "team": "MUN"
     },
     "427": {
-      "cost": 79,
+      "cost": 78,
       "name": "Mbeumo",
       "team": "MUN"
     },
@@ -1837,7 +1837,7 @@
       "team": "MUN"
     },
     "43": {
-      "cost": 58,
+      "cost": 57,
       "name": "Tielemans",
       "team": "MUN"
     },
@@ -1972,7 +1972,7 @@
       "team": "NEW"
     },
     "454": {
-      "cost": 61,
+      "cost": 60,
       "name": "Elanga",
       "team": "NEW"
     },
@@ -2017,7 +2017,7 @@
       "team": "NEW"
     },
     "462": {
-      "cost": 49,
+      "cost": 48,
       "name": "Steur",
       "team": "NEW"
     },
@@ -2027,7 +2027,7 @@
       "team": "NEW"
     },
     "464": {
-      "cost": 63,
+      "cost": 62,
       "name": "Wissa",
       "team": "NEW"
     },
@@ -2047,7 +2047,7 @@
       "team": "NFO"
     },
     "468": {
-      "cost": 45,
+      "cost": 44,
       "name": "John",
       "team": "NFO"
     },
@@ -2082,7 +2082,7 @@
       "team": "NFO"
     },
     "474": {
-      "cost": 45,
+      "cost": 44,
       "name": "Jair Cunha",
       "team": "NFO"
     },
@@ -2092,7 +2092,7 @@
       "team": "NFO"
     },
     "476": {
-      "cost": 40,
+      "cost": 39,
       "name": "O.Richards",
       "team": "NFO"
     },
@@ -2312,7 +2312,7 @@
       "team": "TOT"
     },
     "515": {
-      "cost": 63,
+      "cost": 62,
       "name": "Maddison",
       "team": "TOT"
     },
@@ -2337,7 +2337,7 @@
       "team": "TOT"
     },
     "52": {
-      "cost": 50,
+      "cost": 49,
       "name": "Alysson",
       "team": "AVL"
     },
@@ -2537,7 +2537,7 @@
       "team": "CRY"
     },
     "556": {
-      "cost": 40,
+      "cost": 39,
       "name": "Targett",
       "team": "HUL"
     },
@@ -2587,7 +2587,7 @@
       "team": "IPS"
     },
     "565": {
-      "cost": 56,
+      "cost": 55,
       "name": "M.Sangaré",
       "team": "BRE"
     },
@@ -3217,12 +3217,12 @@
       "team": "BOU"
     },
     "78": {
-      "cost": 74,
+      "cost": 73,
       "name": "Kroupi.Jr",
       "team": "BOU"
     },
     "79": {
-      "cost": 60,
+      "cost": 61,
       "name": "Evanilson",
       "team": "BOU"
     },
@@ -3247,7 +3247,7 @@
       "team": "BRE"
     },
     "83": {
-      "cost": 45,
+      "cost": 44,
       "name": "Valdimarsson",
       "team": "BRE"
     },
@@ -3317,7 +3317,7 @@
       "team": "BRE"
     },
     "96": {
-      "cost": 54,
+      "cost": 53,
       "name": "Damsgaard",
       "team": "BRE"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-16T01:00:00+00:00"
+  "taken_at": "2026-10-17T01:00:00+00:00"
 }
