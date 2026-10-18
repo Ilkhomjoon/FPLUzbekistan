@@ -1,5 +1,5 @@
 {
-  "event": 6,
+  "event": 7,
   "players": {
     "1": {
       "cost": 61,
@@ -862,7 +862,7 @@
       "team": "FUL"
     },
     "254": {
-      "cost": 45,
+      "cost": 44,
       "name": "Robinson",
       "team": "FUL"
     },
@@ -887,7 +887,7 @@
       "team": "FUL"
     },
     "259": {
-      "cost": 40,
+      "cost": 39,
       "name": "Diop",
       "team": "IPS"
     },
@@ -1632,7 +1632,7 @@
       "team": "MCI"
     },
     "393": {
-      "cost": 54,
+      "cost": 53,
       "name": "Khusanov",
       "team": "MCI"
     },
@@ -1662,7 +1662,7 @@
       "team": "MCI"
     },
     "399": {
-      "cost": 79,
+      "cost": 80,
       "name": "Cherki",
       "team": "MCI"
     },
@@ -2012,7 +2012,7 @@
       "team": "NEW"
     },
     "461": {
-      "cost": 58,
+      "cost": 57,
       "name": "Touré",
       "team": "NEW"
     },
@@ -2077,7 +2077,7 @@
       "team": "NFO"
     },
     "473": {
-      "cost": 44,
+      "cost": 43,
       "name": "Aina",
       "team": "NFO"
     },
@@ -2307,7 +2307,7 @@
       "team": "TOT"
     },
     "514": {
-      "cost": 57,
+      "cost": 56,
       "name": "Tel",
       "team": "TOT"
     },
@@ -2317,7 +2317,7 @@
       "team": "TOT"
     },
     "516": {
-      "cost": 55,
+      "cost": 54,
       "name": "Bentancur",
       "team": "TOT"
     },
@@ -2392,7 +2392,7 @@
       "team": "SUN"
     },
     "53": {
-      "cost": 59,
+      "cost": 60,
       "name": "Manzambi",
       "team": "AVL"
     },
@@ -3227,7 +3227,7 @@
       "team": "BOU"
     },
     "8": {
-      "cost": 59,
+      "cost": 60,
       "name": "Calafiori",
       "team": "ARS"
     },
@@ -3337,5 +3337,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-17T01:00:00+00:00"
+  "taken_at": "2026-10-18T01:00:00+00:00"
 }
