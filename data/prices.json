@@ -367,7 +367,7 @@
       "team": "CHE"
     },
     "165": {
-      "cost": 78,
+      "cost": 79,
       "name": "João Pedro",
       "team": "CHE"
     },
@@ -502,7 +502,7 @@
       "team": "COV"
     },
     "19": {
-      "cost": 53,
+      "cost": 52,
       "name": "Zubimendi",
       "team": "ARS"
     },
@@ -697,7 +697,7 @@
       "team": "CRY"
     },
     "224": {
-      "cost": 55,
+      "cost": 54,
       "name": "Nketiah",
       "team": "CRY"
     },
@@ -737,7 +737,7 @@
       "team": "EVE"
     },
     "231": {
-      "cost": 48,
+      "cost": 47,
       "name": "Keane",
       "team": "EVE"
     },
@@ -867,7 +867,7 @@
       "team": "FUL"
     },
     "255": {
-      "cost": 45,
+      "cost": 44,
       "name": "J.Cuenca",
       "team": "FUL"
     },
@@ -1427,7 +1427,7 @@
       "team": "LIV"
     },
     "356": {
-      "cost": 65,
+      "cost": 64,
       "name": "Virgil",
       "team": "LIV"
     },
@@ -2027,7 +2027,7 @@
       "team": "NEW"
     },
     "464": {
-      "cost": 62,
+      "cost": 61,
       "name": "Wissa",
       "team": "NEW"
     },
@@ -2117,7 +2117,7 @@
       "team": "AVL"
     },
     "480": {
-      "cost": 80,
+      "cost": 79,
       "name": "Gibbs-White",
       "team": "NFO"
     },
@@ -2172,7 +2172,7 @@
       "team": "AVL"
     },
     "490": {
-      "cost": 58,
+      "cost": 57,
       "name": "Wood",
       "team": "NFO"
     },
@@ -2907,7 +2907,7 @@
       "team": "MCI"
     },
     "622": {
-      "cost": 40,
+      "cost": 39,
       "name": "Braithwaite",
       "team": "MCI"
     },
@@ -2992,7 +2992,7 @@
       "team": "HUL"
     },
     "638": {
-      "cost": 40,
+      "cost": 39,
       "name": "Norton-Cuffy",
       "team": "HUL"
     },
@@ -3077,7 +3077,7 @@
       "team": "BHA"
     },
     "653": {
-      "cost": 45,
+      "cost": 44,
       "name": "Samba",
       "team": "MCI"
     },
@@ -3156,13 +3156,18 @@
       "name": "Wright",
       "team": "AVL"
     },
+    "668": {
+      "cost": 50,
+      "name": "Tutierov",
+      "team": "SUN"
+    },
     "67": {
       "cost": 63,
       "name": "Rayan",
       "team": "BOU"
     },
     "68": {
-      "cost": 61,
+      "cost": 62,
       "name": "Tavernier",
       "team": "BOU"
     },
@@ -3337,5 +3342,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-18T01:00:00+00:00"
+  "taken_at": "2026-10-19T01:00:00+00:00"
 }
