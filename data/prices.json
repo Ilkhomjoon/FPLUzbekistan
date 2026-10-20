@@ -32,7 +32,7 @@
       "team": "BRE"
     },
     "104": {
-      "cost": 49,
+      "cost": 48,
       "name": "Onyeka",
       "team": "COV"
     },
@@ -92,7 +92,7 @@
       "team": "BHA"
     },
     "115": {
-      "cost": 52,
+      "cost": 53,
       "name": "De Cuyper",
       "team": "BHA"
     },
@@ -142,7 +142,7 @@
       "team": "BHA"
     },
     "124": {
-      "cost": 61,
+      "cost": 62,
       "name": "Groß",
       "team": "BHA"
     },
@@ -177,7 +177,7 @@
       "team": "ARS"
     },
     "130": {
-      "cost": 49,
+      "cost": 48,
       "name": "Wieffer",
       "team": "BHA"
     },
@@ -207,7 +207,7 @@
       "team": "BHA"
     },
     "136": {
-      "cost": 59,
+      "cost": 58,
       "name": "Welbeck",
       "team": "CHE"
     },
@@ -472,7 +472,7 @@
       "team": "COV"
     },
     "184": {
-      "cost": 49,
+      "cost": 48,
       "name": "Grimes",
       "team": "COV"
     },
@@ -802,7 +802,7 @@
       "team": "EVE"
     },
     "243": {
-      "cost": 49,
+      "cost": 48,
       "name": "Alcaraz",
       "team": "EVE"
     },
@@ -1672,12 +1672,12 @@
       "team": "ARS"
     },
     "40": {
-      "cost": 79,
+      "cost": 80,
       "name": "Rogers",
       "team": "CHE"
     },
     "400": {
-      "cost": 74,
+      "cost": 75,
       "name": "Doku",
       "team": "MCI"
     },
@@ -2647,7 +2647,7 @@
       "team": "COV"
     },
     "576": {
-      "cost": 50,
+      "cost": 49,
       "name": "Stroud",
       "team": "HUL"
     },
@@ -3342,5 +3342,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-19T01:00:00+00:00"
+  "taken_at": "2026-10-20T01:00:00+00:00"
 }
