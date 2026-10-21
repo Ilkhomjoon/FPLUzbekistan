@@ -12,9 +12,11 @@ from bot import config, differentials, waiter
 
 
 def _event(eid, current=False, nxt=False, finished=False):
+    # keyingi turning deadline'i doim kelajakda bo'lsin — aks holda test
+    # kalendarga bog'lanib qoladi
+    soon = (waiter.now_utc() + timedelta(days=3)).isoformat().replace("+00:00", "Z")
     return {"id": eid, "finished": finished, "data_checked": finished,
-            "is_current": current, "is_next": nxt,
-            "deadline_time": "2026-10-17T10:00:00Z"}
+            "is_current": current, "is_next": nxt, "deadline_time": soon}
 
 
 BOOTSTRAP = {"events": [_event(5, finished=True), _event(6, current=True), _event(7, nxt=True)],

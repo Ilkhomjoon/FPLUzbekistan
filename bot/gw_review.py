@@ -249,6 +249,15 @@ def run(force: bool = False, window: str | None = None) -> int:
         log.error("Hech qanday liga o'qilmadi — post yuborilmaydi.")
         return 1
 
+    # FPL ning "leagues: Updating" bayrog'iga endi cheksiz ishonmaymiz, shuning
+    # uchun jadval haqiqatan qayta hisoblanganini o'zimiz tekshiramiz: butun
+    # ligada o'rtacha ochko nolga teng bo'lsa, bu tur hali jadvalga tushmagan.
+    counted = [r for r in reviews if r.total_managers]
+    if counted and all(r.average <= 0 for r in counted):
+        log.warning("Liga jadvallari hali GW%d ni hisobga olmagan (o'rtacha 0) — "
+                    "sharh keyingi urinishda chiqadi.", gw)
+        return 0
+
     players = fpl_api.players_by_id(bootstrap)
     text = gw_review_post(gw=gw, event=event, players=players, leader=leader, reviews=reviews)
 

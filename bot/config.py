@@ -158,6 +158,10 @@ GW_REVIEW_POLL = _int("GW_REVIEW_POLL", 180)             # necha soniyada bir te
 GW_REVIEW_CONFIRM = _int("GW_REVIEW_CONFIRM", 2)         # necha marta ketma-ket tasdiqlansin
 GW_REVIEW_CONFIRM_WAIT = _int("GW_REVIEW_CONFIRM_WAIT", 30)  # tasdiqlar orasidagi tanaffus
 GW_REVIEW_MAX_MINUTES = _int("GW_REVIEW_MAX_MINUTES", 300)   # jarayon maksimal ish vaqti
+# FPL "leagues: Updating" bayrog'i osilib qolishi mumkin (19-oktyabrda ikki kun
+# turdi). Ochkolar yakuniy bo'lgandan keyin shuncha daqiqa kutamiz, keyin bu
+# bayroqqa qaramaymiz — jadval tayyorligini liganing o'z ma'lumotidan bilamiz.
+LEAGUE_UPDATE_GRACE = _int("LEAGUE_UPDATE_GRACE", 120)
 
 
 # --- Differentiallar (tur oralig'idagi post) ---

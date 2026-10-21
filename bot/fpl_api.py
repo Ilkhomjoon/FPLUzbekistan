@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import logging
+from datetime import datetime, date, time, timedelta, timezone
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -75,7 +77,24 @@ def get_event_status() -> dict:
 POINTS_FINAL = "r"  # "p" = provisional (vaqtinchalik), "r" = results (yakuniy)
 
 
-def status_verdict(status: dict) -> tuple[int | None, bool, str]:
+def points_final_at(status: dict) -> datetime | None:
+    """Ochkolar qachon yakuniy bo'lgani — turning oxirgi o'yin kunidan keyingi
+    kun, Britaniya vaqti bilan 09:00. `leagues` bayrog'iga qancha kutganimizni
+    shu nuqtadan hisoblaymiz."""
+    from . import config
+
+    days = [r.get("date") for r in (status.get("status") or []) if r.get("date")]
+    if not days:
+        return None
+    try:
+        last = max(date.fromisoformat(d) for d in days)
+    except ValueError:
+        return None
+    tz = ZoneInfo(config.MATCHDAY_TZ)
+    return datetime.combine(last + timedelta(days=1), time(9, 0), tz).astimezone(timezone.utc)
+
+
+def status_verdict(status: dict, now: datetime | None = None) -> tuple[int | None, bool, str]:
     """/event-status/ -> (tur raqami, tayyormi, sabab).
 
     2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni Britaniya
@@ -85,9 +104,17 @@ def status_verdict(status: dict) -> tuple[int | None, bool, str]:
         bonus_added: false -> true   (bonus rasman qo'shildi)
         leagues:     "Updating"      (liga jadvallari qayta hisoblanmoqda)
 
-    Biz liga jadvallarini o'qiganimiz uchun `leagues` tugashini ham kutamiz —
-    aks holda o'rinlar yarim hisoblangan holatda chiqib qolardi.
+    Birinchi ikkitasi — qat'iy shart. `leagues` esa YUMSHOQ shart: biz liga
+    jadvallarini o'qiganimiz uchun uni kutamiz, lekin cheksiz emas.
+
+    19-oktyabrda GW7 ochkolari yakuniy bo'ldi, `leagues` esa ikki kun
+    "Updating" bo'lib osilib qoldi — natijada na tur sharhi, na differentiallar
+    chiqdi. Shuning uchun endi LEAGUE_UPDATE_GRACE daqiqadan keyin bu bayroqqa
+    qaramaymiz; jadval haqiqatan hisoblanganini liganing o'z ma'lumotidan
+    (`event_total`) tekshiramiz.
     """
+    from . import config
+
     rows = status.get("status") or []
     if not rows:
         return None, False, "event-status bo'sh"
@@ -97,8 +124,19 @@ def status_verdict(status: dict) -> tuple[int | None, bool, str]:
         return event, False, "ochkolar hali vaqtinchalik (points='p')"
     if not all(r.get("bonus_added") for r in rows):
         return event, False, "bonus hali rasman qo'shilmagan"
+
     if (status.get("leagues") or "").strip().lower() == "updating":
-        return event, False, "ochkolar yakunlandi, liga jadvallari yangilanmoqda"
+        final_at = points_final_at(status)
+        now = now or datetime.now(timezone.utc)
+        if final_at is None:
+            return event, True, "tayyor (liga bayrog'i 'Updating', sana yo'q)"
+        waited = (now - final_at).total_seconds() / 60
+        if waited < config.LEAGUE_UPDATE_GRACE:
+            return event, False, (f"ochkolar yakunlandi, liga jadvallari yangilanmoqda "
+                                  f"({waited:.0f}/{config.LEAGUE_UPDATE_GRACE} daqiqa)")
+        return event, True, (f"tayyor (liga bayrog'i {waited/60:.1f} soatdan beri "
+                             "'Updating' — osilib qolgan deb hisoblaymiz)")
+
     return event, True, "tayyor"
 
 

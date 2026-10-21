@@ -56,9 +56,15 @@ class NotFinishedTest(unittest.TestCase):
         self.assertIn("vaqtinchalik", " ".join(logs.output))
 
     def test_leagues_still_updating_blocks_the_post(self):
-        """Aynan bugungi holat: ochkolar yakuniy, jadvallar qayta hisoblanmoqda."""
-        gw_review.fpl_api.get_event_status = lambda: _status(
-            points="r", bonus=True, leagues="Updating")
+        """Ochkolar yakuniy, jadvallar qayta hisoblanmoqda — hozircha kutamiz.
+
+        Oxirgi o'yin kuni — bugun, ya'ni yakunlanish nuqtasi hali kelmagan,
+        shuning uchun liga bayrog'i to'sib turadi (kutish muddati o'tmagan).
+        """
+        today = datetime.now(timezone.utc).date().isoformat()
+        gw_review.fpl_api.get_event_status = lambda: {
+            "status": [{"bonus_added": True, "date": today, "event": 1, "points": "r"}],
+            "leagues": "Updating"}
         gw_review.fpl_api.get_bootstrap = lambda: {
             "events": [{"id": 1, "is_current": True, "finished": False, "data_checked": False}],
             "elements": [], "teams": [],
@@ -333,3 +339,63 @@ class SameDayTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class StandingsNotCountedTest(unittest.TestCase):
+    """Liga bayrog'ini e'tiborsiz qoldirganda ham yarim hisoblangan jadval
+    chiqib ketmasin: butun ligada o'rtacha 0 bo'lsa — tur hali tushmagan."""
+
+    def setUp(self):
+        self.sent = []
+        self._orig = {
+            "bootstrap": gw_review.fpl_api.get_bootstrap,
+            "fixtures": gw_review.fpl_api.get_fixtures,
+            "status": gw_review.fpl_api.get_event_status,
+            "leader": gw_review.overall_leader,
+            "review": gw_review.review_league,
+            "load": gw_review.storage.load,
+            "save": gw_review.storage.save,
+            "send": gw_review.telegram.send_message,
+            "require": config.require_telegram,
+        }
+        config.require_telegram = lambda: None
+        gw_review.storage.load = lambda *a, **kw: {}
+        gw_review.storage.save = lambda *a, **kw: None
+        gw_review.telegram.send_message = lambda text, **kw: (
+            self.sent.append(text) or {"message_id": 7})
+        gw_review.overall_leader = lambda: None
+        gw_review.fpl_api.get_event_status = lambda: {
+            "status": [{"bonus_added": True, "date": "2026-10-19", "event": 1, "points": "r"}],
+            "leagues": "Updating"}          # bayroq osilib qolgan
+        gw_review.fpl_api.get_bootstrap = lambda: {
+            "events": [{"id": 1, "is_current": True, "finished": True, "data_checked": True,
+                        "average_entry_score": 50, "highest_score": 100}],
+            "elements": [], "teams": []}
+        gw_review.fpl_api.get_fixtures = lambda **kw: [_fixture(True, True)]
+
+    def tearDown(self):
+        gw_review.fpl_api.get_bootstrap = self._orig["bootstrap"]
+        gw_review.fpl_api.get_fixtures = self._orig["fixtures"]
+        gw_review.fpl_api.get_event_status = self._orig["status"]
+        gw_review.overall_leader = self._orig["leader"]
+        gw_review.review_league = self._orig["review"]
+        gw_review.storage.load = self._orig["load"]
+        gw_review.storage.save = self._orig["save"]
+        gw_review.telegram.send_message = self._orig["send"]
+        config.require_telegram = self._orig["require"]
+
+    def _league(self, average):
+        gw_review.review_league = lambda *a, **kw: gw_review.LeagueReview(
+            label="Liga", name="Liga", total_managers=500, average=average)
+
+    def test_an_uncounted_gameweek_is_not_published(self):
+        self._league(0.0)
+        with self.assertLogs("gw_review", level=logging.INFO) as logs:
+            self.assertEqual(gw_review.run(), 0)
+        self.assertEqual(self.sent, [])
+        self.assertIn("hisobga olmagan", " ".join(logs.output))
+
+    def test_a_counted_gameweek_is_published(self):
+        self._league(48.5)
+        self.assertEqual(gw_review.run(), 0)
+        self.assertEqual(len(self.sent), 1)

@@ -6,8 +6,29 @@ shuning uchun `/event-status/` ga qaraymiz.
 from __future__ import annotations
 
 import unittest
+from datetime import datetime, timedelta, timezone
 
-from bot import fpl_api
+from zoneinfo import ZoneInfo
+
+from bot import config, fpl_api
+
+
+def _recent_status(leagues="Updating", event=1):
+    """Ochkolar yakuniy, liga bayrog'i berilgan holatdagi javob."""
+    return {"status": [{"bonus_added": True, "date": "2026-10-19",
+                        "event": event, "points": "r"}],
+            "leagues": leagues}
+
+
+def _verdict_after(hours_since_final: float, status=None):
+    """Yakunlanish nuqtasidan `hours_since_final` soat o'tgandagi hukm.
+
+    Soatni soatga emas, `status_verdict(now=...)` ga beramiz — test qaysi
+    kuni ishga tushsa ham natija bir xil bo'lsin.
+    """
+    status = status or _recent_status()
+    final_at = fpl_api.points_final_at(status)
+    return fpl_api.status_verdict(status, now=final_at + timedelta(hours=hours_since_final))
 
 
 def _status(points="r", bonus=True, leagues="", event=1, days=4):
@@ -40,11 +61,31 @@ class StatusVerdictTest(unittest.TestCase):
         self.assertFalse(ready)
         self.assertIn("bonus", reason)
 
-    def test_leagues_still_updating(self):
-        """Aynan shu holat: ochkolar yakuniy, lekin jadvallar qayta hisoblanmoqda."""
-        _, ready, reason = fpl_api.status_verdict(_status(leagues="Updating"))
+    def test_leagues_still_updating_blocks_at_first(self):
+        """Ochkolar yakuniy, jadvallar qayta hisoblanmoqda — biroz kutamiz."""
+        _, ready, reason = _verdict_after(0.2)
         self.assertFalse(ready)
         self.assertIn("liga jadvallari", reason)
+
+    def test_a_stuck_leagues_flag_stops_blocking(self):
+        """19-oktyabr holati: bayroq ikki kun 'Updating' bo'lib osilib qoldi."""
+        _, ready, reason = _verdict_after(48)
+        self.assertTrue(ready)
+        self.assertIn("osilib qolgan", reason)
+
+    def test_the_grace_is_measured_from_the_lockdown(self):
+        grace = config.LEAGUE_UPDATE_GRACE / 60
+        _, before, _ = _verdict_after(grace - 0.2)
+        _, after, _ = _verdict_after(grace + 0.2)
+        self.assertFalse(before)
+        self.assertTrue(after)
+
+    def test_points_not_final_is_never_waived(self):
+        """Bayroq osilib qolsa ham, ochkolar vaqtinchalik bo'lsa — kutamiz."""
+        status = _recent_status()
+        status["status"][0]["points"] = "p"
+        _, ready, _ = _verdict_after(48, status)
+        self.assertFalse(ready)
 
     def test_one_day_still_provisional_blocks_the_whole_gameweek(self):
         status = _status()
@@ -66,7 +107,11 @@ class FinalisedEventTest(unittest.TestCase):
         self.assertFalse(event["finished"])   # bayroq hali qo'yilmagan bo'lsa ham
 
     def test_not_finalised_returns_none(self):
-        self.assertIsNone(fpl_api.finalised_event(BOOTSTRAP, _status(leagues="Updating")))
+        # bayroq hozirgina 'Updating' bo'ldi — hali kutamiz
+        status = {"status": [{"bonus_added": True, "event": 1, "points": "r",
+                              "date": datetime.now(timezone.utc).date().isoformat()}],
+                  "leagues": "Updating"}
+        self.assertIsNone(fpl_api.finalised_event(BOOTSTRAP, status))
 
     def test_falls_back_to_the_finished_flag(self):
         bootstrap = {"events": [{"id": 1, "finished": True}, {"id": 2, "finished": False}]}

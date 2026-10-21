@@ -375,6 +375,7 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `ERROR_ALERT_AFTER` | `3` | Necha marta ketma-ket xatodan keyin ogohlantirsin |
 | `CRON_ALERT_MINUTES` | `20` (workflow'da `90`) | Cron kechikishi haqida ogohlantirish chegarasi |
 | `GW_REVIEW_UNTIL` | `22:00` | FPL tasdig'ini shu vaqtgacha kutadi |
+| `LEAGUE_UPDATE_GRACE` | `120` | FPL `leagues: Updating` bayrog'i osilib qolsa, shuncha daqiqadan keyin unga qaralmaydi |
 | `GW_REVIEW_POLL` | `180` | Tasdiqlanganini necha soniyada bir tekshiradi |
 | `GW_REVIEW_CONFIRM` | `2` | Necha marta ketma-ket tasdiq talab qilinadi (CDN uchun) |
 | `DIFF_POST_AT` | `20:00` | Differentiallar posti qachon chiqadi |
