@@ -176,8 +176,12 @@ DIFF_TOP_N = _int("DIFF_TOP_N", 5)                    # har bo'limda nechta qato
 # kerak bo'lsa top-1000. Kam bo'lsa ham mayli — asosiysi ochko keltirgani chiqsin.
 DIFF_ELITE_TIERS = os.getenv("DIFF_ELITE_TIERS", "100,1000")
 DIFF_TOP100_MIN = _float("DIFF_TOP100_MIN", 12.0)     # top ro'yxatda shundan ko'p bo'lsa qiziq
-DIFF_ELITE_MIN_POINTS = _int("DIFF_ELITE_MIN_POINTS", 5)   # o'tgan turdagi ochko chegarasi
-DIFF_ELITE_MIN_FORM = _float("DIFF_ELITE_MIN_FORM", 3.5)   # forma chegarasi
+# 👑 bo'limi bitta turga emas, oxirgi bir necha turga qaraydi: bitta omadli
+# tur ("12 ochko oldi, keyingi 4 turda jim") ro'yxatga tushib qolmasin.
+DIFF_RECENT_GWS = _int("DIFF_RECENT_GWS", 5)               # necha turlik oyna
+DIFF_RECENT_MIN = _int("DIFF_RECENT_MIN", 25)              # shu oynadagi jami ochko chegarasi
+DIFF_RECENT_HAUL = _int("DIFF_RECENT_HAUL", 5)             # "yaxshi tur" shundan boshlanadi
+DIFF_RECENT_WEEKS = _int("DIFF_RECENT_WEEKS", 2)           # kamida nechta "yaxshi tur" bo'lsin
 DIFF_ELITE_MIN_ROWS = _int("DIFF_ELITE_MIN_ROWS", 3)       # shundan kam bo'lsa ro'yxat kengayadi
 DIFF_RISING_N = _int("DIFF_RISING_N", 3)              # "kech qolmang" bo'limidagi qatorlar
 DIFF_FIXTURES = _int("DIFF_FIXTURES", 3)              # kalendar necha turni ko'rsatsin

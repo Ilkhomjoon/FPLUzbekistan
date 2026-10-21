@@ -384,8 +384,10 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `DIFF_MIN_POINTS` | `7` | O'tgan turda shundan kam olgani ro'yxatga tushmaydi |
 | `DIFF_ELITE_TIERS` | `100,1000` | Avval top-100, ro'yxat kam chiqsa top-1000 skanerlanadi |
 | `DIFF_TOP100_MIN` | `12` | Top ro'yxatda shundan ko'p bo'lsa qiziq deb hisoblanadi |
-| `DIFF_ELITE_MIN_POINTS` | `5` | 👑 bo'limi: o'tgan turdagi ochko chegarasi |
-| `DIFF_ELITE_MIN_FORM` | `3.5` | 👑 bo'limi: forma chegarasi |
+| `DIFF_RECENT_GWS` | `5` | 👑 bo'limi necha turlik natijaga qaraydi |
+| `DIFF_RECENT_MIN` | `25` | Shu turlardagi jami ochko chegarasi |
+| `DIFF_RECENT_HAUL` | `5` | "Yaxshi tur" shundan boshlanadi |
+| `DIFF_RECENT_WEEKS` | `2` | Kamida nechta "yaxshi tur" bo'lishi kerak |
 | `DIFF_ELITE_MIN_ROWS` | `3` | Shundan kam topilsa ro'yxat keyingi bosqichga kengayadi |
 | `DIFF_LOCAL_LEAGUE` | `true` | "Bizning ligada" bo'limi chiqsinmi |
 | `DIFF_POLL` | `true` | Postdan keyin so'rovnoma yuborilsinmi |

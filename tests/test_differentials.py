@@ -22,6 +22,17 @@ def _element(pid, name, team, cost, owned, points, total=0, tin=0, status="a", f
             "form": str(points if form is None else form)}
 
 
+# element_id -> (oxirgi 5 turdagi jami ochko, nechta turda 5+)
+RECENT = {
+    1: (38, 4),    # Ødegaard — barqaror
+    2: (30, 3),    # White
+    3: (40, 5),    # Haaland (egaligi baland — differential emas)
+    4: (28, 3),    # Rogers
+    5: (5, 0),     # Nobody
+    7: (10, 1),    # Passenger — kuchlilarda bor, lekin ochko yo'q
+    8: (26, 1),    # Onehit — bitta katta tur, qolgani jim
+}
+
 BOOTSTRAP = {"elements": [
     _element(1, "Ødegaard", 1, 65, 9.8, 11, 11, 110701),
     _element(2, "White", 1, 55, 5.2, 11, 11, 45936),
@@ -67,6 +78,7 @@ class SelectionTest(unittest.TestCase):
 class EliteTest(unittest.TestCase):
     def setUp(self):
         self.players = differentials.pool(BOOTSTRAP)
+        differentials.apply_recent_form(self.players, RECENT)
         self._orig = (differentials.top_entries, differentials.scan_picks,
                       config.DIFF_ELITE_TIERS, config.DIFF_ELITE_MIN_ROWS)
         differentials.top_entries = lambda size: list(range(1, size + 1))
@@ -100,12 +112,13 @@ class EliteTest(unittest.TestCase):
 
     def test_a_player_without_points_is_dropped(self):
         """Foydalanuvchining shikoyati: kuchlilarda bor, lekin ochko keltirmagan."""
-        self._scan({7: 5}, 10)                    # Passenger — 1 ochko
+        self._scan({7: 5}, 10)                    # Passenger — 5 turda 10 ochko
         rows, _ = differentials.elite_differentials(self.players, gw=1)
         self.assertEqual(rows, [])
 
-    def test_a_one_off_haul_without_form_is_dropped(self):
-        self._scan({8: 5}, 10)                    # Onehit — 8 ochko, forma 2.0
+    def test_a_one_off_haul_is_dropped(self):
+        """26 ochko, lekin hammasi bitta turdan — barqaror emas."""
+        self._scan({8: 5}, 10)                    # Onehit — 1 ta yaxshi tur
         rows, _ = differentials.elite_differentials(self.players, gw=1)
         self.assertEqual(rows, [])
 
@@ -138,7 +151,7 @@ class EliteTest(unittest.TestCase):
 
     def test_rows_are_sorted_by_points(self):
         config.DIFF_ELITE_MIN_ROWS = 1
-        self._scan({1: 4, 4: 4}, 10)               # Ødegaard 11 ochko, Rogers 7
+        self._scan({1: 4, 4: 4}, 10)               # Ødegaard 38, Rogers 28
         rows, _ = differentials.elite_differentials(self.players, gw=1)
         self.assertEqual([d.name for d in rows], ["Ødegaard", "Rogers"])
 
@@ -170,8 +183,10 @@ class FixturesTest(unittest.TestCase):
 class PostTest(unittest.TestCase):
     def _picks(self):
         players = differentials.pool(BOOTSTRAP)
+        differentials.apply_recent_form(players, RECENT)
         by_name = {d.name: d for d in players}
         picks = differentials.Picks()
+        picks.window = [1, 2, 3, 4, 5]
         picks.low_owned = differentials.low_owned(players)
         elite = by_name["Ødegaard"]
         elite.elite = 34.0
@@ -195,6 +210,8 @@ class PostTest(unittest.TestCase):
             self.assertIn(marker, text)
         self.assertIn("<b>Ødegaard</b> (ARS) £6.5M — 9.8%", text)
         self.assertIn("top-100: <b>34%</b>", text)
+        self.assertIn("<b>38</b> ochko · 4 turda", text)   # 5 turlik natija
+        self.assertIn("GW1-GW5", text)
         self.assertIn("41 ta jamoada", text)
         self.assertTrue(text.rstrip().endswith(config.CHANNEL_TAG))
         self.assertLess(len(text), 4096)
@@ -277,3 +294,51 @@ class MultiPollTest(unittest.TestCase):
         config.DIFF_POLL_MULTI = False
         question, _ = differentials_poll(5, differentials.Picks(), TEAMS)
         self.assertEqual(question, "GW5 ga kimni olasiz?")
+
+
+class RecentFormTest(unittest.TestCase):
+    """👑 bo'limi bitta turga emas, oxirgi bir necha turga qaraydi."""
+
+    def setUp(self):
+        self._orig = (differentials.fpl_api.get_live, config.DIFF_RECENT_GWS,
+                      config.DIFF_RECENT_HAUL)
+        config.DIFF_RECENT_GWS = 5
+        config.DIFF_RECENT_HAUL = 5
+
+    def tearDown(self):
+        (differentials.fpl_api.get_live, config.DIFF_RECENT_GWS,
+         config.DIFF_RECENT_HAUL) = self._orig
+
+    def test_the_window_is_the_last_five_gameweeks(self):
+        self.assertEqual(differentials.recent_window(7), [3, 4, 5, 6, 7])
+
+    def test_early_season_uses_what_exists(self):
+        self.assertEqual(differentials.recent_window(3), [1, 2, 3])
+
+    def _live(self, points_by_gw):
+        def fake(event):
+            return {"elements": [{"id": pid, "stats": {"total_points": pts}}
+                                 for pid, pts in points_by_gw[event].items()]}
+        differentials.fpl_api.get_live = fake
+
+    def test_points_are_summed_and_good_weeks_counted(self):
+        self._live({1: {10: 9, 11: 2}, 2: {10: 1, 11: 2}, 3: {10: 7, 11: 2}})
+        form = differentials.recent_form([1, 2, 3])
+        self.assertEqual(form[10], (17, 2))     # 9 + 1 + 7, ikkita turda 5+
+        self.assertEqual(form[11], (6, 0))      # jami 6, bitta ham yaxshi tur yo'q
+
+    def test_a_missing_gameweek_does_not_break_the_rest(self):
+        def fake(event):
+            if event == 2:
+                raise RuntimeError("API yiqildi")
+            return {"elements": [{"id": 10, "stats": {"total_points": 6}}]}
+        differentials.fpl_api.get_live = fake
+        form = differentials.recent_form([1, 2, 3])
+        self.assertEqual(form[10], (12, 2))
+
+    def test_players_without_data_get_zeroes(self):
+        players = differentials.pool(BOOTSTRAP)
+        differentials.apply_recent_form(players, {1: (30, 3)})
+        by_id = {d.element_id: d for d in players}
+        self.assertEqual((by_id[1].recent_points, by_id[1].good_weeks), (30, 3))
+        self.assertEqual((by_id[2].recent_points, by_id[2].good_weeks), (0, 0))

@@ -47,6 +47,8 @@ class Diff:
     total: int            # mavsum boshidan
     transfers_in: int     # shu hafta sotib olinishlar
     form: float = 0.0     # FPL "form" — oxirgi 30 kundagi o'rtacha ochko
+    recent_points: int = 0   # oxirgi DIFF_RECENT_GWS turdagi jami ochko
+    good_weeks: int = 0      # shu turlarning nechtasida DIFF_RECENT_HAUL+ olgani
     elite: float = 0.0    # top ro'yxatdagi egalik, %
     local: float = 0.0    # bizning ligadagi egalik, %
     local_count: int = 0
@@ -71,6 +73,7 @@ class Picks:
     local_label: str = ""
     local_scanned: int = 0
     elite_size: int = 0     # 👑 bo'limi nechta menejer bo'yicha hisoblangan
+    window: list[int] = field(default_factory=list)   # 👑 bo'limi qaysi turlarga qaradi
 
     def any(self) -> bool:
         return bool(self.low_owned or self.top100 or self.rising)
@@ -162,6 +165,47 @@ def top_entries(size: int) -> list[int]:
     return entries[:size]
 
 
+def recent_window(gw: int, size: int | None = None) -> list[int]:
+    """Oxirgi turlar ro'yxati (gw ni ham o'z ichiga oladi).
+
+    Mavsum boshida 5 ta tur bo'lmasligi mumkin — bor bo'lganicha olamiz.
+    """
+    size = size or config.DIFF_RECENT_GWS
+    return list(range(max(1, gw - size + 1), gw + 1))
+
+
+def recent_form(events: list[int]) -> dict[int, tuple[int, int]]:
+    """element_id -> (oynadagi jami ochko, nechta turda DIFF_RECENT_HAUL+).
+
+    Har bir tur uchun bitta `/event/{gw}/live/` so'rovi — hammasi bo'lib 5 ta
+    so'rov bilan butun ligadagi har bir futbolchining har turdagi ochkosi
+    qo'lga kiradi. Futbolchi bo'yicha alohida so'rov yuborish (700+ so'rov)
+    shart emas.
+    """
+    totals: Counter = Counter()
+    hauls: Counter = Counter()
+    for ev in events:
+        try:
+            live = fpl_api.get_live(ev)
+        except Exception as exc:
+            log.warning("GW%d jonli ma'lumoti olinmadi: %s", ev, exc)
+            continue
+        for el in live.get("elements") or []:
+            eid = el.get("id")
+            if eid is None:
+                continue
+            points = _num((el.get("stats") or {}).get("total_points"), 0)
+            totals[eid] += points
+            if points >= config.DIFF_RECENT_HAUL:
+                hauls[eid] += 1
+    return {eid: (total, hauls[eid]) for eid, total in totals.items()}
+
+
+def apply_recent_form(players: list[Diff], form: dict[int, tuple[int, int]]) -> None:
+    for d in players:
+        d.recent_points, d.good_weeks = form.get(d.element_id, (0, 0))
+
+
 def elite_tiers() -> list[int]:
     """DIFF_ELITE_TIERS -> [100, 1000]. Xato yozilgan qiymatlar tashlab yuboriladi."""
     out = []
@@ -181,11 +225,13 @@ def _elite_rows(players: list[Diff], counts: Counter, scanned: int) -> list[Diff
     Uchta shart birga ishlaydi:
       · top ro'yxatda DIFF_TOP100_MIN% dan ko'p, umumiy egaligi DIFF_MAX_OWN% dan past
         — ya'ni ularda bor, boshqalarda yo'q;
-      · o'tgan turda DIFF_ELITE_MIN_POINTS+ ochko — bir turlik natija;
-      · forma DIFF_ELITE_MIN_FORM dan baland — bitta omadli tur emas, barqarorlik.
+      · oxirgi DIFF_RECENT_GWS turda jami DIFF_RECENT_MIN+ ochko;
+      · shu turlarning kamida DIFF_RECENT_WEEKS tasida DIFF_RECENT_HAUL+ ochko —
+        bitta omadli tur hisobga olinmasin.
 
-    Ilgari faqat birinchi shart bor edi va ochko keltirmagan futbolchilar ham
-    ro'yxatga tushib ketardi.
+    Ilgari faqat birinchi shart bor edi, keyin bitta turning ochkosi qo'shildi.
+    Bitta tur esa shovqinli: 12 ochko olib, keyingi to'rt turda jim turgan
+    futbolchi ham ro'yxatga tushardi.
     """
     by_id = {d.element_id: d for d in players}
     rows: list[Diff] = []
@@ -195,10 +241,10 @@ def _elite_rows(players: list[Diff], counts: Counter, scanned: int) -> list[Diff
             continue
         d.elite = count / scanned * 100
         if (d.elite >= config.DIFF_TOP100_MIN
-                and d.points >= config.DIFF_ELITE_MIN_POINTS
-                and d.form >= config.DIFF_ELITE_MIN_FORM):
+                and d.recent_points >= config.DIFF_RECENT_MIN
+                and d.good_weeks >= config.DIFF_RECENT_WEEKS):
             rows.append(d)
-    rows.sort(key=lambda d: (-d.points, -(d.elite - d.owned)))
+    rows.sort(key=lambda d: (-d.recent_points, -(d.elite - d.owned)))
     return rows[: config.DIFF_TOP_N]
 
 
@@ -315,6 +361,15 @@ def _too_late() -> bool:
 def collect(bootstrap: dict, gw: int, fixtures: list[dict], teams: dict) -> Picks:
     players = pool(bootstrap)
     picks = Picks()
+
+    window = recent_window(gw)
+    try:
+        apply_recent_form(players, recent_form(window))
+        log.info("Oxirgi %d tur (GW%d-GW%d) natijalari o'qildi.",
+                 len(window), window[0], window[-1])
+    except Exception as exc:
+        log.error("Oxirgi turlar natijasi olinmadi: %s", exc)
+    picks.window = window
 
     picks.low_owned = low_owned(players)
     log.info("Kam olingan, ko'p bergan: %d ta", len(picks.low_owned))
