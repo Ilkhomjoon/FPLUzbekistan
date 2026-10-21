@@ -632,7 +632,7 @@
       "team": "CRY"
     },
     "212": {
-      "cost": 44,
+      "cost": 43,
       "name": "Hughes",
       "team": "CRY"
     },
@@ -837,7 +837,7 @@
       "team": "EVE"
     },
     "25": {
-      "cost": 71,
+      "cost": 70,
       "name": "Gyökeres",
       "team": "ARS"
     },
@@ -957,7 +957,7 @@
       "team": "FUL"
     },
     "271": {
-      "cost": 54,
+      "cost": 53,
       "name": "Muniz",
       "team": "FUL"
     },
@@ -1377,7 +1377,7 @@
       "team": "LEE"
     },
     "347": {
-      "cost": 54,
+      "cost": 53,
       "name": "Nmecha",
       "team": "LEE"
     },
@@ -1462,7 +1462,7 @@
       "team": "LIV"
     },
     "362": {
-      "cost": 50,
+      "cost": 51,
       "name": "Jacquet",
       "team": "LIV"
     },
@@ -1527,7 +1527,7 @@
       "team": "LIV"
     },
     "374": {
-      "cost": 49,
+      "cost": 48,
       "name": "Endo",
       "team": "LIV"
     },
@@ -2127,7 +2127,7 @@
       "team": "MCI"
     },
     "482": {
-      "cost": 58,
+      "cost": 57,
       "name": "Hudson-Odoi",
       "team": "NFO"
     },
@@ -2757,7 +2757,7 @@
       "team": "CRY"
     },
     "596": {
-      "cost": 45,
+      "cost": 44,
       "name": "Ruggeri",
       "team": "AVL"
     },
@@ -3342,5 +3342,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-20T01:00:00+00:00"
+  "taken_at": "2026-10-21T01:00:00+00:00"
 }
