@@ -1372,7 +1372,7 @@
       "team": "LEE"
     },
     "346": {
-      "cost": 60,
+      "cost": 61,
       "name": "Calvert-Lewin",
       "team": "LEE"
     },
@@ -2617,7 +2617,7 @@
       "team": "BOU"
     },
     "570": {
-      "cost": 54,
+      "cost": 53,
       "name": "Palacios",
       "team": "FUL"
     },
@@ -3342,5 +3342,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-21T01:00:00+00:00"
+  "taken_at": "2026-10-22T01:00:00+00:00"
 }
