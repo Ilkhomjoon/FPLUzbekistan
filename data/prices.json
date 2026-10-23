@@ -307,7 +307,7 @@
       "team": "CRY"
     },
     "154": {
-      "cost": 97,
+      "cost": 98,
       "name": "Palmer",
       "team": "CHE"
     },
@@ -1327,7 +1327,7 @@
       "team": "LEE"
     },
     "338": {
-      "cost": 54,
+      "cost": 53,
       "name": "Ampadu",
       "team": "LEE"
     },
@@ -1772,7 +1772,7 @@
       "team": "MUN"
     },
     "418": {
-      "cost": 48,
+      "cost": 47,
       "name": "Maguire",
       "team": "MUN"
     },
@@ -1822,7 +1822,7 @@
       "team": "MUN"
     },
     "427": {
-      "cost": 78,
+      "cost": 79,
       "name": "Mbeumo",
       "team": "MUN"
     },
@@ -3342,5 +3342,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-22T01:00:00+00:00"
+  "taken_at": "2026-10-23T01:00:00+00:00"
 }
