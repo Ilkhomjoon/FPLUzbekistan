@@ -172,7 +172,7 @@
       "team": "BHA"
     },
     "13": {
-      "cost": 73,
+      "cost": 74,
       "name": "Rice",
       "team": "ARS"
     },
@@ -372,7 +372,7 @@
       "team": "CHE"
     },
     "166": {
-      "cost": 66,
+      "cost": 67,
       "name": "N.Jackson",
       "team": "AVL"
     },
@@ -822,7 +822,7 @@
       "team": "EVE"
     },
     "247": {
-      "cost": 54,
+      "cost": 53,
       "name": "Hackney",
       "team": "EVE"
     },
@@ -1322,7 +1322,7 @@
       "team": "LEE"
     },
     "337": {
-      "cost": 53,
+      "cost": 52,
       "name": "Aaronson",
       "team": "LEE"
     },
@@ -1492,7 +1492,7 @@
       "team": "LIV"
     },
     "368": {
-      "cost": 68,
+      "cost": 67,
       "name": "Szoboszlai",
       "team": "LIV"
     },
@@ -2157,7 +2157,7 @@
       "team": "NFO"
     },
     "488": {
-      "cost": 48,
+      "cost": 47,
       "name": "I.Sangaré",
       "team": "NFO"
     },
@@ -2417,7 +2417,7 @@
       "team": "SUN"
     },
     "534": {
-      "cost": 43,
+      "cost": 42,
       "name": "Hume",
       "team": "SUN"
     },
@@ -2607,7 +2607,7 @@
       "team": "CHE"
     },
     "569": {
-      "cost": 61,
+      "cost": 60,
       "name": "Gonzalo",
       "team": "FUL"
     },
@@ -3161,6 +3161,11 @@
       "name": "Tutierov",
       "team": "SUN"
     },
+    "669": {
+      "cost": 40,
+      "name": "Sharman-Lowe",
+      "team": "CHE"
+    },
     "67": {
       "cost": 63,
       "name": "Rayan",
@@ -3342,5 +3347,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-24T01:00:00+00:00"
+  "taken_at": "2026-10-25T01:00:00+00:00"
 }
