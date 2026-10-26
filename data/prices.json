@@ -832,7 +832,7 @@
       "team": "EVE"
     },
     "249": {
-      "cost": 57,
+      "cost": 56,
       "name": "Barry",
       "team": "EVE"
     },
@@ -912,7 +912,7 @@
       "team": "FUL"
     },
     "263": {
-      "cost": 53,
+      "cost": 52,
       "name": "Kevin",
       "team": "FUL"
     },
@@ -952,7 +952,7 @@
       "team": "ARS"
     },
     "270": {
-      "cost": 44,
+      "cost": 43,
       "name": "Reed",
       "team": "FUL"
     },
@@ -1172,7 +1172,7 @@
       "team": "IPS"
     },
     "31": {
-      "cost": 46,
+      "cost": 47,
       "name": "Konsa",
       "team": "ARS"
     },
@@ -1307,7 +1307,7 @@
       "team": "LEE"
     },
     "334": {
-      "cost": 50,
+      "cost": 51,
       "name": "Muharemović",
       "team": "LEE"
     },
@@ -1777,7 +1777,7 @@
       "team": "MUN"
     },
     "419": {
-      "cost": 49,
+      "cost": 48,
       "name": "Martinez",
       "team": "MUN"
     },
@@ -1952,7 +1952,7 @@
       "team": "AVL"
     },
     "450": {
-      "cost": 49,
+      "cost": 48,
       "name": "Livramento",
       "team": "NEW"
     },
@@ -2857,7 +2857,7 @@
       "team": "SUN"
     },
     "613": {
-      "cost": 45,
+      "cost": 44,
       "name": "Ahoka",
       "team": "SUN"
     },
@@ -2932,7 +2932,7 @@
       "team": "FUL"
     },
     "627": {
-      "cost": 80,
+      "cost": 81,
       "name": "Barcola",
       "team": "LIV"
     },
@@ -3347,5 +3347,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-25T01:00:00+00:00"
+  "taken_at": "2026-10-26T01:00:00+00:00"
 }
