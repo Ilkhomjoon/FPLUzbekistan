@@ -282,7 +282,7 @@
       "team": "CHE"
     },
     "15": {
-      "cost": 68,
+      "cost": 67,
       "name": "Ødegaard",
       "team": "ARS"
     },
@@ -1287,7 +1287,7 @@
       "team": "AVL"
     },
     "330": {
-      "cost": 47,
+      "cost": 48,
       "name": "Bogle",
       "team": "LEE"
     },
@@ -1597,7 +1597,7 @@
       "team": "MCI"
     },
     "387": {
-      "cost": 63,
+      "cost": 62,
       "name": "O'Reilly",
       "team": "MCI"
     },
@@ -1622,7 +1622,7 @@
       "team": "MCI"
     },
     "391": {
-      "cost": 58,
+      "cost": 57,
       "name": "Gvardiol",
       "team": "MCI"
     },
@@ -1742,7 +1742,7 @@
       "team": "MCI"
     },
     "412": {
-      "cost": 49,
+      "cost": 48,
       "name": "Lammens",
       "team": "MUN"
     },
@@ -2027,7 +2027,7 @@
       "team": "NEW"
     },
     "464": {
-      "cost": 61,
+      "cost": 60,
       "name": "Wissa",
       "team": "NEW"
     },
@@ -2457,7 +2457,7 @@
       "team": "SUN"
     },
     "541": {
-      "cost": 45,
+      "cost": 44,
       "name": "Meunier",
       "team": "SUN"
     },
@@ -3082,7 +3082,7 @@
       "team": "MCI"
     },
     "654": {
-      "cost": 45,
+      "cost": 44,
       "name": "Graham",
       "team": "EVE"
     },
@@ -3172,12 +3172,12 @@
       "team": "BOU"
     },
     "68": {
-      "cost": 63,
+      "cost": 64,
       "name": "Tavernier",
       "team": "BOU"
     },
     "69": {
-      "cost": 60,
+      "cost": 59,
       "name": "Scott",
       "team": "BOU"
     },
@@ -3347,5 +3347,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-26T01:00:00+00:00"
+  "taken_at": "2026-10-27T01:00:00+00:00"
 }
