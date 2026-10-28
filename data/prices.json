@@ -367,12 +367,12 @@
       "team": "CHE"
     },
     "165": {
-      "cost": 79,
+      "cost": 78,
       "name": "João Pedro",
       "team": "CHE"
     },
     "166": {
-      "cost": 67,
+      "cost": 68,
       "name": "N.Jackson",
       "team": "AVL"
     },
@@ -1552,7 +1552,7 @@
       "team": "LIV"
     },
     "379": {
-      "cost": 90,
+      "cost": 91,
       "name": "Isak",
       "team": "LIV"
     },
@@ -1737,7 +1737,7 @@
       "team": "MCI"
     },
     "411": {
-      "cost": 157,
+      "cost": 158,
       "name": "Haaland",
       "team": "MCI"
     },
@@ -1827,12 +1827,12 @@
       "team": "MUN"
     },
     "428": {
-      "cost": 79,
+      "cost": 78,
       "name": "Cunha",
       "team": "MUN"
     },
     "429": {
-      "cost": 69,
+      "cost": 68,
       "name": "Rashford",
       "team": "MUN"
     },
@@ -2252,7 +2252,7 @@
       "team": "TOT"
     },
     "504": {
-      "cost": 51,
+      "cost": 52,
       "name": "Vuskovic",
       "team": "BHA"
     },
@@ -2677,7 +2677,7 @@
       "team": "FUL"
     },
     "581": {
-      "cost": 54,
+      "cost": 53,
       "name": "Diomande",
       "team": "NFO"
     },
@@ -3347,5 +3347,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-27T01:00:00+00:00"
+  "taken_at": "2026-10-28T01:00:00+00:00"
 }
