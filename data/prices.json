@@ -2392,7 +2392,7 @@
       "team": "SUN"
     },
     "53": {
-      "cost": 60,
+      "cost": 61,
       "name": "Manzambi",
       "team": "AVL"
     },
@@ -2587,7 +2587,7 @@
       "team": "IPS"
     },
     "565": {
-      "cost": 55,
+      "cost": 54,
       "name": "M.Sangaré",
       "team": "BRE"
     },
@@ -3347,5 +3347,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-28T01:00:00+00:00"
+  "taken_at": "2026-10-29T01:00:00+00:00"
 }
