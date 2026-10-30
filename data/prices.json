@@ -892,7 +892,7 @@
       "team": "IPS"
     },
     "26": {
-      "cost": 75,
+      "cost": 74,
       "name": "Havertz",
       "team": "ARS"
     },
@@ -2542,7 +2542,7 @@
       "team": "HUL"
     },
     "557": {
-      "cost": 62,
+      "cost": 61,
       "name": "Tzolis",
       "team": "ARS"
     },
@@ -2652,7 +2652,7 @@
       "team": "HUL"
     },
     "577": {
-      "cost": 44,
+      "cost": 43,
       "name": "Tomiyasu",
       "team": "CRY"
     },
@@ -3232,12 +3232,12 @@
       "team": "BOU"
     },
     "79": {
-      "cost": 62,
+      "cost": 63,
       "name": "Evanilson",
       "team": "BOU"
     },
     "8": {
-      "cost": 60,
+      "cost": 59,
       "name": "Calafiori",
       "team": "ARS"
     },
@@ -3347,5 +3347,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-10-29T01:00:00+00:00"
+  "taken_at": "2026-10-30T01:00:00+00:00"
 }
