@@ -372,6 +372,7 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `LIVE_ACTIVE_AFTER` | `12` | Oxirgi o'yindan keyin yana necha soat workflow ishga tushadi |
 | `LIVE_PREKICK_POLL` | `60` | O'yingacha shuncha soniya qolganda uyqudan turadi |
 | `STATS_WAKE_LEAD` | `300` (workflow'da `200`) | `--wait` rejimida shundan kam qolsa kutib turadi |
+| `STATS_MAX_MINUTES` | `300` | Kutish rejimidagi jarayonning maksimal ish vaqti |
 | `ERROR_ALERT_AFTER` | `3` | Necha marta ketma-ket xatodan keyin ogohlantirsin |
 | `CRON_ALERT_MINUTES` | `20` (workflow'da `90`) | Cron kechikishi haqida ogohlantirish chegarasi |
 | `GW_REVIEW_UNTIL` | `22:00` | FPL tasdig'ini shu vaqtgacha kutadi |

@@ -138,6 +138,7 @@ STATS_HASHTAG = os.getenv("STATS_HASHTAG", "#GWStats")
 STATS_LEAD = _int("STATS_LEAD", 40)          # birinchi o'yingacha shuncha daqiqa qolganda boshlanadi
 STATS_MIN_LEAD = _int("STATS_MIN_LEAD", 3)   # bundan kam qolgan bo'lsa umuman chiqarmaymiz
 STATS_WAKE_LEAD = _int("STATS_WAKE_LEAD", 300)  # --wait rejimida: o'yingacha shuncha daqiqadan
+STATS_MAX_MINUTES = _int("STATS_MAX_MINUTES", 300)  # jarayon maksimal ish vaqti
                                              # kam qolgan bo'lsa jarayon chiqmaydi, kutib turadi
 STATS_WORKERS = _int("STATS_WORKERS", 6)     # parallel so'rovlar soni (FPL API'ni bo'g'ib qo'ymaslik uchun)
 STATS_MAX_ENTRIES = _int("STATS_MAX_ENTRIES", 20000)  # xavfsizlik chegarasi

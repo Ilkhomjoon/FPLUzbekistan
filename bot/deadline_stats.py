@@ -111,21 +111,51 @@ def first_kickoff(fixtures: list[dict]) -> datetime | None:
     return min(datetime.fromisoformat(t.replace("Z", "+00:00")) for t in times)
 
 
+def target_event(bootstrap: dict, state: dict, force: bool, wait: bool) -> dict | None:
+    """Qaysi tur uchun statistika chiqaramiz.
+
+    FPL `is_current` bayrog'ini faqat deadline o'tgach keyingi turga o'tkazadi.
+    Undan oldin bot joriy tur sifatida o'tgan turni ko'radi — uniki esa
+    allaqachon chiqarilgan, shuning uchun jim chiqib ketardi va kutish
+    mexanizmi umuman ishga tushmasdi.
+
+    23-oktyabrda (GW8, juma kuni) aynan shu bo'ldi: deadline 17:30 da, o'yin
+    19:00 da — oradagi 90 daqiqaga bitta ham cron tushmadi va post chiqmadi.
+
+    Shuning uchun joriy tur uchun post allaqachon chiqarilgan bo'lsa, keyingi
+    turga qaraymiz: deadline'i yaqin bo'lsa, o'sha vaqtgacha kutib turamiz.
+    """
+    events = bootstrap.get("events", [])
+    current = next((e for e in events if e.get("is_current")), None)
+    nxt = next((e for e in events if e.get("is_next")), None)
+    # Taqqoslash "teng emas" emas, "kichik" bo'yicha: keyingi tur uchun post
+    # chiqib bo'lgach, `is_current` hali eski turda turadi — tenglikka
+    # qarasak, o'tgan turning statistikasi ikkinchi marta chiqib ketardi.
+    posted = state.get("event") or 0
+    if current and (force or posted < current.get("id", 0)):
+        return current
+    if not wait or force:
+        return None
+    if nxt and posted < nxt.get("id", 0):
+        return nxt
+    return None
+
+
 def run(force: bool = False, wait: bool = False) -> int:
     config.require_telegram()
 
     bootstrap = fpl_api.get_bootstrap()
-    event = next((e for e in bootstrap["events"] if e.get("is_current")), None)
+    state = storage.load(config.STATS_STATE_FILE, {}) or {}
+    event = target_event(bootstrap, state, force, wait)
     if not event:
-        log.info("Joriy tur yo'q — chiqamiz.")
+        current = next((e for e in bootstrap.get("events", []) if e.get("is_current")), None)
+        if current:
+            log.info("GW%d uchun statistika allaqachon chiqarilgan.", current.get("id"))
+        else:
+            log.info("Joriy tur yo'q — chiqamiz.")
         return 0
 
     gw = event["id"]
-    state = storage.load(config.STATS_STATE_FILE, {}) or {}
-    if state.get("event") == gw and not force:
-        log.info("GW%d uchun statistika allaqachon chiqarilgan.", gw)
-        return 0
-
     now = datetime.now(timezone.utc)
     deadline = datetime.fromisoformat(event["deadline_time"].replace("Z", "+00:00"))
     fixtures = fpl_api.get_fixtures(event=gw)
@@ -136,13 +166,22 @@ def run(force: bool = False, wait: bool = False) -> int:
 
     minutes_left = (kickoff - now).total_seconds() / 60
 
-    # --wait: cron kechikkan bo'lsa ham post o'z vaqtida chiqsin uchun jarayon
-    # chiqib ketmaydi, birinchi o'yingacha STATS_LEAD daqiqa qolgunicha kutadi.
-    if wait and not force and config.STATS_LEAD < minutes_left <= config.STATS_WAKE_LEAD:
-        target = kickoff - timedelta(minutes=config.STATS_LEAD)
-        log.info("Birinchi o'yingacha %.0f daqiqa — %s gacha kutamiz.",
-                 minutes_left, target.isoformat())
-        waiter.sleep_until(target, label="Deadline statistikasi")
+    # --wait: cron kechikkan yoki erta kelgan bo'lsa ham post o'z vaqtida
+    # chiqsin uchun jarayon chiqib ketmaydi, kerakli daqiqagacha kutib turadi.
+    # Maqsad vaqti — deadline bilan "o'yingacha STATS_LEAD daqiqa" dan
+    # KECHROG'I: tarkiblar deadline'da qotadi, shuning uchun undan oldin
+    # chiqarib bo'lmaydi.
+    target = max(deadline, kickoff - timedelta(minutes=config.STATS_LEAD))
+    if wait and not force and now < target:
+        ahead = (target - now).total_seconds() / 60
+        if ahead > config.STATS_WAKE_LEAD:
+            log.info("GW%d uchun post vaqtigacha %.0f daqiqa — hali erta (uyg'onish "
+                     "chegarasi %d).", gw, ahead, config.STATS_WAKE_LEAD)
+            return 0
+        log.info("GW%d: post vaqtigacha %.0f daqiqa — %s gacha kutamiz.",
+                 gw, ahead, target.isoformat())
+        waiter.sleep_until(target, label="Deadline statistikasi",
+                           budget_end=waiter.budget(config.STATS_MAX_MINUTES))
         now = datetime.now(timezone.utc)
         minutes_left = (kickoff - now).total_seconds() / 60
         bootstrap = fpl_api.get_bootstrap()

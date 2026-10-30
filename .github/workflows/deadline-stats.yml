@@ -54,6 +54,8 @@ jobs:
           STATS_LEAD: "40"
           # shuncha daqiqadan kam qolgan bo'lsa jarayon kutib turadi
           STATS_WAKE_LEAD: "200"
+          # job timeout 240 daqiqa — jarayon undan oldin o'zi chiqsin
+          STATS_MAX_MINUTES: "200"
           STATS_WORKERS: "6"
           # Har bir ligada nechta sardor ko'rsatilsin
           STATS_TOP_N: "5"
