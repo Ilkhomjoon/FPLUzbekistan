@@ -1032,7 +1032,7 @@
       "team": "HUL"
     },
     "285": {
-      "cost": 40,
+      "cost": 39,
       "name": "McNair",
       "team": "HUL"
     },
@@ -1457,7 +1457,7 @@
       "team": "LIV"
     },
     "361": {
-      "cost": 40,
+      "cost": 39,
       "name": "Lucky",
       "team": "LIV"
     },
@@ -3187,7 +3187,7 @@
       "team": "BOU"
     },
     "7": {
-      "cost": 54,
+      "cost": 53,
       "name": "Lewis-Skelly",
       "team": "ARS"
     },
@@ -3352,5 +3352,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-01T01:00:00+00:00"
+  "taken_at": "2026-11-02T01:00:00+00:00"
 }
