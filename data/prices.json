@@ -62,7 +62,7 @@
       "team": "BHA"
     },
     "11": {
-      "cost": 52,
+      "cost": 51,
       "name": "Mosquera",
       "team": "ARS"
     },
@@ -2602,12 +2602,12 @@
       "team": "NEW"
     },
     "568": {
-      "cost": 54,
+      "cost": 53,
       "name": "Barco",
       "team": "CHE"
     },
     "569": {
-      "cost": 60,
+      "cost": 59,
       "name": "Gonzalo",
       "team": "FUL"
     },
@@ -3352,5 +3352,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-02T01:00:00+00:00"
+  "taken_at": "2026-11-03T01:00:00+00:00"
 }
