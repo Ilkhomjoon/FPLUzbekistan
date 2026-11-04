@@ -444,6 +444,52 @@ def _league_block(review, gw: int) -> str:
     return "\n".join(lines)
 
 
+def _news_line(change, teams: dict) -> list[str]:
+    """Bitta futbolchi uchun ikki qator: sarlavha va FPL izohi."""
+    from .team_news import STATUS_LABELS
+
+    emoji, label = STATUS_LABELS.get(change.status, ("⚪️", change.status))
+    short = teams.get(change.team, {}).get("short_name", "")
+    who = f"<b>{esc(change.name)}</b>" + (f" ({esc(short)})" if short else "")
+
+    if change.recovered:
+        _, was = STATUS_LABELS.get(change.was_status, ("", change.was_status))
+        head = f"{emoji} {who} · {change.owned:.1f}% — tayyor (ilgari: {esc(was)})"
+    else:
+        head = f"{emoji} {who} · {change.owned:.1f}% — {esc(label)}"
+        if change.chance is not None and change.status != "a":
+            head += f", o'ynash ehtimoli {change.chance}%"
+
+    lines = [head]
+    if change.news and not change.recovered:
+        from .news_uz import translate
+
+        note = translate(change.news)
+        if note:
+            lines.append(f"   <i>{esc(note)}</i>")
+    return lines
+
+
+def team_news_post(changes: list, teams: dict, deadline_in: int | None = None) -> str:
+    """Jarohat/holat o'zgarishlari posti.
+
+    `deadline_in` — deadline'gacha qolgan daqiqa (faqat yaqin bo'lsa beriladi).
+    """
+    head = ["🚨 <b>Jamoa yangiliklari</b>"]
+    if deadline_in is not None:
+        hours, minutes = divmod(max(0, deadline_in), 60)
+        left = f"{hours} soat {minutes} daqiqa" if hours else f"{minutes} daqiqa"
+        head.append(f"⏳ Deadline'gacha {left}")
+    else:
+        head.append(f"🕘 {now_local().strftime('%H:%M')} holatiga ko'ra")
+
+    blocks = ["\n".join(head)]
+    for change in changes:
+        blocks.append("\n".join(_news_line(change, teams)))
+    blocks.append(f"{config.NEWS_HASHTAG}\n\n{config.CHANNEL_TAG}")
+    return "\n\n".join(blocks)
+
+
 def differentials_post(gw: int, next_gw: int, picks, teams: dict) -> str:
     """`bot.differentials.Picks` -> tur oralig'idagi differentiallar posti."""
     blocks = [f"💎 <b>GW{next_gw} — differentiallar</b>\n"

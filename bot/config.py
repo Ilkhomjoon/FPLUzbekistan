@@ -132,6 +132,20 @@ PRICE_WATCH_INTERVAL = _int("PRICE_WATCH_INTERVAL", 3600)   # yangilanishlar ora
 # Birinchi postdan keyin ro'yxatga qo'shilganlar shu belgi bilan ajratiladi
 PRICE_WATCH_NEW_MARK = os.getenv("PRICE_WATCH_NEW_MARK", "🆕")
 
+# --- Jamoa yangiliklari (jarohat, diskvalifikatsiya, tuzalish) ---
+NEWS_STATE_FILE = DATA_DIR / "team_news.json"
+NEWS_HASHTAG = os.getenv("NEWS_HASHTAG", "#TeamNews")
+NEWS_MIN_OWNED = _float("NEWS_MIN_OWNED", 3.0)   # egaligi shundan past bo'lsa kuzatilmaydi
+NEWS_MAX_ROWS = _int("NEWS_MAX_ROWS", 12)        # bitta postdagi maksimal qator
+# Oddiy kunlarda shu oynada bitta tekshiruv. Toshkent 14:00 = Londonda 09:00,
+# ya'ni FPL xodimlari ish boshlaydi; 23:00 da esa u yerda kech bo'ladi.
+NEWS_WINDOW = os.getenv("NEWS_WINDOW", "14:00-23:00")
+# Deadline'gacha shuncha daqiqa qolganda jarayon yashab qoladi va tez-tez
+# tekshiradi — o'sha payt har daqiqa qimmat.
+NEWS_RUSH_LEAD = _int("NEWS_RUSH_LEAD", 360)
+NEWS_INTERVAL = _int("NEWS_INTERVAL", 600)       # intensiv rejimdagi tekshiruv oralig'i
+NEWS_MAX_MINUTES = _int("NEWS_MAX_MINUTES", 300)  # jarayon maksimal ish vaqti
+
 # --- Deadline statistikasi (sardorlar va chiplar) ---
 STATS_STATE_FILE = DATA_DIR / "deadline_stats.json"
 STATS_HASHTAG = os.getenv("STATS_HASHTAG", "#GWStats")

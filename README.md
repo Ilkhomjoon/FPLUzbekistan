@@ -1,9 +1,10 @@
 # FPLUzbekistan boti
 
-[@FPLUzbekistan](https://t.me/FPLUzbekistan) kanali uchun ikkita avtomatlashtirilgan vazifa:
+[@FPLUzbekistan](https://t.me/FPLUzbekistan) kanali uchun avtomatlashtirilgan vazifalar:
 
 1. **Narx o'zgarishlari** — har kuni ertalab futbolchilarning narxi tushgan/ko'tarilganini aniqlab, tayyor shablon bo'yicha post qiladi. O'zgarish bo'lmasa **hech narsa post qilinmaydi**, faqat logga yoziladi.
-2. **Jonli bonus ochkolar** — o'yin kuni birinchi o'yin boshlanishi bilan kanalga bitta xabar yuboradi va uni **har daqiqada** yangilab boradi (BPS asosidagi bonus, hisob, 🔴 → 🟢).
+2. **Jamoa yangiliklari** — jarohat, diskvalifikatsiya va tuzalishlarni kuzatib, o'zgarganda darhol xabar beradi. FPL ning inglizcha izohi o'zbekchaga o'giriladi (`bot/news_uz.py` lug'ati). Deadline yaqin bo'lsa har 10 daqiqada tekshiradi.
+3. **Jonli bonus ochkolar** — o'yin kuni birinchi o'yin boshlanishi bilan kanalga bitta xabar yuboradi va uni **har daqiqada** yangilab boradi (BPS asosidagi bonus, hisob, 🔴 → 🟢).
 
 Hammasi **GitHub Actions**da, mutlaqo tekin ishlaydi. Server sotib olish shart emas.
 
@@ -373,6 +374,11 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `LIVE_PREKICK_POLL` | `60` | O'yingacha shuncha soniya qolganda uyqudan turadi |
 | `STATS_WAKE_LEAD` | `300` (workflow'da `200`) | `--wait` rejimida shundan kam qolsa kutib turadi |
 | `STATS_MAX_MINUTES` | `300` | Kutish rejimidagi jarayonning maksimal ish vaqti |
+| `NEWS_MIN_OWNED` | `3` | Egaligi shundan past futbolchilar kuzatilmaydi, % |
+| `NEWS_WINDOW` | `14:00-23:00` | Oddiy kunlardagi kuzatuv oynasi |
+| `NEWS_RUSH_LEAD` | `360` | Deadline'gacha shuncha daqiqa qolganda tez-tez tekshiriladi |
+| `NEWS_INTERVAL` | `600` | Intensiv rejimdagi tekshiruv oralig'i (soniya) |
+| `NEWS_MAX_ROWS` | `12` | Bitta postdagi maksimal qator |
 | `ERROR_ALERT_AFTER` | `3` | Necha marta ketma-ket xatodan keyin ogohlantirsin |
 | `CRON_ALERT_MINUTES` | `20` (workflow'da `90`) | Cron kechikishi haqida ogohlantirish chegarasi |
 | `GW_REVIEW_UNTIL` | `22:00` | FPL tasdig'ini shu vaqtgacha kutadi |

@@ -55,6 +55,7 @@ Har bir yozuv uchun bir xil sozlama:
 | 5 | `live-bonus.yml` | **:10** — 13,14,…,23 va 00,01,02 soatlarda | `{"ref":"main","inputs":{"scheduled":"true"}}` |
 | 6 | `live-bonus.yml` | **:10** — 06, 08, 10 soatlarda | `{"ref":"main","inputs":{"scheduled":"true","final":"true"}}` |
 | 7 | `deadline-stats.yml` | **:20** — 12, 15, 18, 21, 00 soatlarda | `{"ref":"main","inputs":{"scheduled":"true"}}` |
+| 8 | `team-news.yml` | **har soat** (:35) | `{"ref":"main","inputs":{"scheduled":"true"}}` |
 
 5–7-yozuvlarda cron-job.org jadval oynasida kerakli **soatlarni belgilab**,
 daqiqa sifatida bittasini (`10` yoki `20`) tanlang.
@@ -70,6 +71,7 @@ jarayonning o'zi kutadi**:
 - `gw-review` 12:45 da uyg'onadi → FPL lockdown'ini kuzatadi (~13:05)
 - `live-bonus` har soat tekshiradi; o'yin yo'q bo'lsa 20 soniyada chiqadi
 - `deadline-stats` deadline yaqinlashganini o'zi hisoblaydi
+- `team-news` har soat uyg'onadi: oyna tashqarisida darhol chiqadi, deadline yaqin bo'lsa jarayon ichida har 10 daqiqada tekshiradi
 
 ## 3. Tekshirish
 

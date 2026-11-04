@@ -1,0 +1,69 @@
+name: Jamoa yangiliklari
+
+on:
+  # Tashqi cron (cron-job.org) har soat uyg'otadi — nima qilishni kodning
+  # o'zi hal qiladi: deadline yaqin bo'lsa tez-tez tekshiradi, oddiy kunlarda
+  # NEWS_WINDOW oynasida bir marta, oyna tashqarisida esa darhol chiqadi.
+  # Shu sabab cron vaqtini o'zgartirish post mantig'ini buzmaydi.
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Telegramga yubormasdan sinash"
+        type: boolean
+        default: false
+      force:
+        description: "Oynani e'tiborsiz qoldirib, hoziroq tekshirish"
+        type: boolean
+        default: false
+      once:
+        description: "Faqat bir marta tekshirsin (kutmasin)"
+        type: boolean
+        default: false
+      scheduled:
+        description: "Tashqi cron chaqirdi — jadval bo'yicha ishlasin"
+        type: boolean
+        default: false
+
+concurrency:
+  group: fpl-team-news
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  news:
+    runs-on: ubuntu-latest
+    # Deadline oldidan jarayon soatlab yashaydi
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Yangiliklarni tekshirish
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          NEWS_MIN_OWNED: "3"
+          NEWS_WINDOW: "14:00-23:00"
+          NEWS_RUSH_LEAD: "360"
+          NEWS_INTERVAL: "600"
+          # job timeout 340 daqiqa — jarayon undan oldin o'zi chiqsin
+          NEWS_MAX_MINUTES: "300"
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          if [ "${{ inputs.once }}" = "true" ]; then ARGS="$ARGS --once"; fi
+          python -m bot.team_news $ARGS
+
+      - name: Holatni saqlash (commit)
+        if: always()
+        run: bash scripts/commit_state.sh "update team news state"
