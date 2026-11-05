@@ -121,6 +121,72 @@ def edit_message(message_id: int, text: str, chat_id: str | None = None) -> dict
     )
 
 
+PHOTO_CAPTION_LIMIT = 1024   # Telegram cheklovi: rasm izohi matndan qisqa
+
+
+def _upload(method: str, filename: str, blob: bytes, field: str = "photo",
+            **payload) -> dict:
+    """Fayl bilan birga so'rov (multipart). `_call` faqat JSON yuboradi.
+
+    Baytlar oldindan o'qib olinadi — qayta urinishda faylni yana ochish shart
+    bo'lmasligi va yarim o'qilgan oqim yuborilmasligi uchun.
+    """
+    if not config.BOT_TOKEN:
+        raise TelegramError("TELEGRAM_BOT_TOKEN o'rnatilmagan")
+    url = API.format(token=config.BOT_TOKEN, method=method)
+    data = {k: v for k, v in payload.items() if v is not None}
+    last_err: Exception | None = None
+    for attempt in range(4):
+        try:
+            r = session().post(url, data=data,
+                               files={field: (filename, blob, "image/png")},
+                               timeout=(10, 180))
+            result = r.json()
+        except Exception as exc:
+            last_err = exc
+            log.warning("%s tarmoq xatosi (%d-urinish): %s", method, attempt + 1, exc)
+            time.sleep(2 * (attempt + 1))
+            continue
+        if result.get("ok"):
+            return result["result"]
+        if r.status_code == 429:
+            wait = int(result.get("parameters", {}).get("retry_after", 5))
+            log.warning("Telegram 429, %s soniya kutamiz", wait)
+            time.sleep(wait + 1)
+            continue
+        raise TelegramError(f"{method} xatosi: {result.get('description', '')}")
+    raise TelegramNetworkError(f"{method} bajarilmadi: {last_err}")
+
+
+def send_photo(path, caption: str = "", chat_id: str | None = None,
+               silent: bool = False) -> dict:
+    """Kanalga rasm yuboradi. Izoh HTML bo'lishi mumkin, 1024 belgigacha."""
+    from pathlib import Path
+
+    path = Path(path)
+    chat_id = chat_id or config.CHANNEL_ID
+    caption = (caption or "")[:PHOTO_CAPTION_LIMIT]
+
+    if config.DRY_RUN:
+        print("\n" + "=" * 48)
+        print(f"[DRY-RUN] rasm -> {chat_id}: {path}")
+        print("=" * 48)
+        print(caption)
+        print("=" * 48 + "\n")
+        return {"message_id": 0, "dry_run": True}
+
+    return _upload(
+        "sendPhoto",
+        path.name,
+        path.read_bytes(),
+        field="photo",
+        chat_id=chat_id,
+        caption=caption,
+        parse_mode="HTML",
+        disable_notification=silent,
+    )
+
+
 POLL_QUESTION_LIMIT = 300   # Telegram cheklovi
 POLL_OPTION_LIMIT = 100
 POLL_MAX_OPTIONS = 10

@@ -56,6 +56,7 @@ Har bir yozuv uchun bir xil sozlama:
 | 6 | `live-bonus.yml` | **:10** — 06, 08, 10 soatlarda | `{"ref":"main","inputs":{"scheduled":"true","final":"true"}}` |
 | 7 | `deadline-stats.yml` | **:20** — 12, 15, 18, 21, 00 soatlarda | `{"ref":"main","inputs":{"scheduled":"true"}}` |
 | 8 | `team-news.yml` | **har soat** (:35) | `{"ref":"main","inputs":{"scheduled":"true"}}` |
+| 9 | `compare.yml` | har kuni **17:40** | `{"ref":"main","inputs":{"scheduled":"true"}}` |
 
 5–7-yozuvlarda cron-job.org jadval oynasida kerakli **soatlarni belgilab**,
 daqiqa sifatida bittasini (`10` yoki `20`) tanlang.
@@ -72,6 +73,7 @@ jarayonning o'zi kutadi**:
 - `live-bonus` har soat tekshiradi; o'yin yo'q bo'lsa 20 soniyada chiqadi
 - `deadline-stats` deadline yaqinlashganini o'zi hisoblaydi
 - `team-news` har soat uyg'onadi: oyna tashqarisida darhol chiqadi, deadline yaqin bo'lsa jarayon ichida har 10 daqiqada tekshiradi
+- `compare` har kuni 17:40 da uyg'onadi, lekin chart haftada bir marta chiqadi: jarayonning o'zi deadline'ga qarab post daqiqasini hisoblaydi (deadline'dan kamida 3 soat oldingi **oxirgi 20:30**). Post kuni bo'lmasa jimgina chiqib ketadi — ogohlantirish yubormaydi
 
 ## 3. Tekshirish
 

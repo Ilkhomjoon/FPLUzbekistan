@@ -209,6 +209,39 @@ DIFF_POLL_MULTI = _bool("DIFF_POLL_MULTI", True)
 DIFF_WORKERS = _int("DIFF_WORKERS", 6)                # parallel so'rovlar
 DIFF_MAX_MINUTES = _int("DIFF_MAX_MINUTES", 300)      # jarayon maksimal ish vaqti
 
+# Top-1000 egalik tarixi. 👑 bo'limi uchun tarkiblar allaqachon o'qilgan —
+# ularni tashlab yubormasdan yozib qo'yamiz. Shu tarix bo'lgani uchun keyinchalik
+# "falonchi top-1000 da necha hafta ichida qanchaga ko'tarildi" degan chart
+# chiqarish mumkin bo'ladi. Tarixsiz esa o'tmishni qayta tiklash imkoni yo'q:
+# FPL eski turlarning tarkiblarini qaytaradi, lekin 1000 ta so'rov har tur uchun.
+ELITE_HISTORY = _bool("ELITE_HISTORY", True)
+ELITE_HISTORY_FILE = DATA_DIR / "elite_history.json"
+ELITE_HISTORY_MIN = _float("ELITE_HISTORY_MIN", 3.0)   # shundan past egalik yozilmaydi
+ELITE_HISTORY_KEEP = _int("ELITE_HISTORY_KEEP", 15)    # oxirgi nechta tur saqlansin
+
+
+# --- Solishtirish charti (ikki futbolchi, rasm) ---
+COMPARE_STATE_FILE = DATA_DIR / "compare.json"
+COMPARE_HASHTAG = os.getenv("COMPARE_HASHTAG", "#Solishtirish")
+CHART_DIR = Path(os.getenv("CHART_DIR", DATA_DIR / "charts"))
+CHART_LOGO = Path(os.getenv("CHART_LOGO", ROOT / "assets" / "logo.png"))
+# Post deadline'dan kamida COMPARE_LEAD daqiqa oldingi OXIRGI COMPARE_POST_AT da
+# chiqadi: odamlar tarkibni kechqurun o'ylaydi, lekin deadline'ga 3 soat qolganda
+# maslahat bergan ma'noli emas.
+COMPARE_POST_AT = os.getenv("COMPARE_POST_AT", "20:30")
+COMPARE_LEAD = _int("COMPARE_LEAD", 180)          # deadline'gacha eng kam zaxira, daqiqa
+COMPARE_MIN_LEAD = _int("COMPARE_MIN_LEAD", 45)   # bundan kam qolsa umuman chiqmaydi
+COMPARE_GRACE = _int("COMPARE_GRACE", 150)        # post vaqtidan shuncha kechiksa ham mayli
+# Cron har kuni uyg'onadi, post esa haftada bir marta chiqadi — "vaqti kelmagan"
+# holat odatiy. Ogohlantirish faqat post vaqti shu oynada bo'lsa yuboriladi.
+COMPARE_ALERT_WITHIN = _int("COMPARE_ALERT_WITHIN", 720)
+COMPARE_MAX_MINUTES = _int("COMPARE_MAX_MINUTES", 300)  # jarayon maksimal ish vaqti
+COMPARE_MIN_GW = _int("COMPARE_MIN_GW", 3)        # mavsum boshida /90 raqamlari shovqinli
+COMPARE_TREND_GWS = _int("COMPARE_TREND_GWS", 6)  # chizikdagi turlar soni
+COMPARE_MIN_TRANSFERS = _int("COMPARE_MIN_TRANSFERS", 20000)  # juftlik uchun eng kam transfer
+COMPARE_MIN_MINUTES = _int("COMPARE_MIN_MINUTES", 270)  # shkala: shuncha daqiqa o'ynaganlar
+COMPARE_PIN = _bool("COMPARE_PIN", False)         # rasm kanal tepasiga qadalsinmi
+
 
 def _leagues() -> list[tuple[int, str]]:
     """STATS_LEAGUES="137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan" ko'rinishida."""

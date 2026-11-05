@@ -286,7 +286,77 @@ def elite_differentials(players: list[Diff], gw: int) -> tuple[list[Diff], int]:
     if not scanned:
         log.warning("Top menejerlar tarkiblari o'qilmadi.")
         return [], 0
+
+    if config.ELITE_HISTORY:
+        try:
+            full_counts, full_scanned = _extend_scan(entries, gw, counts, scanned, done)
+            saved = record_elite_history(players, gw, full_counts, full_scanned)
+            log.info("Egalik tarixi: %d ta jamoa bo'yicha %d ta futbolchi yozildi",
+                     full_scanned, saved)
+        except Exception as exc:
+            # tarix yozilmasa ham post chiqishi kerak
+            log.warning("Egalik tarixi yozilmadi: %s", exc)
+
     return rows, done
+
+
+def _extend_scan(entries: list[int], gw: int, counts: Counter, scanned: int,
+                 done: int) -> tuple[Counter, int]:
+    """Tarix uchun qolgan jamoalarni ham skanerlaydi.
+
+    Postning mazmuniga tegmaydi: yangi Counter qaytariladi, `Diff.elite`
+    qiymatlari o'zgarmaydi. 👑 bo'limi top-100 da to'lib qolsa ham, tarix
+    har doim bir xil o'lchovda (top-1000) yozilsin — aks holda qatorlarni
+    turlar bo'yicha solishtirib bo'lmaydi.
+    """
+    target = elite_tiers()[-1]
+    rest = entries[done:target]
+    if not rest:
+        return counts, scanned
+    extra, extra_scanned = scan_picks(rest, gw)
+    return counts + extra, scanned + extra_scanned
+
+
+def record_elite_history(players: list[Diff], gw: int, counts: Counter,
+                         scanned: int) -> int:
+    """Top ro'yxatdagi egalikni tarix fayliga yozadi -> nechta qator yozilgani.
+
+    Nega kerak: FPL o'tmishdagi egalikni bermaydi. Shu turdagi tarkiblar
+    allaqachon o'qilgan, ularni tashlab yuborish — ma'lumotni yo'qotish.
+    Bir necha tur yig'ilgach "kim top-1000 da tez ko'tarilyapti" degan chart
+    chiqarish mumkin bo'ladi: oddiy egalikdan farqli, bu ko'rsatkich kuchli
+    menejerlar nimaga ishonayotganini ko'rsatadi.
+    """
+    if not scanned:
+        return 0
+
+    by_id = {d.element_id: d for d in players}
+    rows: dict[str, dict] = {}
+    for element_id, count in counts.items():
+        share = count / scanned * 100
+        if share < config.ELITE_HISTORY_MIN:
+            continue
+        d = by_id.get(element_id)
+        rows[str(element_id)] = {
+            "name": d.name if d else None,
+            "elite": round(share, 1),
+            "owned": round(d.owned, 1) if d else None,
+        }
+
+    history = storage.load(config.ELITE_HISTORY_FILE, {}) or {}
+    events: dict = history.get("events") or {}
+    events[str(gw)] = {
+        "scanned": scanned,
+        "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "players": rows,
+    }
+    # fayl cheksiz o'smasin — faqat oxirgi turlar qoladi
+    keep = sorted((int(k) for k in events if str(k).isdigit()),
+                  reverse=True)[: config.ELITE_HISTORY_KEEP]
+    history["events"] = {str(k): events[str(k)] for k in sorted(keep)}
+    history["updated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    storage.save(config.ELITE_HISTORY_FILE, history)
+    return len(rows)
 
 
 def local_ownership(rows: list[Diff], gw: int) -> tuple[str, int]:

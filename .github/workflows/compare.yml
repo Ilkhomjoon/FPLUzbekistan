@@ -1,0 +1,59 @@
+name: Solishtirish charti
+
+on:
+  # Jadval bo'yicha ishga tushirish tashqi cron (cron-job.org) orqali —
+  # `scheduled: true` kirituvchisi bilan. Sozlash: docs/tashqi-cron.md
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Telegramga yubormasdan sinash"
+        type: boolean
+        default: false
+      force:
+        description: "Vaqt tekshiruvini e'tiborsiz qoldirib, hoziroq chiqarish"
+        type: boolean
+        default: false
+      scheduled:
+        description: "Tashqi cron chaqirdi — jadval bo'yicha ishlasin"
+        type: boolean
+        default: false
+
+concurrency:
+  group: fpl-compare
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    # post vaqtigacha kutish (COMPARE_MAX_MINUTES) + rasm chizish
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Chartni tayyorlash va yuborish
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          COMPARE_POST_AT: "20:30"   # deadline'dan oldingi oxirgi shu soat
+          COMPARE_LEAD: "180"        # deadline'gacha eng kam zaxira, daqiqa
+          COMPARE_MIN_TRANSFERS: "20000"
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          python -m bot.compare $ARGS
+
+      - name: Holatni saqlash (commit)
+        if: always()
+        run: bash scripts/commit_state.sh "update compare state"

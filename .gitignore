@@ -5,3 +5,4 @@ __pycache__/
 venv/
 *.log
 data/*.tmp
+data/charts/

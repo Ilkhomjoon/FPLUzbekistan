@@ -5,6 +5,7 @@
 1. **Narx o'zgarishlari** — har kuni ertalab futbolchilarning narxi tushgan/ko'tarilganini aniqlab, tayyor shablon bo'yicha post qiladi. O'zgarish bo'lmasa **hech narsa post qilinmaydi**, faqat logga yoziladi.
 2. **Jamoa yangiliklari** — jarohat, diskvalifikatsiya va tuzalishlarni kuzatib, o'zgarganda darhol xabar beradi. FPL ning inglizcha izohi o'zbekchaga o'giriladi (`bot/news_uz.py` lug'ati). Deadline yaqin bo'lsa har 10 daqiqada tekshiradi.
 3. **Jonli bonus ochkolar** — o'yin kuni birinchi o'yin boshlanishi bilan kanalga bitta xabar yuboradi va uni **har daqiqada** yangilab boradi (BPS asosidagi bonus, hisob, 🔴 → 🟢).
+4. **Solishtirish charti** — deadline oldidan shu turda eng ko'p sotib olinayotgan ikki futbolchini radar chart qilib **rasm** sifatida chiqaradi. Juftlik bitta pozitsiya ichidan tanlanadi, ko'rsatkichlar pozitsiyaga moslashadi, rasm markazida kanal logosi turadi.
 
 Hammasi **GitHub Actions**da, mutlaqo tekin ishlaydi. Server sotib olish shart emas.
 
@@ -147,6 +148,7 @@ python -m unittest discover -s tests
 | `python -m bot.price_changes --preview` | kerak | Haqiqiy futbolchilar va narxlar bilan namuna |
 | `python -m bot.live_bonus --dry-run --once` | kerak | Bugungi o'yinlar bo'yicha jonli xabar (o'yin bo'lmasa "o'yin yo'q" deydi) |
 | `python -m bot.price_changes --dry-run` | kerak | Haqiqiy ish jarayoni: snapshot bilan solishtiradi |
+| `python -m bot.compare --dry-run --force` | kerak | Solishtirish chartini chizadi va `data/charts/` ga saqlaydi (Telegramga yubormaydi) |
 
 **Muhim nuance:** `--dry-run` ni birinchi marta ishga tushirganingizda hech qanday post chiqmaydi — bu xato emas. Solishtirish uchun kechagi narxlar kerak, birinchi ishga tushishda bot faqat boshlang'ich snapshot oladi. Shuning uchun **birinchi sinov uchun `--preview` ni ishlating** — u snapshot'ga bog'liq emas va postni darhol chizib beradi.
 
@@ -204,6 +206,7 @@ Har bir workflow shu tamoyilda ishlaydi:
 | Deadline statistikasi | o'yindan ≤200 daqiqa oldin | `T−40 daqiqa` gacha kutadi, so'ng ligalarni skanerlaydi | **T−40 daqiqa** |
 | Narx bashorati | 22:50 | `--post-at 23:00`, so'ng 03:30 gacha yangilaydi | **23:00** |
 | Differentiallar | 15:09 | `DIFF_POST_AT` gacha ushlab turadi | **20:00** |
+| Solishtirish charti | 17:40 | deadline'ni ko'rib, post daqiqasini o'zi hisoblaydi | **20:30** (deadline'dan ≥3 soat oldin) |
 | Tur sharhi | 11:30 | FPL tasdig'ini kuzatadi | **~13:05** (qishda ~14:05) |
 
 **O'yin holati orqaga ketmaydi.** FPL API CDN orqali beriladi va ba'zan eski nusxani qaytaradi — shu sabab tugagan o'yin "hali boshlanmagan" bo'lib qolgan, sarlavha esa `YAKUNLANDI` dan `KUTILMOQDA` ga qaytgan edi. Endi har yangilanishda `merge_fixtures()` eski va yangi nusxani solishtirib, **ilgarilaganini** oladi: boshlangan o'yin qaytib boshlanmagan bo'lmaydi, hisob va statistika kamaymaydi. Yakuniy yangilanish ham tugamagan ko'rinishdagi nusxa kelsa xabarni tegmay qo'yadi.
@@ -323,11 +326,18 @@ bot/
   price_changes.py  # 1-vazifa: kunlik narx o'zgarishlari
   live_bonus.py     # 2-vazifa: jonli bonus ochkolar
   differentials.py  # tur oralig'idagi differentiallar posti + so'rovnoma
+  charts.py         # matplotlib bilan PNG chizish (FPL haqida bilmaydi)
+  compare.py        # deadline oldidagi "A vs B" radar chart posti
+assets/
+  logo.png          # chartdagi suv belgisi va pastdagi logotip
 data/
   prices.json       # kechagi narxlar snapshot'i (Actions o'zi commit qiladi)
   live_message.json # bugungi jonli xabar id'si
   cron_log.csv      # cron kechikish tarixi
   differentials.json # qaysi tur uchun differentiallar chiqarilgani
+  elite_history.json # top-1000 egaligi, tur-tur (kelajakdagi chartlar uchun)
+  compare.json       # qaysi tur uchun chart chiqarilgani
+  charts/            # vaqtinchalik PNG fayllar (.gitignore da)
 .github/workflows/  # ikkita cron
 scripts/
   commit_state.sh   # holat fayllarini repoga commit qiladi
@@ -400,6 +410,17 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `DIFF_POLL` | `true` | Postdan keyin so'rovnoma yuborilsinmi |
 | `DIFF_POLL_MULTI` | `true` | So'rovnomada bir nechta variant tanlansa bo'ladimi |
 | `DIFF_POLL_OPTIONS` | `3` | So'rovnomadagi futbolchilar soni |
+| `ELITE_HISTORY` | `true` | Top-1000 egaligi tur-tur yozib borilsinmi |
+| `ELITE_HISTORY_MIN` | `3` | Shundan past egalik tarixga yozilmaydi, % |
+| `ELITE_HISTORY_KEEP` | `15` | Tarixda oxirgi nechta tur saqlansin |
+| `COMPARE_POST_AT` | `20:30` | Chart qaysi soatda chiqadi |
+| `COMPARE_LEAD` | `180` | Deadline'gacha eng kam zaxira (daqiqa) — post shundan oldingi oxirgi `COMPARE_POST_AT` da chiqadi |
+| `COMPARE_MIN_LEAD` | `45` | Deadline'ga bundan kam qolsa chart umuman chiqmaydi |
+| `COMPARE_MIN_TRANSFERS` | `20000` | Juftlikdagi ikkinchi futbolchi uchun eng kam transfer |
+| `COMPARE_MIN_MINUTES` | `270` | Radar shkalasi shuncha daqiqa o'ynaganlar orasidan olinadi |
+| `COMPARE_TREND_GWS` | `6` | Pastdagi chizikda nechta tur ko'rsatiladi |
+| `COMPARE_MIN_GW` | `3` | Mavsum boshida chart chiqmaydi (/90 raqamlari shovqinli) |
+| `CHART_LOGO` | `assets/logo.png` | Chartdagi logotip fayli |
 | `LOCAL_TZ` | `Asia/Tashkent` | Xabardagi vaqtlar shu zonada ko'rsatiladi |
 | `MATCHDAY_TZ` | `Europe/London` | "O'yin kuni" shu zona bo'yicha aniqlanadi |
 
