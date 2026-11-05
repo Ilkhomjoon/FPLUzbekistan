@@ -1277,7 +1277,7 @@
       "team": "BHA"
     },
     "329": {
-      "cost": 43,
+      "cost": 42,
       "name": "Rodon",
       "team": "LEE"
     },
@@ -1772,7 +1772,7 @@
       "team": "MUN"
     },
     "418": {
-      "cost": 47,
+      "cost": 46,
       "name": "Maguire",
       "team": "MUN"
     },
@@ -2117,7 +2117,7 @@
       "team": "AVL"
     },
     "480": {
-      "cost": 79,
+      "cost": 78,
       "name": "Gibbs-White",
       "team": "NFO"
     },
@@ -3157,7 +3157,7 @@
       "team": "AVL"
     },
     "668": {
-      "cost": 50,
+      "cost": 49,
       "name": "Tutierov",
       "team": "SUN"
     },
@@ -3352,5 +3352,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-04T01:00:00+00:00"
+  "taken_at": "2026-11-05T01:00:00+00:00"
 }
