@@ -54,6 +54,17 @@ TABLE_STEP = 0.027
 COL_A, COL_B = 0.42, 0.72     # jadvaldagi raqam ustunlari
 MIN_METRICS = 3               # uchburchakdan kam radar bo'lmaydi
 
+# "Kuchlilar nimani olyapti" charti — pastroq, chunki radar yo'q
+MOVERS_FIG = (7.6, 8.4)
+MOVERS_AX = (0.30, 0.480, 0.60, 0.300)
+MOVERS_LEGEND_Y = 0.804
+MOVERS_TABLE_TOP = 0.350
+MOVERS_TABLE_STEP = 0.039
+# jadval ustunlari: (x, tekislash, sarlavha). Birinchisi — ism.
+MOVERS_COLS = ((0.08, "left", ""), (0.43, "center", "Narx"),
+               (0.58, "center", "Top-1000"), (0.72, "center", "Umumiy"),
+               (0.88, "center", "Ochko"))
+
 
 @dataclass
 class Metric:
@@ -75,16 +86,41 @@ class Metric:
         return max(0.0, min(1.0, value / self.top))
 
 
+@dataclass
+class Move:
+    """Dumbbell chartdagi bitta qator — bitta futbolchining egalik harakati.
+
+    before/now — top ro'yxatdagi egalik (oyna boshi va oxiri), other — umumiy
+    egalik. cells — jadvaldagi tayyor matnlar (MOVERS_COLS dagi sarlavhalar
+    tartibida, ismdan keyin).
+    """
+
+    name: str
+    before: float
+    now: float
+    other: float
+    cells: tuple[str, ...] = ()
+
+    @property
+    def rise(self) -> float:
+        return self.now - self.before
+
+
 def logo_path() -> Path | None:
     path = Path(config.CHART_LOGO)
     return path if path.is_file() else None
 
 
+def _logo_height(fig, image, width: float) -> float:
+    """Figura kvadrat emas — nisbatni saqlash uchun o'lchamlarini hisobga olamiz."""
+    fig_w, fig_h = fig.get_size_inches()
+    return width * (image.shape[0] / image.shape[1]) * (fig_w / fig_h)
+
+
 def _logo_axes(fig, left: float, bottom: float, width: float,
                image, alpha: float = 1.0, zorder: float = 5):
-    """Nisbatini saqlab logotip qo'yadi (figura cho'zinchoq, shuni hisobga olamiz)."""
-    height, pixels = image.shape[0], image.shape[1]
-    box_h = width * (height / pixels) * (FIG_W / FIG_H)
+    """Nisbatini saqlab logotip qo'yadi."""
+    box_h = _logo_height(fig, image, width)
     ax = fig.add_axes([left, bottom, width, box_h], zorder=zorder)
     ax.imshow(image, alpha=alpha)
     ax.axis("off")
@@ -186,6 +222,127 @@ def _table(fig, name_a: str, name_b: str, metrics: list[Metric],
         y -= TABLE_STEP
 
 
+def _xticks(limit: float) -> list[int]:
+    """0 dan `limit` gacha o'qilishi oson qadamlar."""
+    step = 5 if limit <= 25 else (10 if limit <= 60 else 20)
+    return list(range(0, int(limit) + 1, step))
+
+
+def _movers_panel(fig, rows: list[Move], c: dict) -> None:
+    ax = fig.add_axes(list(MOVERS_AX), facecolor=c["surface"])
+    for side in ("top", "right", "left"):
+        ax.spines[side].set_visible(False)
+    ax.spines["bottom"].set_color(c["grid"])
+    ax.xaxis.grid(True, color=c["grid"], linewidth=0.8)
+    ax.set_axisbelow(True)
+
+    count = len(rows)
+    limit = max([r.now for r in rows] + [r.other for r in rows]) + 9
+    # nolda turgan belgi o'q chizig'iga yopishib, yarmi kesilib qolmasin
+    ax.set_xlim(-limit * 0.015, limit)
+    ax.set_ylim(-0.7, count - 0.3)
+    # eng katta o'sish tepada tursin (matplotlib da y=0 pastda)
+    ax.set_yticks(range(count))
+    ax.set_yticklabels([r.name for r in reversed(rows)], color=c["ink"], fontsize=13.5)
+    ax.tick_params(axis="y", length=0, pad=10)
+    # to'r eng uzoq nuqtadan oshib tursin — chiziq havoda qolib ketmasin
+    ticks = _xticks(limit)
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([f"{t}%" for t in ticks], color=c["ink2"], fontsize=11.5)
+    ax.tick_params(axis="x", length=0, pad=6)
+
+    for i, row in enumerate(reversed(rows)):
+        ax.plot([row.before, row.now], [i, i], color=c["grid"], linewidth=4,
+                solid_capstyle="round", zorder=2)
+        # bo'sh doira — "oldin", to'la doira — "hozir", romb — umumiy egalik.
+        # Shakllar rangdan tashqari ikkinchi belgi: rangni ajratolmagan
+        # o'quvchi ham qatorni o'qiy oladi.
+        ax.plot([row.before], [i], "o", markersize=9, markerfacecolor=c["surface"],
+                markeredgecolor=c["grid"], markeredgewidth=2.5, zorder=3)
+        ax.plot([row.now], [i], "o", markersize=10, markerfacecolor=c["s1"],
+                markeredgecolor=c["surface"], markeredgewidth=2, zorder=4)
+        ax.plot([row.other], [i], "D", markersize=8, markerfacecolor=c["s2"],
+                markeredgecolor=c["surface"], markeredgewidth=1.6, zorder=5)
+        ax.text(row.now + limit * 0.035, i, f"+{row.rise:.1f}", va="center", ha="left",
+                color=c["s1"], fontsize=12.5, fontweight="bold", zorder=6)
+
+
+def _movers_legend(fig, c: dict, labels: tuple[str, str, str]) -> None:
+    items = (("o", c["grid"], "none", labels[0], 0.075),
+             ("o", c["s1"], c["s1"], labels[1], 0.280),
+             ("D", c["s2"], c["s2"], labels[2], 0.600))
+    for marker, edge, face, label, x in items:
+        fig.add_artist(Line2D([x], [MOVERS_LEGEND_Y], marker=marker, markersize=9,
+                              markerfacecolor=face, markeredgecolor=edge,
+                              markeredgewidth=2, linestyle="none"))
+        fig.text(x + 0.025, MOVERS_LEGEND_Y - 0.0045, label, ha="left",
+                 color=c["ink2"], fontsize=12)
+
+
+def _movers_table(fig, rows: list[Move], c: dict) -> None:
+    y = MOVERS_TABLE_TOP
+    for x, align, head in MOVERS_COLS:
+        if head:
+            fig.text(x, y, head, ha=align, color=c["ink2"], fontsize=12,
+                     fontweight="bold")
+    fig.add_artist(Line2D([0.06, 0.94], [y - 0.014, y - 0.014],
+                          color=c["grid"], linewidth=1))
+
+    y -= 0.046
+    for row in rows:
+        fig.text(MOVERS_COLS[0][0], y, row.name, ha="left", color=c["ink"], fontsize=12.5)
+        for (x, align, _), text in zip(MOVERS_COLS[1:], row.cells):
+            # "Top-1000" ustuni — postning asosiy raqami, shuning uchun qalin
+            main = x == MOVERS_COLS[2][0]
+            fig.text(x, y, text, ha=align, color=c["ink"] if main else c["ink2"],
+                     fontsize=12.5, fontweight="bold" if main else "normal")
+        y -= MOVERS_TABLE_STEP
+
+
+def movers_chart(out_path: str | Path, title: str, subtitle: str,
+                 rows: list[Move],
+                 legend: tuple[str, str, str] = ("3 tur oldin", "hozir (top-1000)",
+                                                 "umumiy egalik"),
+                 palette: dict | None = None) -> Path:
+    """Top ro'yxatdagi egalik harakati — dumbbell chart va raqamlar jadvali."""
+    if not rows:
+        raise ValueError("Chart uchun kamida bitta qator kerak")
+
+    c = {**PALETTE, **(palette or {})}
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    fig = plt.figure(figsize=MOVERS_FIG, dpi=150, facecolor=c["surface"])
+    try:
+        fig.text(0.5, 0.957, title, ha="center", color=c["ink"],
+                 fontsize=24, fontweight="bold")
+        if subtitle:
+            fig.text(0.5, 0.930, subtitle, ha="center", va="top", color=c["ink2"],
+                     fontsize=12.5, linespacing=1.45)
+
+        _movers_legend(fig, c, legend)
+        _movers_panel(fig, rows, c)
+        _movers_table(fig, rows, c)
+
+        mark = logo_path()
+        image = mpimg.imread(str(mark)) if mark else None
+        if image is not None:
+            # suv belgisi chart bilan jadval orasida — rasmni kesib uni
+            # olib tashlash mumkin emas
+            width = 0.28
+            height = _logo_height(fig, image, width)
+            _logo_axes(fig, 0.5 - width / 2, 0.408 - height / 2, width,
+                       image, alpha=0.12, zorder=2.5)
+            _logo_axes(fig, 0.5 - 0.27 / 2, 0.022, 0.27, image)
+        else:
+            log.warning("Logotip topilmadi (%s) — rasm logosiz chiqadi", config.CHART_LOGO)
+
+        fig.savefig(out_path, facecolor=c["surface"])
+    finally:
+        plt.close(fig)
+    return out_path
+
+
 def comparison_chart(out_path: str | Path, title: str, subtitle: str,
                      name_a: str, name_b: str, metrics: list[Metric],
                      gws: list[int] | None = None,
@@ -219,7 +376,7 @@ def comparison_chart(out_path: str | Path, title: str, subtitle: str,
             # olib tashlashning imkoni yo'q
             rx, ry, rw, rh = RADAR
             width = 0.30
-            height = width * (image.shape[0] / image.shape[1]) * (FIG_W / FIG_H)
+            height = _logo_height(fig, image, width)
             _logo_axes(fig, rx + rw / 2 - width / 2, ry + rh / 2 - height / 2,
                        width, image, alpha=0.16, zorder=2.6)
 

@@ -37,7 +37,7 @@ def price_change_post(changes: list[dict], direction: str) -> str:
         if config.PRICE_SHOW_TEAM and c.get("team"):
             who = f"{who} ({esc(c['team'])})"
         lines.append(f"{who} ({price(c['new'])})")
-    lines += ["", config.PRICE_HASHTAG, "", config.CHANNEL_TAG]
+    lines += ["", config.tags(config.PRICE_HASHTAG), "", config.CHANNEL_TAG]
     return "\n".join(lines)
 
 
@@ -287,7 +287,7 @@ def _live_post(
     if config.SHOW_BPS and config.BPS_NOTE and level < 2:
         blocks.append(f"<blockquote>{esc(config.BPS_NOTE)}</blockquote>")
 
-    blocks.append(f"{config.LIVE_HASHTAG}\n\n{config.CHANNEL_TAG}")
+    blocks.append(f"{config.tags(config.LIVE_HASHTAG)}\n\n{config.CHANNEL_TAG}")
     return "\n\n".join(blocks)
 
 
@@ -355,7 +355,7 @@ def deadline_stats_post(gw: int, scans, players: dict, teams: dict,
         chip_block.append(f"<b>🌍 Overall:</b> {_chip_line(overall_chip_counts)}")
     blocks.append("\n".join(chip_block))
 
-    blocks.append(f"{config.STATS_HASHTAG}\n\n{config.CHANNEL_TAG}")
+    blocks.append(f"{config.tags(config.STATS_HASHTAG)}\n\n{config.CHANNEL_TAG}")
     return "\n\n".join(blocks)
 
 
@@ -392,7 +392,7 @@ def price_watch_post(rises: list[dict], falls: list[dict], stamp: str) -> str:
         f"ℹ️ {config.PRICE_WATCH_SURE}% dan oshganlar o'zgarishi kutiladi. "
         "Narxlar tunda yangilanadi — oxirgi soatlarda ko'rsatkich o'zgarishi mumkin."
     )
-    blocks.append(f"{config.PRICE_WATCH_HASHTAG}\n\n{config.CHANNEL_TAG}")
+    blocks.append(f"{config.tags(config.PRICE_WATCH_HASHTAG)}\n\n{config.CHANNEL_TAG}")
     return "\n\n".join(blocks)
 
 
@@ -486,7 +486,7 @@ def team_news_post(changes: list, teams: dict, deadline_in: int | None = None) -
     blocks = ["\n".join(head)]
     for change in changes:
         blocks.append("\n".join(_news_line(change, teams)))
-    blocks.append(f"{config.NEWS_HASHTAG}\n\n{config.CHANNEL_TAG}")
+    blocks.append(f"{config.tags(config.NEWS_HASHTAG)}\n\n{config.CHANNEL_TAG}")
     return "\n\n".join(blocks)
 
 
@@ -542,7 +542,7 @@ def differentials_post(gw: int, next_gw: int, picks, teams: dict) -> str:
                          f"({d.local:.1f}%) · dunyoda {d.owned:.1f}%")
         blocks.append("\n".join(lines))
 
-    blocks.append(f"{config.DIFF_HASHTAG}\n\n{config.CHANNEL_TAG}")
+    blocks.append(f"{config.tags(config.DIFF_HASHTAG)}\n\n{config.CHANNEL_TAG}")
     return "\n\n".join(blocks)
 
 
@@ -591,5 +591,5 @@ def gw_review_post(gw: int, event: dict, players: dict, leader, reviews) -> str:
     for review in reviews:
         blocks.append(_league_block(review, gw))
 
-    blocks.append(f"{config.GW_REVIEW_HASHTAG}\n\n{config.CHANNEL_TAG}")
+    blocks.append(f"{config.tags(config.GW_REVIEW_HASHTAG)}\n\n{config.CHANNEL_TAG}")
     return "\n\n".join(blocks)

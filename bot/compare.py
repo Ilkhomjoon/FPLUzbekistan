@@ -274,7 +274,7 @@ def caption(gw: int, a: Player, b: Player, teams: dict) -> str:
         "",
         "Raqamlar — mavsum boshidan, 90 daqiqaga nisbatan hisoblangan.",
         "",
-        f"{config.COMPARE_HASHTAG} {config.CHANNEL_TAG}",
+        f"{config.tags(config.COMPARE_HASHTAG)} {config.CHANNEL_TAG}",
     ]
     return "\n".join(lines)
 

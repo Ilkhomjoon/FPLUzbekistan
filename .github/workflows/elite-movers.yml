@@ -1,0 +1,72 @@
+name: Harakat charti
+
+on:
+  # Jadval bo'yicha ishga tushirish tashqi cron (cron-job.org) orqali —
+  # `scheduled: true` kirituvchisi bilan. Sozlash: docs/tashqi-cron.md
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Telegramga yubormasdan sinash"
+        type: boolean
+        default: false
+      force:
+        description: "Vaqt tekshiruvini e'tiborsiz qoldirib, hoziroq chiqarish"
+        type: boolean
+        default: false
+      scheduled:
+        description: "Tashqi cron chaqirdi — jadval bo'yicha ishlasin"
+        type: boolean
+        default: false
+      backfill_gw:
+        description: "Post emas: shu o'tgan tur uchun top-1000 tarixini to'ldiradi (masalan 8)"
+        type: string
+        default: ""
+
+concurrency:
+  group: fpl-elite-movers
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  movers:
+    runs-on: ubuntu-latest
+    # post vaqtigacha kutish (MOVERS_MAX_MINUTES) yoki 1000 ta tarkib skaneri
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Tarixni to'ldirish (faqat backfill_gw berilganda)
+        if: inputs.backfill_gw != ''
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+        run: python -m bot.differentials --backfill ${{ inputs.backfill_gw }}
+
+      - name: Chartni tayyorlash va yuborish
+        if: inputs.backfill_gw == ''
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          MOVERS_POST_AT: "19:40"
+          MOVERS_WINDOW: "3"
+          MOVERS_MIN_RISE: "3"
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          python -m bot.elite_movers $ARGS
+
+      - name: Holatni saqlash (commit)
+        if: always()
+        run: bash scripts/commit_state.sh "update elite movers state"

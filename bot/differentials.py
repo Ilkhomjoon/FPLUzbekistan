@@ -24,7 +24,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
-from . import config, fpl_api, storage, telegram, waiter
+from . import config, elite_cohort, fpl_api, storage, telegram, waiter
 from .deadline_stats import league_entries
 from .formatting import differentials_poll, differentials_post
 
@@ -258,7 +258,8 @@ def elite_differentials(players: list[Diff], gw: int) -> tuple[list[Diff], int]:
     Qaytaradi: (ro'yxat, nechta jamoa tekshirilgani).
     """
     tiers = elite_tiers()
-    entries = top_entries(tiers[-1])
+    cohort = cohort_for(gw, tiers[-1])
+    entries = cohort.entries
     if not entries:
         log.warning("Dunyo bo'yicha reyting olinmadi.")
         return [], 0
@@ -290,7 +291,13 @@ def elite_differentials(players: list[Diff], gw: int) -> tuple[list[Diff], int]:
     if config.ELITE_HISTORY:
         try:
             full_counts, full_scanned = _extend_scan(entries, gw, counts, scanned, done)
-            saved = record_elite_history(players, gw, full_counts, full_scanned)
+            # Ro'yxat shu safar yangi olingan bo'lsa, "1000 tadan 1000 tasi
+            # hali ham top-1000 da" deb yozishning ma'nosi yo'q — o'lchagich
+            # faqat keyingi haftalarda ma'noga ega bo'ladi.
+            saved = record_elite_history(
+                players, gw, full_counts, full_scanned,
+                cohort=cohort.from_event,
+                survivors=None if cohort.refreshed else cohort.survivors)
             log.info("Egalik tarixi: %d ta jamoa bo'yicha %d ta futbolchi yozildi",
                      full_scanned, saved)
         except Exception as exc:
@@ -317,8 +324,20 @@ def _extend_scan(entries: list[int], gw: int, counts: Counter, scanned: int,
     return counts + extra, scanned + extra_scanned
 
 
+def cohort_for(gw: int, size: int, refresh: bool = True) -> elite_cohort.Cohort:
+    """Skanerlanadigan menejerlar ro'yxati.
+
+    ELITE_COHORT yoqilgan bo'lsa — muzlatilgan ro'yxat (bot/elite_cohort.py),
+    aks holda eski xulq: har safar joriy reytingdan olinadi.
+    """
+    if not config.ELITE_COHORT:
+        return elite_cohort.Cohort(top_entries(size), 0)
+    return elite_cohort.resolve(gw, size, fetch=top_entries, refresh=refresh)
+
+
 def record_elite_history(players: list[Diff], gw: int, counts: Counter,
-                         scanned: int) -> int:
+                         scanned: int, source: str = "live",
+                         cohort: int = 0, survivors: int | None = None) -> int:
     """Top ro'yxatdagi egalikni tarix fayliga yozadi -> nechta qator yozilgani.
 
     Nega kerak: FPL o'tmishdagi egalikni bermaydi. Shu turdagi tarkiblar
@@ -326,6 +345,10 @@ def record_elite_history(players: list[Diff], gw: int, counts: Counter,
     Bir necha tur yig'ilgach "kim top-1000 da tez ko'tarilyapti" degan chart
     chiqarish mumkin bo'ladi: oddiy egalikdan farqli, bu ko'rsatkich kuchli
     menejerlar nimaga ishonayotganini ko'rsatadi.
+
+    `source` — "live" yoki "backfill". Orqaga to'ldirilgan turlar BUGUNGI
+    top-1000 ro'yxati bo'yicha hisoblanadi (o'sha paytdagisi bo'yicha emas),
+    shuning uchun ular belgilab qo'yiladi.
     """
     if not scanned:
         return 0
@@ -345,11 +368,16 @@ def record_elite_history(players: list[Diff], gw: int, counts: Counter,
 
     history = storage.load(config.ELITE_HISTORY_FILE, {}) or {}
     events: dict = history.get("events") or {}
-    events[str(gw)] = {
+    record = {
         "scanned": scanned,
+        "source": source,
+        "cohort": cohort,
         "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "players": rows,
     }
+    if survivors is not None:
+        record["survivors"] = survivors
+    events[str(gw)] = record
     # fayl cheksiz o'smasin — faqat oxirgi turlar qoladi
     keep = sorted((int(k) for k in events if str(k).isdigit()),
                   reverse=True)[: config.ELITE_HISTORY_KEEP]
@@ -357,6 +385,45 @@ def record_elite_history(players: list[Diff], gw: int, counts: Counter,
     history["updated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     storage.save(config.ELITE_HISTORY_FILE, history)
     return len(rows)
+
+
+def backfill_elite_history(gw: int, overwrite: bool = False,
+                           cohort: elite_cohort.Cohort | None = None) -> int:
+    """O'tgan bitta tur uchun top egalikni orqaga to'ldiradi -> yozilgan qatorlar.
+
+    Nega kerak: "kuchlilar nimani olyapti" charti uchun kamida uchta turlik
+    tarix talab qilinadi. Tabiiy to'planishini kutish uch hafta oladi; ro'yxat
+    yangilangandan keyin esa chart shuncha vaqt uzilib qolardi.
+
+    Skaner MUZLATILGAN ro'yxat bo'yicha ketadi va ro'yxat bu yerda hech qachon
+    yangilanmaydi (`refresh=False`) — o'tmishni to'ldirayotganda o'lchov
+    o'zgarib ketmasligi kerak. Shu tufayli to'ldirilgan turlar ham, keyingi
+    turlar ham bitta o'lchovda bo'ladi.
+    """
+    history = storage.load(config.ELITE_HISTORY_FILE, {}) or {}
+    existing = (history.get("events") or {}).get(str(gw))
+    if existing and not overwrite:
+        log.info("GW%d tarixda allaqachon bor — o'tkazib yuboramiz.", gw)
+        return 0
+
+    size = elite_tiers()[-1]
+    if cohort is None:
+        cohort = cohort_for(gw, size, refresh=False)
+    if not cohort.entries:
+        log.warning("Menejerlar ro'yxati yo'q — to'ldirib bo'lmadi.")
+        return 0
+
+    counts, scanned = scan_picks(cohort.entries, gw)
+    if not scanned:
+        log.warning("GW%d uchun hech bir tarkib o'qilmadi.", gw)
+        return 0
+
+    players = pool(fpl_api.get_bootstrap())
+    saved = record_elite_history(players, gw, counts, scanned, source="backfill",
+                                 cohort=cohort.from_event)
+    log.info("GW%d: %d ta jamoa tekshirildi -> %d ta futbolchi yozildi",
+             gw, scanned, saved)
+    return saved
 
 
 def local_ownership(rows: list[Diff], gw: int) -> tuple[str, int]:
@@ -597,6 +664,10 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="Tur oralig'idagi differentiallar posti")
     ap.add_argument("--dry-run", action="store_true", help="Telegramga yubormasdan terminalga chiqaradi")
     ap.add_argument("--force", action="store_true", help="Vaqt tekshiruvini e'tiborsiz qoldiradi")
+    ap.add_argument("--backfill", type=int, metavar="GW",
+                    help="Post chiqarmaydi: shu o'tgan tur uchun top egalik tarixini to'ldiradi")
+    ap.add_argument("--overwrite", action="store_true",
+                    help="--backfill bilan: tarixda bor bo'lsa ham qayta yozadi")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
@@ -604,6 +675,9 @@ def main() -> int:
         config.DRY_RUN = True
 
     try:
+        if args.backfill:
+            backfill_elite_history(args.backfill, overwrite=args.overwrite)
+            return 0
         return run(force=args.force)
     except Exception as exc:
         log.exception("Differentiallar skriptida xatolik")

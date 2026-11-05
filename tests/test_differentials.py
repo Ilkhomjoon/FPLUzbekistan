@@ -81,18 +81,20 @@ class EliteTest(unittest.TestCase):
         differentials.apply_recent_form(self.players, RECENT)
         self._orig = (differentials.top_entries, differentials.scan_picks,
                       config.DIFF_ELITE_TIERS, config.DIFF_ELITE_MIN_ROWS,
-                      config.ELITE_HISTORY)
+                      config.ELITE_HISTORY, config.ELITE_COHORT)
         differentials.top_entries = lambda size: list(range(1, size + 1))
         config.DIFF_ELITE_TIERS = "10"
         config.DIFF_ELITE_MIN_ROWS = 1
         # bu yerda tanlash mantiqi sinaladi; tarix yozuvi haqiqiy data/ ga
         # tegib ketmasin (uning o'z testi bor)
         config.ELITE_HISTORY = False
+        # kogorta bu yerda ahamiyatsiz — faqat tanlash mantiqi sinaladi
+        config.ELITE_COHORT = False
 
     def tearDown(self):
         (differentials.top_entries, differentials.scan_picks,
          config.DIFF_ELITE_TIERS, config.DIFF_ELITE_MIN_ROWS,
-         config.ELITE_HISTORY) = self._orig
+         config.ELITE_HISTORY, config.ELITE_COHORT) = self._orig
 
     def _scan(self, mapping: dict, scanned: int):
         differentials.scan_picks = lambda entries, gw, workers=None: (

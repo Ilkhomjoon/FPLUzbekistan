@@ -55,6 +55,25 @@ ADMIN_CHAT_ID = os.getenv("TELEGRAM_ADMIN_CHAT_ID", "").strip()  # xatolik xabar
 ERROR_ALERT_AFTER = _int("ERROR_ALERT_AFTER", 3)  # necha marta ketma-ket xatodan keyin xabar berilsin
 DRY_RUN = _bool("DRY_RUN", False)          # True bo'lsa Telegramga yubormaydi, terminalga chiqaradi
 CHANNEL_TAG = os.getenv("CHANNEL_TAG", "@FPLUzbekistan")
+# Har bir postning oxirida turadigan umumiy hashtag. Telegram qidiruvi
+# hashtaglar bo'yicha ishlaydi: "#PriceChanges" ni faqat FPL biladigan odam
+# qidiradi, "#FPL" ni esa o'yinni endi boshlagan ham. Yangi obunachi aynan
+# shu keng so'z orqali keladi.
+COMMON_HASHTAG = os.getenv("COMMON_HASHTAG", "#FPL")
+
+
+def tags(*names: str) -> str:
+    """Postning hashtaglari: o'ziga xosi, keyin umumiy #FPL.
+
+    Takrorlanmaydi — COMMON_HASHTAG allaqachon ro'yxatda bo'lsa yoki
+    bitta sozlamada bir nechta hashtag yozilgan bo'lsa ham.
+    """
+    out: list[str] = []
+    for name in (*names, COMMON_HASHTAG):
+        for tag in str(name or "").split():
+            if tag and tag not in out:
+                out.append(tag)
+    return " ".join(out)
 LOCAL_TZ = os.getenv("LOCAL_TZ", "Asia/Tashkent")        # vaqtlarni ko'rsatish uchun
 MATCHDAY_TZ = os.getenv("MATCHDAY_TZ", "Europe/London")  # "o'yin kuni" shu zona bo'yicha aniqlanadi
 
@@ -214,10 +233,40 @@ DIFF_MAX_MINUTES = _int("DIFF_MAX_MINUTES", 300)      # jarayon maksimal ish vaq
 # "falonchi top-1000 da necha hafta ichida qanchaga ko'tarildi" degan chart
 # chiqarish mumkin bo'ladi. Tarixsiz esa o'tmishni qayta tiklash imkoni yo'q:
 # FPL eski turlarning tarkiblarini qaytaradi, lekin 1000 ta so'rov har tur uchun.
+# Kogorta: skanerlanadigan 1000 menejer ro'yxati bir marta olinadi va
+# muzlatiladi — sabablari bot/elite_cohort.py da yozilgan.
+ELITE_COHORT = _bool("ELITE_COHORT", True)
+ELITE_COHORT_FILE = DATA_DIR / "elite_cohort.json"
+ELITE_COHORT_MIN = _int("ELITE_COHORT_MIN", 500)   # shundan kam qolsa ro'yxat yangilanadi
+
 ELITE_HISTORY = _bool("ELITE_HISTORY", True)
 ELITE_HISTORY_FILE = DATA_DIR / "elite_history.json"
-ELITE_HISTORY_MIN = _float("ELITE_HISTORY_MIN", 3.0)   # shundan past egalik yozilmaydi
+# Chegara past: "harakat" chartida futbolchining 3 tur oldingi egaligi kerak.
+# Chegara 3% bo'lsa, o'sha paytda 2.9% da turgani faylga tushmaydi va chartda
+# nol bo'lib ko'rinadi — ya'ni o'sish bo'rttirib ko'rsatiladi. 1% da bu xato
+# ko'pi bilan 1 foiz bandi.
+ELITE_HISTORY_MIN = _float("ELITE_HISTORY_MIN", 1.0)   # shundan past egalik yozilmaydi
 ELITE_HISTORY_KEEP = _int("ELITE_HISTORY_KEEP", 15)    # oxirgi nechta tur saqlansin
+
+
+# --- "Kuchlilar nimani olyapti" (top-1000 egaligidagi harakat) ---
+MOVERS_STATE_FILE = DATA_DIR / "elite_movers.json"
+MOVERS_HASHTAG = os.getenv("MOVERS_HASHTAG", "#TopMovers")
+MOVERS_WINDOW = _int("MOVERS_WINDOW", 3)           # necha turlik o'zgarishga qaraymiz
+MOVERS_MIN_EVENTS = _int("MOVERS_MIN_EVENTS", 3)   # tarixda shundan kam tur bo'lsa post yo'q
+MOVERS_TOP_N = _int("MOVERS_TOP_N", 5)             # nechta futbolchi ko'rsatiladi
+MOVERS_MIN_RISE = _float("MOVERS_MIN_RISE", 3.0)   # shundan kam o'sgani "harakat" emas, %
+# Differentiallar 19:50 da uyg'onib tarixni yozadi. Bu post undan 10 daqiqa
+# oldin uyg'onadi — ya'ni yangi turni ERTASI kuni ko'radi va chiqaradi.
+# Shu tufayli ikkita post bir kechada to'planib qolmaydi.
+MOVERS_POST_AT = os.getenv("MOVERS_POST_AT", "19:40")
+MOVERS_LATEST = os.getenv("MOVERS_LATEST", "23:00")   # bundan kech bo'lsa ertaga
+MOVERS_MAX_MINUTES = _int("MOVERS_MAX_MINUTES", 300)  # jarayon maksimal ish vaqti
+# Kogorta yangilanganda yangi ro'yxat bo'yicha faqat bitta tur bo'lib qoladi.
+# Chart uzilib qolmasligi uchun yetishmayotgan turlar o'sha zahoti to'ldiriladi
+# (har biri ~1000 so'rov). Bu birinchi ishga tushirishda ham qo'l keladi.
+MOVERS_BACKFILL = _bool("MOVERS_BACKFILL", True)
+MOVERS_BACKFILL_MAX = _int("MOVERS_BACKFILL_MAX", 3)  # bitta jarayonda ko'pi bilan nechta tur
 
 
 # --- Solishtirish charti (ikki futbolchi, rasm) ---

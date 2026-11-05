@@ -57,6 +57,7 @@ Har bir yozuv uchun bir xil sozlama:
 | 7 | `deadline-stats.yml` | **:20** — 12, 15, 18, 21, 00 soatlarda | `{"ref":"main","inputs":{"scheduled":"true"}}` |
 | 8 | `team-news.yml` | **har soat** (:35) | `{"ref":"main","inputs":{"scheduled":"true"}}` |
 | 9 | `compare.yml` | har kuni **17:40** | `{"ref":"main","inputs":{"scheduled":"true"}}` |
+| 10 | `elite-movers.yml` | har kuni **19:30** | `{"ref":"main","inputs":{"scheduled":"true"}}` |
 
 5–7-yozuvlarda cron-job.org jadval oynasida kerakli **soatlarni belgilab**,
 daqiqa sifatida bittasini (`10` yoki `20`) tanlang.
@@ -73,6 +74,7 @@ jarayonning o'zi kutadi**:
 - `live-bonus` har soat tekshiradi; o'yin yo'q bo'lsa 20 soniyada chiqadi
 - `deadline-stats` deadline yaqinlashganini o'zi hisoblaydi
 - `team-news` har soat uyg'onadi: oyna tashqarisida darhol chiqadi, deadline yaqin bo'lsa jarayon ichida har 10 daqiqada tekshiradi
+- `elite-movers` 19:30 da uyg'onadi — differentiallardan (19:50) oldin. Tur yopilgan kuni tarixda yangi tur hali yo'q, demak jim chiqadi; differentiallar uni o'sha kechqurun yozadi; **ertasi kuni** chart chiqadi. Shu tufayli ikkita post bir kechada to'planmaydi
 - `compare` har kuni 17:40 da uyg'onadi, lekin chart haftada bir marta chiqadi: jarayonning o'zi deadline'ga qarab post daqiqasini hisoblaydi (deadline'dan kamida 3 soat oldingi **oxirgi 20:30**). Post kuni bo'lmasa jimgina chiqib ketadi — ogohlantirish yubormaydi
 
 ## 3. Tekshirish

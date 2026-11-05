@@ -19,9 +19,11 @@ class RecordTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.path = Path(self.tmp.name) / "elite_history.json"
-        patcher = patch.object(config, "ELITE_HISTORY_FILE", self.path)
-        patcher.start()
-        self.addCleanup(patcher.stop)
+        for name, value in (("ELITE_HISTORY_FILE", self.path),
+                            ("ELITE_COHORT_FILE", Path(self.tmp.name) / "cohort.json")):
+            patcher = patch.object(config, name, value)
+            patcher.start()
+            self.addCleanup(patcher.stop)
         self.addCleanup(self.tmp.cleanup)
         self.players = [_player(1, "Semenyo", 7.5), _player(2, "Anderson", 3.1),
                         _player(3, "Nobody", 0.4)]
