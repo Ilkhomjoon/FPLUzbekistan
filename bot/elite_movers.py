@@ -206,7 +206,9 @@ def caption(rows: list[Mover], events: list[int], cohort: int = 0,
         if survivors is not None and size:
             note += f" — o'sha {size} menejerdan {survivors} tasi hozir ham top-1000 da"
         lines += ["", note + "."]
-    lines += ["", f"{config.tags(config.MOVERS_HASHTAG)} {config.CHANNEL_TAG}"]
+    # Hashtaglar va kanal nomi alohida qatorlarda — matnli postlarda ham
+    # shunday, rasm izohi ulardan farq qilib turmasin
+    lines += ["", config.tags(config.MOVERS_HASHTAG), "", config.CHANNEL_TAG]
     return "\n".join(lines)
 
 

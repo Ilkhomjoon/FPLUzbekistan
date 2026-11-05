@@ -121,6 +121,8 @@ class CaptionTest(unittest.TestCase):
         self.assertIn("Semenyo", text)
         self.assertIn(config.MOVERS_HASHTAG, text)
         self.assertLessEqual(len(text), 1024)
+        self.assertEqual(text.splitlines()[-3:],
+                         [config.tags(config.MOVERS_HASHTAG), "", config.CHANNEL_TAG])
 
 
 class RenderTest(unittest.TestCase):

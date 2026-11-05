@@ -177,6 +177,9 @@ class CaptionTest(unittest.TestCase):
         self.assertIn("(BOU)", text)
         self.assertIn(config.COMPARE_HASHTAG, text)
         self.assertLessEqual(len(text), 1024)   # Telegram izoh chegarasi
+        # kanal nomi oxirida, hashtaglardan bo'sh qator bilan ajratilgan
+        self.assertEqual(text.splitlines()[-3:],
+                         [config.tags(config.COMPARE_HASHTAG), "", config.CHANNEL_TAG])
 
 
 class RenderTest(unittest.TestCase):
