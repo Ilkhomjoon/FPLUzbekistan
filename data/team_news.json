@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-06T11:35:23+00:00",
+  "checked_at": "2026-11-06T17:25:31+00:00",
   "players": {
     "1": {
       "chance": null,
@@ -192,9 +192,9 @@
       "status": "a"
     },
     "28": {
-      "chance": 0,
-      "news": "Head injury - Unknown return date",
-      "status": "i"
+      "chance": 75,
+      "news": "Head injury - 75% chance of playing",
+      "status": "d"
     },
     "286": {
       "chance": null,
@@ -217,9 +217,9 @@
       "status": "a"
     },
     "31": {
-      "chance": 75,
-      "news": "Knee injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "316": {
       "chance": 100,
