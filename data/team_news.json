@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-05T17:35:24+00:00",
+  "checked_at": "2026-11-06T09:35:20+00:00",
   "players": {
     "1": {
       "chance": null,
@@ -217,9 +217,9 @@
       "status": "a"
     },
     "31": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Knee injury - 75% chance of playing",
+      "status": "d"
     },
     "316": {
       "chance": 100,
@@ -242,9 +242,9 @@
       "status": "a"
     },
     "346": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Foot injury - 75% chance of playing",
+      "status": "d"
     },
     "350": {
       "chance": null,
@@ -411,11 +411,6 @@
       "news": "",
       "status": "a"
     },
-    "498": {
-      "chance": null,
-      "news": "",
-      "status": "a"
-    },
     "499": {
       "chance": 100,
       "news": "",
@@ -447,6 +442,11 @@
       "status": "a"
     },
     "565": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "566": {
       "chance": null,
       "news": "",
       "status": "a"
