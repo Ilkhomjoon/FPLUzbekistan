@@ -687,7 +687,7 @@
       "team": "CRY"
     },
     "222": {
-      "cost": 60,
+      "cost": 59,
       "name": "Strand Larsen",
       "team": "CRY"
     },
@@ -2392,7 +2392,7 @@
       "team": "SUN"
     },
     "53": {
-      "cost": 61,
+      "cost": 62,
       "name": "Manzambi",
       "team": "AVL"
     },
@@ -2782,7 +2782,7 @@
       "team": "ARS"
     },
     "60": {
-      "cost": 55,
+      "cost": 56,
       "name": "Hill",
       "team": "BOU"
     },
@@ -3352,5 +3352,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-05T01:00:00+00:00"
+  "taken_at": "2026-11-06T01:00:00+00:00"
 }
