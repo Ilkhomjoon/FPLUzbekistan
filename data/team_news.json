@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-07T10:35:26+00:00",
+  "checked_at": "2026-11-07T11:35:18+00:00",
   "players": {
     "1": {
       "chance": null,
@@ -242,9 +242,9 @@
       "status": "a"
     },
     "346": {
-      "chance": 75,
-      "news": "Foot injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "350": {
       "chance": null,
