@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-08T13:35:22+00:00",
+  "checked_at": "2026-11-08T14:35:22+00:00",
   "players": {
     "1": {
       "chance": null,
@@ -12,9 +12,9 @@
       "status": "a"
     },
     "106": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 0,
+      "news": "Suspended until 5 Dec",
+      "status": "s"
     },
     "109": {
       "chance": null,
