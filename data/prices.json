@@ -117,7 +117,7 @@
       "team": "BHA"
     },
     "12": {
-      "cost": 95,
+      "cost": 94,
       "name": "Saka",
       "team": "ARS"
     },
@@ -372,7 +372,7 @@
       "team": "CHE"
     },
     "166": {
-      "cost": 70,
+      "cost": 71,
       "name": "N.Jackson",
       "team": "AVL"
     },
@@ -567,12 +567,12 @@
       "team": "ARS"
     },
     "200": {
-      "cost": 59,
+      "cost": 58,
       "name": "Lacroix",
       "team": "CHE"
     },
     "201": {
-      "cost": 53,
+      "cost": 52,
       "name": "Muñoz",
       "team": "NFO"
     },
@@ -1387,7 +1387,7 @@
       "team": "LEE"
     },
     "349": {
-      "cost": 45,
+      "cost": 44,
       "name": "Mateo Joseph",
       "team": "LEE"
     },
@@ -1767,7 +1767,7 @@
       "team": "MUN"
     },
     "417": {
-      "cost": 48,
+      "cost": 47,
       "name": "Dalot",
       "team": "MUN"
     },
@@ -1817,7 +1817,7 @@
       "team": "MUN"
     },
     "426": {
-      "cost": 117,
+      "cost": 116,
       "name": "B.Fernandes",
       "team": "MUN"
     },
@@ -1907,7 +1907,7 @@
       "team": "MUN"
     },
     "442": {
-      "cost": 49,
+      "cost": 48,
       "name": "Pope",
       "team": "NEW"
     },
@@ -2697,7 +2697,7 @@
       "team": "COV"
     },
     "585": {
-      "cost": 40,
+      "cost": 39,
       "name": "Herrington",
       "team": "HUL"
     },
@@ -2972,7 +2972,7 @@
       "team": "CRY"
     },
     "634": {
-      "cost": 59,
+      "cost": 58,
       "name": "Fernandez-Pardo",
       "team": "NEW"
     },
@@ -3176,8 +3176,13 @@
       "name": "Subuloye",
       "team": "CHE"
     },
+    "671": {
+      "cost": 40,
+      "name": "Gunter",
+      "team": "TOT"
+    },
     "68": {
-      "cost": 66,
+      "cost": 67,
       "name": "Tavernier",
       "team": "BOU"
     },
@@ -3352,5 +3357,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-07T01:00:00+00:00"
+  "taken_at": "2026-11-08T01:00:00+00:00"
 }
