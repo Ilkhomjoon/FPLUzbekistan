@@ -1,5 +1,15 @@
 {
-  "checked_at": "2026-11-08T17:35:21+00:00",
+  "checked_at": "2026-11-09T09:35:22+00:00",
+  "pending": {
+    "32": {
+      "seen": 1,
+      "state": {
+        "chance": 100,
+        "news": "",
+        "status": "a"
+      }
+    }
+  },
   "players": {
     "1": {
       "chance": null,
