@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import logging
 import math
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -54,6 +55,34 @@ TABLE_STEP = 0.027
 COL_A, COL_B = 0.42, 0.72     # jadvaldagi raqam ustunlari
 MIN_METRICS = 3               # uchburchakdan kam radar bo'lmaydi
 
+# Poyga charti uchun kategoriya ranglari — qat'iy tartibda, aylantirilmaydi.
+# Qorong'u fonda tekshirilgan: eng yaqin juftlik CVD bo'yicha dE 8.4, oddiy
+# ko'rish bo'yicha 19.3, hammasi fon bilan 3:1 dan yuqori kontrastda.
+# Shunga qaramay rang yolg'iz qolmaydi — har chiziqning oxirida ismi yoziladi.
+SERIES = ("#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300")
+
+# Poyga charti
+RACE_FIG = (7.6, 10.0)
+RACE_AX = (0.105, 0.480, 0.56, 0.330)
+RACE_TABLE_TOP = 0.368
+RACE_TABLE_STEP = 0.033
+RACE_COLS = ((0.065, "left", ""), (0.330, "center", "Jami"),
+             (0.440, "center", "Oxirgi tur"), (0.575, "center", "Overall o'rni"),
+             (0.700, "center", "Liga"), (0.815, "center", "O'zbekiston"),
+             (0.935, "center", "Overall"))
+# Oxirgi uchta ustun — uchta turli yetakchidan orqada qolgan ochko. Sarlavhalarni
+# "Ligadan / O'zbekistondan / Overalldan" deb yozsak jadval sig'maydi, shuning
+# uchun ularning ustiga bitta umumiy izoh qo'yiladi.
+RACE_GROUP = (0.818, "yetakchidan orqada", 0.682, 0.975)
+# Ligaga qo'shilish kodi — jadval bilan logotip orasida.
+RACE_CODE_LABEL_Y = 0.138
+RACE_CODE_Y = 0.107
+# Kod uchun bitta aniq shrift: DejaVu Sans Mono matplotlib bilan birga keladi,
+# ya'ni GitHub Actions'da ham xuddi shu ko'rinishda chiqadi. O'rnatilmagan
+# shriftni so'rasak, server boshqasiga almashtirib yuborardi.
+RACE_CODE_FONT = "DejaVu Sans Mono"
+
+
 # "Kuchlilar nimani olyapti" charti — pastroq, chunki radar yo'q
 MOVERS_FIG = (7.6, 8.4)
 MOVERS_AX = (0.30, 0.480, 0.60, 0.300)
@@ -87,6 +116,22 @@ class Metric:
 
 
 @dataclass
+class Runner:
+    """Poyga chartidagi bitta menejer.
+
+    ranks — har bir turdagi o'rni. Bu o'rin BUTUN liga bo'yicha emas,
+    chartdagi menejerlar orasidagi o'rin: aks holda mavsum boshida chiziq
+    rasmdan chiqib ketardi (bugungi uchinchi odam GW2 da 180-o'rinda
+    bo'lishi mumkin).
+    """
+
+    name: str
+    ranks: list[int]
+    cells: tuple[str, ...] = ()
+    label: str = ""      # chiziq oxiridagi yozuv; bo'sh bo'lsa `name` ishlatiladi
+
+
+@dataclass
 class Move:
     """Dumbbell chartdagi bitta qator — bitta futbolchining egalik harakati.
 
@@ -109,6 +154,16 @@ class Move:
 def logo_path() -> Path | None:
     path = Path(config.CHART_LOGO)
     return path if path.is_file() else None
+
+
+# Matplotlib shriftida emoji yo'q — ular rasmda bo'sh kvadrat bo'lib chiqadi.
+# Matn tashqaridan keladi (liga nomi, menejer ismi), shuning uchun tozalaymiz.
+_NON_FONT = re.compile("[\U0001F000-\U0001FAFF\u2600-\u27BF\uFE0F]")
+
+
+def plain(text: str) -> str:
+    """Rasmga tushadigan matndan shriftda yo'q belgilarni olib tashlaydi."""
+    return _NON_FONT.sub("", text or "").strip()
 
 
 def _logo_height(fig, image, width: float) -> float:
@@ -290,7 +345,7 @@ def _movers_table(fig, rows: list[Move], c: dict) -> None:
 
     y -= 0.046
     for row in rows:
-        fig.text(MOVERS_COLS[0][0], y, row.name, ha="left", color=c["ink"], fontsize=12.5)
+        fig.text(MOVERS_COLS[0][0], y, plain(row.name), ha="left", color=c["ink"], fontsize=12.5)
         for (x, align, _), text in zip(MOVERS_COLS[1:], row.cells):
             # "Top-1000" ustuni — postning asosiy raqami, shuning uchun qalin
             main = x == MOVERS_COLS[2][0]
@@ -314,10 +369,10 @@ def movers_chart(out_path: str | Path, title: str, subtitle: str,
 
     fig = plt.figure(figsize=MOVERS_FIG, dpi=150, facecolor=c["surface"])
     try:
-        fig.text(0.5, 0.957, title, ha="center", color=c["ink"],
+        fig.text(0.5, 0.957, plain(title), ha="center", color=c["ink"],
                  fontsize=24, fontweight="bold")
         if subtitle:
-            fig.text(0.5, 0.930, subtitle, ha="center", va="top", color=c["ink2"],
+            fig.text(0.5, 0.930, plain(subtitle), ha="center", va="top", color=c["ink2"],
                      fontsize=12.5, linespacing=1.45)
 
         _movers_legend(fig, c, legend)
@@ -334,6 +389,122 @@ def movers_chart(out_path: str | Path, title: str, subtitle: str,
             _logo_axes(fig, 0.5 - width / 2, 0.408 - height / 2, width,
                        image, alpha=0.12, zorder=2.5)
             _logo_axes(fig, 0.5 - 0.27 / 2, 0.022, 0.27, image)
+        else:
+            log.warning("Logotip topilmadi (%s) — rasm logosiz chiqadi", config.CHART_LOGO)
+
+        fig.savefig(out_path, facecolor=c["surface"])
+    finally:
+        plt.close(fig)
+    return out_path
+
+
+def _race_panel(fig, gws: list[int], runners: list[Runner], c: dict) -> None:
+    ax = fig.add_axes(list(RACE_AX), facecolor=c["surface"])
+    for side in ("top", "right", "left"):
+        ax.spines[side].set_visible(False)
+    ax.spines["bottom"].set_color(c["grid"])
+    ax.yaxis.grid(True, color=c["grid"], linewidth=0.8)
+    ax.set_axisbelow(True)
+
+    count = len(runners)
+    ax.set_xlim(gws[0] - 0.4, gws[-1] + 0.4)
+    ax.set_ylim(count + 0.6, 0.4)      # birinchi o'rin tepada
+    ax.set_yticks(range(1, count + 1))
+    ax.set_yticklabels([str(i) for i in range(1, count + 1)],
+                       color=c["ink2"], fontsize=12)
+    ax.tick_params(axis="y", length=0, pad=8)
+
+    # turlar ko'payganda yorliqlar bir-biriga tiqilib qolmasin
+    step = 1 if len(gws) <= 12 else (2 if len(gws) <= 24 else 4)
+    ticks = [g for i, g in enumerate(gws) if i % step == 0 or g == gws[-1]]
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([f"GW{g}" for g in ticks], color=c["ink2"], fontsize=11)
+    ax.tick_params(axis="x", length=0, pad=6)
+
+    for runner, colour in zip(runners, SERIES):
+        ax.plot(gws, runner.ranks, color=colour, linewidth=2.5, zorder=3)
+        ax.plot(gws, runner.ranks, "o", color=colour, markersize=7,
+                markeredgecolor=c["surface"], markeredgewidth=1.8, zorder=4)
+        # ism chiziq oxirida — rangni ajratolmagan o'quvchi ham o'qiy oladi
+        ax.annotate(plain(runner.label or runner.name), xy=(gws[-1], runner.ranks[-1]), xytext=(10, 0),
+                    textcoords="offset points", va="center", ha="left",
+                    color=colour, fontsize=12, fontweight="bold",
+                    annotation_clip=False)
+
+
+def _race_table(fig, runners: list[Runner], c: dict) -> None:
+    y = RACE_TABLE_TOP
+    group_x, group_text, left, right = RACE_GROUP
+    fig.text(group_x, y + 0.023, group_text, ha="center", color=c["ink2"],
+             fontsize=10.5)
+    fig.add_artist(Line2D([left, right], [y + 0.018, y + 0.018],
+                          color=c["grid"], linewidth=1))
+    for x, align, head in RACE_COLS:
+        if head:
+            fig.text(x, y, head, ha=align, color=c["ink2"], fontsize=12,
+                     fontweight="bold")
+    fig.add_artist(Line2D([0.03, 0.97], [y - 0.013, y - 0.013],
+                          color=c["grid"], linewidth=1))
+
+    y -= 0.043
+    for index, (runner, colour) in enumerate(zip(runners, SERIES), start=1):
+        fig.add_artist(Line2D([0.035, 0.058], [y + 0.005, y + 0.005],
+                              color=colour, linewidth=4, solid_capstyle="round"))
+        fig.text(RACE_COLS[0][0], y, f"{index}. {plain(runner.name)}", ha="left",
+                 color=c["ink"], fontsize=12.5)
+        for (x, align, _), text in zip(RACE_COLS[1:], runner.cells):
+            main = x == RACE_COLS[1][0]
+            fig.text(x, y, text, ha=align, color=c["ink"] if main else c["ink2"],
+                     fontsize=12.5, fontweight="bold" if main else "normal")
+        y -= RACE_TABLE_STEP
+
+
+def _race_code(fig, code: str, c: dict) -> None:
+    """Ligaga qo'shilish kodi — harflari ajratilgan izoh va ramkadagi kod."""
+    spaced = " ".join("LIGA KODI")
+    fig.text(0.5, RACE_CODE_LABEL_Y, spaced, ha="center", va="center",
+             color=c["ink2"], fontsize=9.5)
+    fig.text(0.5, RACE_CODE_Y, code, ha="center", va="center", color=c["ink"],
+             fontsize=14, fontweight="bold", family=RACE_CODE_FONT,
+             bbox=dict(boxstyle="round,pad=0.42", facecolor=c["surface"],
+                       edgecolor=c["s1"], linewidth=1.4))
+
+
+def race_chart(out_path: str | Path, title: str, subtitle: str,
+               gws: list[int], runners: list[Runner], code: str = "",
+               palette: dict | None = None) -> Path:
+    """Liga yetakchilarining mavsumiy poygasi — o'rin chizig'i va jadval."""
+    if not runners or not gws:
+        raise ValueError("Poyga charti uchun menejerlar va turlar kerak")
+    if len(runners) > len(SERIES):
+        raise ValueError(f"Ko'pi bilan {len(SERIES)} ta menejer "
+                         f"(berildi: {len(runners)})")
+
+    c = {**PALETTE, **(palette or {})}
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+    fig = plt.figure(figsize=RACE_FIG, dpi=150, facecolor=c["surface"])
+    try:
+        fig.text(0.5, 0.960, plain(title), ha="center", color=c["ink"],
+                 fontsize=24, fontweight="bold")
+        if subtitle:
+            fig.text(0.5, 0.928, plain(subtitle), ha="center", va="top",
+                     color=c["ink2"], fontsize=12.5, linespacing=1.45)
+
+        _race_panel(fig, gws, runners, c)
+        _race_table(fig, runners, c)
+        if code:
+            _race_code(fig, code, c)
+
+        mark = logo_path()
+        image = mpimg.imread(str(mark)) if mark else None
+        if image is not None:
+            width = 0.26
+            height = _logo_height(fig, image, width)
+            _logo_axes(fig, 0.5 - width / 2, 0.425 - height / 2, width,
+                       image, alpha=0.12, zorder=2.5)
+            _logo_axes(fig, 0.5 - 0.24 / 2, 0.014, 0.24, image)
         else:
             log.warning("Logotip topilmadi (%s) — rasm logosiz chiqadi", config.CHART_LOGO)
 
@@ -361,10 +532,10 @@ def comparison_chart(out_path: str | Path, title: str, subtitle: str,
 
     fig = plt.figure(figsize=(FIG_W, FIG_H), dpi=150, facecolor=c["surface"])
     try:
-        fig.text(0.5, 0.963, title, ha="center", color=c["ink"],
+        fig.text(0.5, 0.963, plain(title), ha="center", color=c["ink"],
                  fontsize=24, fontweight="bold")
         if subtitle:
-            fig.text(0.5, 0.932, subtitle, ha="center", va="top", color=c["ink2"],
+            fig.text(0.5, 0.932, plain(subtitle), ha="center", va="top", color=c["ink2"],
                      fontsize=12.5, linespacing=1.6)
 
         _radar(fig, metrics, colours, c)

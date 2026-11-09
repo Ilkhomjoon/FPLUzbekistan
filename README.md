@@ -6,7 +6,8 @@
 2. **Jamoa yangiliklari** — jarohat, diskvalifikatsiya va tuzalishlarni kuzatib, o'zgarganda darhol xabar beradi. FPL ning inglizcha izohi o'zbekchaga o'giriladi (`bot/news_uz.py` lug'ati). Deadline yaqin bo'lsa har 10 daqiqada tekshiradi.
 3. **Jonli bonus ochkolar** — o'yin kuni birinchi o'yin boshlanishi bilan kanalga bitta xabar yuboradi va uni **har daqiqada** yangilab boradi (BPS asosidagi bonus, hisob, 🔴 → 🟢).
 4. **Solishtirish charti** — deadline oldidan shu turda eng ko'p sotib olinayotgan ikki futbolchini radar chart qilib **rasm** sifatida chiqaradi. Juftlik bitta pozitsiya ichidan tanlanadi, ko'rsatkichlar pozitsiyaga moslashadi, rasm markazida kanal logosi turadi.
-5. **Harakat charti** — "kuchlilar nimani olyapti": oxirgi 3 turda top-1000 menejerda egaligi eng tez o'sgan futbolchilar. Kuchlilardagi egalik bilan umumiy egalik orasidagi masofa — differential tug'iladigan joy. Ma'lumot differentiallar skaneri yig'adigan `elite_history.json` dan olinadi; menejerlar ro'yxati esa muzlatilgan (pastga qarang).
+5. **O'zbekiston poygasi** — ligamizning eng yaxshi olti menejeri mavsum davomida bir-birini qanday quvib o'tgani. Chiziqlar kesishgan joy — o'rin almashgan tur. Faqat 7 ta so'rov: jadvalning birinchi sahifasi va oltita menejerning tarixi.
+6. **Harakat charti** — "kuchlilar nimani olyapti": oxirgi 3 turda top-1000 menejerda egaligi eng tez o'sgan futbolchilar. Kuchlilardagi egalik bilan umumiy egalik orasidagi masofa — differential tug'iladigan joy. Ma'lumot differentiallar skaneri yig'adigan `elite_history.json` dan olinadi; menejerlar ro'yxati esa muzlatilgan (pastga qarang).
 
 Hammasi **GitHub Actions**da, mutlaqo tekin ishlaydi. Server sotib olish shart emas.
 
@@ -151,6 +152,7 @@ python -m unittest discover -s tests
 | `python -m bot.price_changes --dry-run` | kerak | Haqiqiy ish jarayoni: snapshot bilan solishtiradi |
 | `python -m bot.compare --dry-run --force` | kerak | Solishtirish chartini chizadi va `data/charts/` ga saqlaydi (Telegramga yubormaydi) |
 | `python -m bot.elite_movers --dry-run --force` | kerak emas* | Harakat chartini chizadi (*tarix fayli to'lgan bo'lsa) |
+| `python -m bot.race --dry-run --force` | kerak | Poyga chartini chizadi va `data/charts/` ga saqlaydi |
 | `python -m bot.differentials --backfill 8` | kerak | GW8 uchun egalikni muzlatilgan ro'yxat bo'yicha to'ldiradi (~1000 so'rov, post chiqmaydi) |
 
 **Muhim nuance:** `--dry-run` ni birinchi marta ishga tushirganingizda hech qanday post chiqmaydi — bu xato emas. Solishtirish uchun kechagi narxlar kerak, birinchi ishga tushishda bot faqat boshlang'ich snapshot oladi. Shuning uchun **birinchi sinov uchun `--preview` ni ishlating** — u snapshot'ga bog'liq emas va postni darhol chizib beradi.
@@ -211,6 +213,7 @@ Har bir workflow shu tamoyilda ishlaydi:
 | Differentiallar | 15:09 | `DIFF_POST_AT` gacha ushlab turadi | **20:00** |
 | Solishtirish charti | 17:40 | deadline'ni ko'rib, post daqiqasini o'zi hisoblaydi | **20:30** (deadline'dan ≥3 soat oldin) |
 | Harakat charti | 19:30 | `MOVERS_POST_AT` gacha ushlab turadi | **19:40** (tur yopilgandan keyingi kun) |
+| O'zbekiston poygasi | 19:50 | ochkolar yakunlanganini kutadi | **20:00** (tur yopilgandan ikki kun keyin) |
 | Tur sharhi | 11:30 | FPL tasdig'ini kuzatadi | **~13:05** (qishda ~14:05) |
 
 **O'yin holati orqaga ketmaydi.** FPL API CDN orqali beriladi va ba'zan eski nusxani qaytaradi — shu sabab tugagan o'yin "hali boshlanmagan" bo'lib qolgan, sarlavha esa `YAKUNLANDI` dan `KUTILMOQDA` ga qaytgan edi. Endi har yangilanishda `merge_fixtures()` eski va yangi nusxani solishtirib, **ilgarilaganini** oladi: boshlangan o'yin qaytib boshlanmagan bo'lmaydi, hisob va statistika kamaymaydi. Yakuniy yangilanish ham tugamagan ko'rinishdagi nusxa kelsa xabarni tegmay qo'yadi.
@@ -336,6 +339,7 @@ bot/
   compare.py        # deadline oldidagi "A vs B" radar chart posti
   elite_cohort.py   # muzlatilgan 1000 menejer ro'yxati (o'lchov barqarorligi)
   elite_movers.py   # top-1000 egaligidagi harakat charti
+  race.py           # liga yetakchilarining poyga charti
 assets/
   logo.png          # chartdagi suv belgisi va pastdagi logotip
 data/
@@ -347,6 +351,7 @@ data/
   compare.json       # qaysi tur uchun chart chiqarilgani
   elite_cohort.json  # skanerlanadigan 1000 menejer (entry_id lari)
   elite_movers.json  # qaysi tur uchun harakat charti chiqarilgani
+  race.json          # qaysi tur uchun poyga charti chiqarilgani
   charts/            # vaqtinchalik PNG fayllar (.gitignore da)
 .github/workflows/  # ikkita cron
 scripts/
@@ -438,6 +443,11 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `MOVERS_MIN_RISE` | `3` | Shundan kam o'sgani "harakat" hisoblanmaydi, % |
 | `MOVERS_TOP_N` | `5` | Chartdagi futbolchilar soni |
 | `MOVERS_POST_AT` | `19:40` | Harakat charti qachon chiqadi |
+| `RACE_TOP_N` | `6` | Poyga chartidagi menejerlar soni (ranglar soni bilan chegaralangan) |
+| `RACE_LEAD` | `48` | Ochkolar yakunlangandan shuncha soat o'tgach chiqadi |
+| `RACE_POST_AT` | `20:00` | Poyga charti qachon chiqadi |
+| `RACE_NATIONAL_LEAGUE` | `0` | Jadvaldagi "O'zbekistondan" ustuni uchun liga id; 0 bo'lsa `STATS_LEAGUES` dagi ikkinchisi olinadi |
+| `LEAGUE_CODE` | — | Ligaga qo'shilish kodi; berilsa postda ko'rsatiladi |
 | `MOVERS_BACKFILL` | `true` | Yetishmayotgan turlar o'z-o'zidan to'ldirilsinmi |
 | `MOVERS_BACKFILL_MAX` | `3` | Bitta jarayonda ko'pi bilan nechta tur to'ldiriladi |
 | `COMMON_HASHTAG` | `#FPL` | Har bir postning oxirida maxsus hashtagdan keyin turadi |

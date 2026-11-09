@@ -269,6 +269,26 @@ MOVERS_BACKFILL = _bool("MOVERS_BACKFILL", True)
 MOVERS_BACKFILL_MAX = _int("MOVERS_BACKFILL_MAX", 3)  # bitta jarayonda ko'pi bilan nechta tur
 
 
+
+# --- O'zbekiston poygasi (liga yetakchilari, rasm) ---
+RACE_STATE_FILE = DATA_DIR / "race.json"
+RACE_HASHTAG = os.getenv("RACE_HASHTAG", "#Poyga")
+RACE_TOP_N = _int("RACE_TOP_N", 6)        # chartdagi menejerlar (ranglar soni bilan chegaralangan)
+RACE_MIN_GW = _int("RACE_MIN_GW", 3)      # mavsum boshida poyga hali qiziq emas
+RACE_WORKERS = _int("RACE_WORKERS", 6)    # parallel so'rovlar
+# Jadvalda milliy liga o'rni ham ko'rsatiladi. 0 bo'lsa STATS_LEAGUES dagi
+# IKKINCHI liga olinadi (birinchisi — bizning kanal ligasi).
+RACE_NATIONAL_LEAGUE = _int("RACE_NATIONAL_LEAGUE", 0)
+# Ochkolar rasman yakunlangandan shuncha soat o'tgach chiqadi. 48 soat —
+# tur sharhi, differentiallar va harakat charti bilan to'qnashmasligi uchun.
+RACE_LEAD = _int("RACE_LEAD", 48)
+RACE_POST_AT = os.getenv("RACE_POST_AT", "20:00")
+RACE_GRACE = _int("RACE_GRACE", 150)          # shuncha kechiksa ham mayli
+RACE_ALERT_WITHIN = _int("RACE_ALERT_WITHIN", 720)  # ogohlantirish oynasi
+RACE_MAX_MINUTES = _int("RACE_MAX_MINUTES", 300)    # jarayon maksimal ish vaqti
+# Ligaga qo'shilish kodi — postda ko'rsatiladi. Bo'sh bo'lsa qator chiqmaydi.
+LEAGUE_CODE = os.getenv("LEAGUE_CODE", "").strip()
+
 # --- Solishtirish charti (ikki futbolchi, rasm) ---
 COMPARE_STATE_FILE = DATA_DIR / "compare.json"
 COMPARE_HASHTAG = os.getenv("COMPARE_HASHTAG", "#Solishtirish")

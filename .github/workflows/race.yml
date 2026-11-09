@@ -1,0 +1,62 @@
+name: O'zbekiston poygasi
+
+on:
+  # Jadval bo'yicha ishga tushirish tashqi cron (cron-job.org) orqali —
+  # `scheduled: true` kirituvchisi bilan. Sozlash: docs/tashqi-cron.md
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Telegramga yubormasdan sinash"
+        type: boolean
+        default: false
+      force:
+        description: "Vaqt tekshiruvini e'tiborsiz qoldirib, hoziroq chiqarish"
+        type: boolean
+        default: false
+      scheduled:
+        description: "Tashqi cron chaqirdi — jadval bo'yicha ishlasin"
+        type: boolean
+        default: false
+
+concurrency:
+  group: fpl-race
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  race:
+    runs-on: ubuntu-latest
+    # post vaqtigacha kutish (RACE_MAX_MINUTES) + 7 ta so'rov
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Chartni tayyorlash va yuborish
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
+          TELEGRAM_ADMIN_CHAT_ID: ${{ secrets.TELEGRAM_ADMIN_CHAT_ID }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          # Birinchi liga "bizniki" — poyga shundan olinadi
+          STATS_LEAGUES: "137243:🏆 FPLUzbekistan,251:🇺🇿 Uzbekistan"
+          LEAGUE_CODE: "hv7h9c"
+          RACE_POST_AT: "20:00"
+          RACE_LEAD: "48"
+          RACE_TOP_N: "6"
+        run: |
+          ARGS=""
+          if [ "${{ inputs.force }}" = "true" ]; then ARGS="--force"; fi
+          python -m bot.race $ARGS
+
+      - name: Holatni saqlash (commit)
+        if: always()
+        run: bash scripts/commit_state.sh "update race state"
