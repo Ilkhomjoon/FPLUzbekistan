@@ -77,12 +77,12 @@
       "team": "BHA"
     },
     "112": {
-      "cost": 50,
+      "cost": 51,
       "name": "Van Hecke",
       "team": "TOT"
     },
     "113": {
-      "cost": 44,
+      "cost": 43,
       "name": "F.Kadıoğlu",
       "team": "BHA"
     },
@@ -92,7 +92,7 @@
       "team": "BHA"
     },
     "115": {
-      "cost": 54,
+      "cost": 55,
       "name": "De Cuyper",
       "team": "BHA"
     },
@@ -367,7 +367,7 @@
       "team": "CHE"
     },
     "165": {
-      "cost": 77,
+      "cost": 76,
       "name": "João Pedro",
       "team": "CHE"
     },
@@ -922,7 +922,7 @@
       "team": "FUL"
     },
     "265": {
-      "cost": 49,
+      "cost": 48,
       "name": "Berge",
       "team": "FUL"
     },
@@ -1047,7 +1047,7 @@
       "team": "HUL"
     },
     "288": {
-      "cost": 44,
+      "cost": 43,
       "name": "Dowell",
       "team": "HUL"
     },
@@ -1082,7 +1082,7 @@
       "team": "HUL"
     },
     "294": {
-      "cost": 45,
+      "cost": 44,
       "name": "Zambrano",
       "team": "HUL"
     },
@@ -1207,7 +1207,7 @@
       "team": "IPS"
     },
     "316": {
-      "cost": 55,
+      "cost": 54,
       "name": "Emersonn",
       "team": "IPS"
     },
@@ -1252,7 +1252,7 @@
       "team": "IPS"
     },
     "324": {
-      "cost": 48,
+      "cost": 47,
       "name": "Mehmeti",
       "team": "IPS"
     },
@@ -1552,7 +1552,7 @@
       "team": "LIV"
     },
     "379": {
-      "cost": 92,
+      "cost": 93,
       "name": "Isak",
       "team": "LIV"
     },
@@ -1582,7 +1582,7 @@
       "team": "LIV"
     },
     "384": {
-      "cost": 55,
+      "cost": 54,
       "name": "Donnarumma",
       "team": "MCI"
     },
@@ -1622,12 +1622,12 @@
       "team": "MCI"
     },
     "391": {
-      "cost": 57,
+      "cost": 56,
       "name": "Gvardiol",
       "team": "MCI"
     },
     "392": {
-      "cost": 52,
+      "cost": 51,
       "name": "Aït-Nouri",
       "team": "MCI"
     },
@@ -2252,7 +2252,7 @@
       "team": "TOT"
     },
     "504": {
-      "cost": 52,
+      "cost": 53,
       "name": "Vuskovic",
       "team": "BHA"
     },
@@ -2812,7 +2812,7 @@
       "team": "LEE"
     },
     "605": {
-      "cost": 45,
+      "cost": 44,
       "name": "Yalcouyé",
       "team": "BHA"
     },
@@ -3157,7 +3157,7 @@
       "team": "AVL"
     },
     "668": {
-      "cost": 49,
+      "cost": 48,
       "name": "Tutierov",
       "team": "SUN"
     },
@@ -3180,6 +3180,11 @@
       "cost": 40,
       "name": "Gunter",
       "team": "TOT"
+    },
+    "672": {
+      "cost": 45,
+      "name": "Cissé",
+      "team": "AVL"
     },
     "68": {
       "cost": 67,
@@ -3217,7 +3222,7 @@
       "team": "BOU"
     },
     "74": {
-      "cost": 50,
+      "cost": 49,
       "name": "Brooks",
       "team": "BOU"
     },
@@ -3357,5 +3362,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-08T01:00:00+00:00"
+  "taken_at": "2026-11-09T01:00:00+00:00"
 }
