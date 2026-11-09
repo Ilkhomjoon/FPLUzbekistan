@@ -55,7 +55,8 @@ jobs:
           NEWS_MIN_OWNED: "3"
           NEWS_WINDOW: "14:00-23:00"
           NEWS_RUSH_LEAD: "360"
-          NEWS_INTERVAL: "600"
+          NEWS_INTERVAL: "300"
+          NEWS_CONFIRM: "2"
           # job timeout 340 daqiqa — jarayon undan oldin o'zi chiqsin
           NEWS_MAX_MINUTES: "300"
         run: |

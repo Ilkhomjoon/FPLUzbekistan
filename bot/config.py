@@ -162,7 +162,12 @@ NEWS_WINDOW = os.getenv("NEWS_WINDOW", "14:00-23:00")
 # Deadline'gacha shuncha daqiqa qolganda jarayon yashab qoladi va tez-tez
 # tekshiradi — o'sha payt har daqiqa qimmat.
 NEWS_RUSH_LEAD = _int("NEWS_RUSH_LEAD", 360)
-NEWS_INTERVAL = _int("NEWS_INTERVAL", 600)       # intensiv rejimdagi tekshiruv oralig'i
+# CDN turli yoshdagi nusxalarni qaytaradi: bitta javobga ishonib bo'lmaydi.
+# O'zgarish shuncha marta KETMA-KET bir xil ko'rinsagina e'lon qilinadi.
+NEWS_CONFIRM = _int("NEWS_CONFIRM", 2)
+# Tasdiq talab qilingani uchun oraliq qisqartirildi: 2 x 300 s = 5 daqiqa
+# kechikish, avvalgi 600 s da esa 10 daqiqa bo'lardi.
+NEWS_INTERVAL = _int("NEWS_INTERVAL", 300)       # intensiv rejimdagi tekshiruv oralig'i
 NEWS_MAX_MINUTES = _int("NEWS_MAX_MINUTES", 300)  # jarayon maksimal ish vaqti
 
 # --- Deadline statistikasi (sardorlar va chiplar) ---

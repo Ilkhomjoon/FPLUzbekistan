@@ -229,12 +229,29 @@ def run(force: bool = False, wait: bool = False) -> int:
         overall_chip_counts=overall_chips(event),
     )
 
-    res = telegram.send_message(text)
-    storage.save(config.STATS_STATE_FILE, {
+    record = {
         "event": gw,
-        "message_id": res.get("message_id"),
         "posted_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-    })
+    }
+    try:
+        res = telegram.send_message(text)
+        record["message_id"] = res.get("message_id")
+    except telegram.TelegramUncertain as exc:
+        # Javob kelmadi: post chiqqan bo'lishi ham, chiqmagan bo'lishi ham
+        # mumkin. Holatni baribir yozamiz — aks holda keyingi cron xuddi
+        # shu postni qaytadan chiqarib, kanalda ikkita nusxa paydo bo'ladi.
+        record["uncertain"] = True
+        storage.save(config.STATS_STATE_FILE, record)
+        log.error("GW%d statistikasi: %s", gw, exc)
+        telegram.notify_admin(
+            f"⚠️ <b>Deadline statistikasi</b>\nGW{gw} posti yuborildi, lekin "
+            "Telegramdan javob kelmadi. Kanalni tekshir:\n"
+            "· post chiqqan bo'lsa — hech narsa qilish shart emas;\n"
+            "· chiqmagan bo'lsa — workflow'ni <code>force</code> bilan qayta ishga tushir."
+        )
+        return 1
+
+    storage.save(config.STATS_STATE_FILE, record)
     log.info("Statistika posti yuborildi (GW%d)", gw)
     return 0
 

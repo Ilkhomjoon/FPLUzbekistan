@@ -43,6 +43,24 @@ class TelegramNetworkError(TelegramError):
     """Tarmoq muammosi — taymaut, uzilish. Odatda o'z-o'zidan tuzaladi."""
 
 
+class TelegramUncertain(TelegramError):
+    """So'rov yuborildi, javob kelmadi — xabar chiqqan-chiqmagani noma'lum.
+
+    Bu holatda qayta urinib bo'lmaydi: Telegram xabarni qabul qilgan bo'lsa,
+    ikkinchi urinish kanalga IKKINCHI nusxani chiqaradi. 6-noyabrda deadline
+    statistikasi aynan shu sababdan ikki marta chiqqan.
+    """
+
+
+# Holatni o'zgartiradigan metodlar — ularda "javob kelmadi" degani "xabar
+# chiqmadi" degani emas. Qolganlari (edit, get) xavfsiz: qayta chaqirilsa
+# natija o'zgarmaydi.
+WRITE_METHODS = {"sendMessage", "sendPhoto", "sendPoll"}
+# Bitta jarayon ichida bir xil matnni takror yubormaslik uchun
+_recent: dict[tuple[str, str], float] = {}
+DEDUPE_SECONDS = 1800
+
+
 def esc(text: str) -> str:
     """HTML parse_mode uchun xavfsiz matn."""
     return html.escape(str(text), quote=False)
@@ -67,6 +85,17 @@ def _call(method: str, **payload) -> dict:
                 log.debug("%s: %.2f s", method, LAST_CALL_SECONDS)
         except Exception as exc:  # tarmoq xatosi
             last_err = exc
+            # Ulanib bo'lmagan bo'lsa — so'rov serverga yetmagan, qayta urinsa
+            # bo'ladi. Ulanib, javobni kutayotganda uzilsa — Telegram xabarni
+            # qabul qilgan bo'lishi mumkin; sendMessage'ni qayta yuborsak
+            # kanalda ikkita bir xil post paydo bo'ladi.
+            reached = not isinstance(exc, requests.exceptions.ConnectionError)
+            if reached and method in WRITE_METHODS:
+                log.error("%s: so'rov yuborildi, javob kelmadi — qayta urinmaymiz "
+                          "(xabar chiqqan bo'lishi mumkin): %s", method, exc)
+                raise TelegramUncertain(
+                    f"{method}: javob kelmadi, xabar chiqqan bo'lishi mumkin ({exc})"
+                ) from exc
             log.warning("%s tarmoq xatosi (%d-urinish): %s", method, attempt + 1, exc)
             time.sleep(2 * (attempt + 1))
             continue
@@ -87,8 +116,28 @@ def _call(method: str, **payload) -> dict:
     raise TelegramNetworkError(f"{method} bajarilmadi: {last_err}")
 
 
+def _is_repeat(chat_id: str, text: str) -> bool:
+    """Shu jarayon yaqinda aynan shu matnni yuborganmi?
+
+    Oxirgi himoya chizig'i: kodda xato bo'lsa ham, bitta ishga tushishda
+    bir xil post ikki marta chiqib ketmaydi.
+    """
+    key = (chat_id, text)
+    now = time.monotonic()
+    for old, when in list(_recent.items()):
+        if now - when > DEDUPE_SECONDS:
+            _recent.pop(old, None)
+    if key in _recent:
+        return True
+    _recent[key] = now
+    return False
+
+
 def send_message(text: str, chat_id: str | None = None, silent: bool = False) -> dict:
     chat_id = chat_id or config.CHANNEL_ID
+    if not config.DRY_RUN and _is_repeat(chat_id, text):
+        log.warning("Aynan shu matn yaqinda yuborilgan — takrori o'tkazib yuborildi.")
+        return {}
     if config.DRY_RUN:
         print("\n" + "=" * 48)
         print(f"[DRY-RUN] -> {chat_id}")
@@ -144,6 +193,13 @@ def _upload(method: str, filename: str, blob: bytes, field: str = "photo",
             result = r.json()
         except Exception as exc:
             last_err = exc
+            reached = not isinstance(exc, requests.exceptions.ConnectionError)
+            if reached and method in WRITE_METHODS:
+                log.error("%s: so'rov yuborildi, javob kelmadi — qayta urinmaymiz: %s",
+                          method, exc)
+                raise TelegramUncertain(
+                    f"{method}: javob kelmadi, rasm chiqqan bo'lishi mumkin ({exc})"
+                ) from exc
             log.warning("%s tarmoq xatosi (%d-urinish): %s", method, attempt + 1, exc)
             time.sleep(2 * (attempt + 1))
             continue

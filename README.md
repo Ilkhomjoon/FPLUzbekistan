@@ -224,6 +224,12 @@ Har bir workflow shu tamoyilda ishlaydi:
 
 **Harakat charti — menejerlar ro'yxati muzlatiladi.** Reytingning eng tepasi har turda almashadi. Agar har hafta "o'sha paytdagi top-1000" skanerlansa, egalikdagi o'sish ikki narsadan iborat bo'ladi: kuchlilar haqiqatan sotib olgani **va** ro'yxat tarkibi almashgani. Ikkinchisi bir tomonga qiyshaygan — top-1000 ga aynan o'tgan turda ko'p ochko olgan futbolchiga ega menejerlar kiradi, ya'ni chart "kim ko'p ochko oldi" degan signalni takrorlay boshlaydi. Shuning uchun ro'yxat bir marta olinadi va `data/elite_cohort.json` ga yoziladi: har hafta **aynan o'sha 1000 menejer** skanerlanadi, maxraj o'zgarmaydi. Har safar joriy top-1000 bilan kesishma sanaladi — bu **faqat o'lchagich**, skaner baribir to'liq ro'yxat bo'yicha ketadi (tushib ketganlarni chiqarib tashlash aynan o'sha qiyshayishni qaytarardi). Qolganlar `ELITE_COHORT_MIN` (500) dan kam bo'lsa, ro'yxat o'sha turdan qaytadan olinadi va yangi turlar yangi belgi (`cohort`) bilan yoziladi. Chart faqat bir xil belgili turlarni solishtiradi, yetishmayotganlari esa o'sha zahoti to'ldiriladi (`MOVERS_BACKFILL`) — shu sababli ro'yxat yangilanganda post uzilib qolmaydi.
 
+**Jamoa yangiliklari — bir xil xabar ikki marta chiqmaydi.** FPL ma'lumoti CDN orqali tarqatiladi va turli serverlar turli yoshdagi nusxani qaytaradi. Deadline oldidan bu sezilarli: bir so'rov "jarohat", keyingisi "tayyor", keyingisi yana "jarohat" deydi. Avval bot har bir farqni o'zgarish deb hisoblar va yarim soatda bir xil postni qaytarardi. Endi ikkita qoida ishlaydi. Birinchisi — o'zgarish ketma-ket `NEWS_CONFIRM` marta bir xil ko'rinsagina qabul qilinadi, bir martalik sakrash e'tiborsiz qoladi. Ikkinchisi — taqqoslash "oxirgi ko'rgan" holat bilan emas, **kanalga aytilgan** holat bilan qilinadi: aytilgandan keyin u yangilik bo'lmay qoladi, demak aynan bir xil xabar texnik jihatdan takrorlana olmaydi.
+
+**Jamoa yangiliklari — tur ketayotganda jim turadi.** Deadline o'tgach tarkiblar qotadi: o'sha paytdagi jarohat xabari hech narsani o'zgartira olmaydi. Shuning uchun deadline'dan turning ochkolari yakunlanishigacha (oxirgi o'yindan keyingi kun, Britaniya vaqti bilan 09:00) post chiqmaydi. O'sha davrdagi o'zgarishlar yo'qolmaydi — taqqoslash nuqtasi joyida qoladi va tur yopilgach hammasi birdan chiqadi.
+
+**Javobi kelmagan post qayta yuborilmaydi.** 6-noyabrda deadline statistikasi kanalga ikki marta chiqdi. Sabab: `sendMessage` Telegramga yetib bordi, javob esa taymautga uchradi, va qayta urinish ikkinchi nusxani yaratdi. Endi xatoning turi ajratiladi — ulanib bo'lmagan bo'lsa so'rov serverga yetmagan, qayta urinsa bo'ladi; ulanib, javob kutayotganda uzilsa, xabar chiqqan bo'lishi mumkin va qayta urinilmaydi. Bunday holatda tur "chiqarilgan" deb belgilanadi (keyingi cron takrorlamasligi uchun) va adminga tekshirish haqida xabar boradi. Ustiga oxirgi himoya qo'shildi: bitta jarayon aynan bir xil matnni ikki marta yubormaydi.
+
 **Tur sharhi — alohida holat.** 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni **Britaniya vaqti bilan 09:00** da yakuniy qiladi ("lockdown"). Toshkentda bu yozda 13:00, qishda 14:00 — ya'ni aniq soatni cron'ga yozib bo'lmaydi. Shuning uchun uyg'onib, har 3 daqiqada tekshiramiz va tayyor bo'lishi bilan chiqaramiz (`GW_REVIEW_UNTIL` gacha). Post oynasi `09:00-23:00` — tashqi cron 12:30 ga ham, 19:00 ga ham qo'yilsa ishlaydi. Tasdiq kelib, oyna yopiq bo'lsa, bot jim o'tib ketmaydi — adminga xabar yuboradi.
 
 **Muhim:** `bootstrap-static` dagi `finished` bayrog'i lockdown'dan ancha keyin qo'yiladi — unga tayanib bo'lmaydi. Turning yakunlanganini `/event-status/` bo'yicha aniqlaymiz:
@@ -402,7 +408,8 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `NEWS_MIN_OWNED` | `3` | Egaligi shundan past futbolchilar kuzatilmaydi, % |
 | `NEWS_WINDOW` | `14:00-23:00` | Oddiy kunlardagi kuzatuv oynasi |
 | `NEWS_RUSH_LEAD` | `360` | Deadline'gacha shuncha daqiqa qolganda tez-tez tekshiriladi |
-| `NEWS_INTERVAL` | `600` | Intensiv rejimdagi tekshiruv oralig'i (soniya) |
+| `NEWS_INTERVAL` | `300` | Intensiv rejimdagi tekshiruv oralig'i (soniya) |
+| `NEWS_CONFIRM` | `2` | O'zgarish shuncha marta ketma-ket tasdiqlansagina chiqadi |
 | `NEWS_MAX_ROWS` | `12` | Bitta postdagi maksimal qator |
 | `ERROR_ALERT_AFTER` | `3` | Necha marta ketma-ket xatodan keyin ogohlantirsin |
 | `CRON_ALERT_MINUTES` | `20` (workflow'da `90`) | Cron kechikishi haqida ogohlantirish chegarasi |

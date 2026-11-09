@@ -158,3 +158,116 @@ class PostTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ConfirmTest(unittest.TestCase):
+    """CDN sakrab turgan javob bermasin — o'zgarish ikki marta tasdiqlansin."""
+
+    def test_one_sighting_is_not_enough(self):
+        ready, waiting = team_news.confirm({}, {"1": {"status": "i"}}, need=2)
+        self.assertEqual(ready, {})
+        self.assertEqual(waiting["1"]["seen"], 1)
+
+    def test_two_in_a_row_are_accepted(self):
+        found = {"1": {"status": "i"}}
+        _, waiting = team_news.confirm({}, found, need=2)
+        ready, waiting = team_news.confirm(waiting, found, need=2)
+        self.assertEqual(ready, found)
+        self.assertEqual(waiting, {})
+
+    def test_a_flapping_value_resets_the_count(self):
+        pending = {}
+        for state in ({"status": "i"}, {"status": "a"}, {"status": "i"}):
+            ready, pending = team_news.confirm(pending, {"1": state}, need=2)
+            self.assertEqual(ready, {}, "sakrab turgan qiymat chiqmasligi kerak")
+
+    def test_a_vanished_candidate_leaves_the_queue(self):
+        _, pending = team_news.confirm({}, {"1": {"status": "i"}}, need=2)
+        ready, pending = team_news.confirm(pending, {}, need=2)
+        self.assertEqual((ready, pending), ({}, {}))
+
+
+class RepeatTest(unittest.TestCase):
+    """Bir xil xabar ikki marta chiqmasligi kerak."""
+
+    def setUp(self):
+        self.sent = []
+        self._send = team_news.telegram.send_message
+        team_news.telegram.send_message = lambda text, **kw: self.sent.append(text) or {}
+        self.addCleanup(setattr, team_news.telegram, "send_message", self._send)
+
+    def _tick(self, state, players):
+        return team_news.check_once(state, _bootstrap(players), TEAMS)
+
+    def test_the_same_change_is_announced_once(self):
+        state = self._tick({}, HEALTHY)                      # birinchi ishga tushirish
+        injured = [_player(1, "Haaland", 1, 54.2, "i", 0, "Knee injury"),
+                   HEALTHY[1], HEALTHY[2], HEALTHY[3]]
+        state = self._tick(state, injured)                   # 1-ko'rinish: tasdiq kutadi
+        self.assertEqual(self.sent, [])
+        state = self._tick(state, injured)                   # 2-ko'rinish: chiqadi
+        self.assertEqual(len(self.sent), 1)
+        for _ in range(4):                                   # keyin jim
+            state = self._tick(state, injured)
+        self.assertEqual(len(self.sent), 1)
+
+    def test_a_flapping_feed_posts_nothing(self):
+        state = self._tick({}, HEALTHY)
+        injured = [_player(1, "Haaland", 1, 54.2, "i", 0, "Knee injury"),
+                   HEALTHY[1], HEALTHY[2], HEALTHY[3]]
+        for players in (injured, HEALTHY, injured, HEALTHY, injured):
+            state = self._tick(state, players)
+        self.assertEqual(self.sent, [])
+
+    def test_a_real_second_change_still_gets_through(self):
+        state = self._tick({}, HEALTHY)
+        injured = [_player(1, "Haaland", 1, 54.2, "i", 0, "Knee injury"),
+                   HEALTHY[1], HEALTHY[2], HEALTHY[3]]
+        state = self._tick(state, injured)
+        state = self._tick(state, injured)
+        self.assertEqual(len(self.sent), 1)
+        for _ in range(2):                                   # tuzaldi — yangi xabar
+            state = self._tick(state, HEALTHY)
+        self.assertEqual(len(self.sent), 2)
+        self.assertIn("tayyor", self.sent[1])
+
+    def test_a_quiet_note_change_updates_the_baseline_silently(self):
+        state = self._tick({}, HEALTHY)
+        reworded = [_player(1, "Haaland", 1, 54.2, "a", None, "Back in training"),
+                    HEALTHY[1], HEALTHY[2], HEALTHY[3]]
+        state = self._tick(state, reworded)
+        self.assertEqual(self.sent, [])
+        self.assertEqual(state["players"]["1"]["news"], "Back in training")
+
+
+class InPlayTest(unittest.TestCase):
+    """Tur ketayotganda post chiqmaydi."""
+
+    def _bootstrap_with_current(self, deadline):
+        data = _bootstrap(HEALTHY)
+        data["events"] = [{"id": 11, "is_current": True,
+                           "deadline_time": deadline.isoformat().replace("+00:00", "Z")}]
+        return data
+
+    def test_quiet_after_the_deadline_until_the_round_closes(self):
+        now = waiter.now_utc()
+        data = self._bootstrap_with_current(now - timedelta(hours=3))
+        status = {"status": [{"date": (now + timedelta(days=1)).date().isoformat()}]}
+        self.assertTrue(team_news.round_in_play(data, status, now))
+
+    def test_loud_again_once_the_points_are_final(self):
+        now = waiter.now_utc()
+        data = self._bootstrap_with_current(now - timedelta(days=5))
+        status = {"status": [{"date": (now - timedelta(days=3)).date().isoformat()}]}
+        self.assertFalse(team_news.round_in_play(data, status, now))
+
+    def test_before_the_deadline_nothing_is_blocked(self):
+        now = waiter.now_utc()
+        data = self._bootstrap_with_current(now + timedelta(hours=2))
+        status = {"status": [{"date": (now + timedelta(days=2)).date().isoformat()}]}
+        self.assertFalse(team_news.round_in_play(data, status, now))
+
+    def test_an_unreadable_status_does_not_block(self):
+        now = waiter.now_utc()
+        data = self._bootstrap_with_current(now - timedelta(hours=3))
+        self.assertFalse(team_news.round_in_play(data, {}, now))
