@@ -67,6 +67,9 @@ PHRASES = {
     "knock": "zarba olgan",
     "minor knock": "kichik zarba olgan",
     "injury": "jarohat",
+    # FPL ba'zan tafsilotni yozmaydi — "falon joyi" deb taxmin qilmaymiz
+    "unspecified injury": "jarohat tafsilotlari hali ochiqlanganicha yo'q",
+    "unspecified illness": "kasallik tafsilotlari hali ochiqlanganicha yo'q",
     "illness": "kasallik",
     "virus": "virus",
     "fitness": "jismoniy holati yetarli emas",

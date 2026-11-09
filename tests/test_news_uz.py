@@ -75,3 +75,27 @@ class TranslateTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class UnspecifiedTest(unittest.TestCase):
+    """FPL tafsilotni yozmagan holat — taxmin qilmaymiz."""
+
+    def test_an_unspecified_injury(self):
+        self.assertEqual(translate("Unspecified injury"),
+                         "Jarohat tafsilotlari hali ochiqlanganicha yo'q")
+
+    def test_the_duplicate_percentage_is_still_dropped(self):
+        self.assertEqual(translate("Unspecified injury - 75% chance of playing"),
+                         "Jarohat tafsilotlari hali ochiqlanganicha yo'q")
+
+    def test_a_return_date_is_kept(self):
+        self.assertEqual(translate("Unspecified injury - Expected back 20 Dec"),
+                         "Jarohat tafsilotlari hali ochiqlanganicha yo'q, "
+                         "20-dekabrda qaytishi kutilmoqda")
+
+    def test_an_unspecified_illness_says_illness(self):
+        self.assertEqual(translate("Unspecified illness"),
+                         "Kasallik tafsilotlari hali ochiqlanganicha yo'q")
+
+    def test_a_named_injury_is_unaffected(self):
+        self.assertEqual(translate("Knee injury"), "Tizza jarohati")
