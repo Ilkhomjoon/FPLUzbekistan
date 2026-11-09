@@ -1,15 +1,6 @@
 {
-  "checked_at": "2026-11-09T09:35:22+00:00",
-  "pending": {
-    "32": {
-      "seen": 1,
-      "state": {
-        "chance": 100,
-        "news": "",
-        "status": "a"
-      }
-    }
-  },
+  "checked_at": "2026-11-09T10:35:24+00:00",
+  "pending": {},
   "players": {
     "1": {
       "chance": null,
@@ -232,9 +223,9 @@
       "status": "a"
     },
     "32": {
-      "chance": 0,
-      "news": "Suspended until 21 Nov",
-      "status": "s"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "330": {
       "chance": null,
