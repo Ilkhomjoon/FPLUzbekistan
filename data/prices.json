@@ -622,7 +622,7 @@
       "team": "EVE"
     },
     "210": {
-      "cost": 54,
+      "cost": 53,
       "name": "Wharton",
       "team": "CRY"
     },
@@ -662,7 +662,7 @@
       "team": "CRY"
     },
     "218": {
-      "cost": 48,
+      "cost": 47,
       "name": "Doucouré",
       "team": "CRY"
     },
@@ -897,7 +897,7 @@
       "team": "ARS"
     },
     "260": {
-      "cost": 62,
+      "cost": 61,
       "name": "Wilson",
       "team": "LEE"
     },
@@ -2122,7 +2122,7 @@
       "team": "NFO"
     },
     "481": {
-      "cost": 63,
+      "cost": 62,
       "name": "Anderson",
       "team": "MCI"
     },
@@ -2682,7 +2682,7 @@
       "team": "NFO"
     },
     "582": {
-      "cost": 54,
+      "cost": 53,
       "name": "Madjo",
       "team": "AVL"
     },
@@ -3362,5 +3362,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-09T01:00:00+00:00"
+  "taken_at": "2026-11-10T01:00:00+00:00"
 }
