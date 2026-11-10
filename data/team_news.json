@@ -1,15 +1,6 @@
 {
-  "checked_at": "2026-11-10T11:35:24+00:00",
-  "pending": {
-    "552": {
-      "seen": 1,
-      "state": {
-        "chance": 75,
-        "news": "Muscular injury - 75% chance of playing",
-        "status": "d"
-      }
-    }
-  },
+  "checked_at": "2026-11-10T12:35:21+00:00",
+  "pending": {},
   "players": {
     "1": {
       "chance": null,
@@ -437,9 +428,9 @@
       "status": "a"
     },
     "552": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Muscular injury - 75% chance of playing",
+      "status": "d"
     },
     "557": {
       "chance": 100,
