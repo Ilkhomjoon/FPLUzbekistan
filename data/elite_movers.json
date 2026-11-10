@@ -1,19 +1,19 @@
 {
   "cohort": 9,
-  "event": 9,
-  "message_id": 4125,
+  "event": 10,
+  "message_id": 4177,
   "players": [
     "N.Jackson",
     "Van Hecke",
+    "Evanilson",
     "Tavernier",
-    "Manzambi",
     "Silva"
   ],
-  "posted_at": "2026-11-05T08:18:25+00:00",
-  "survivors": null,
+  "posted_at": "2026-11-10T14:40:01+00:00",
+  "survivors": 586,
   "window": [
-    7,
     8,
-    9
+    9,
+    10
   ]
 }
