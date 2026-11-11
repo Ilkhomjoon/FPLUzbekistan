@@ -57,7 +57,7 @@
       "team": "BRE"
     },
     "109": {
-      "cost": 46,
+      "cost": 47,
       "name": "Verbruggen",
       "team": "BHA"
     },
@@ -762,7 +762,7 @@
       "team": "EVE"
     },
     "236": {
-      "cost": 66,
+      "cost": 67,
       "name": "Dewsbury-Hall",
       "team": "EVE"
     },
@@ -1807,7 +1807,7 @@
       "team": "MUN"
     },
     "424": {
-      "cost": 40,
+      "cost": 39,
       "name": "Amass",
       "team": "MUN"
     },
@@ -3362,5 +3362,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-10T01:00:00+00:00"
+  "taken_at": "2026-11-11T01:00:00+00:00"
 }
