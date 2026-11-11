@@ -1,6 +1,23 @@
 {
-  "checked_at": "2026-11-10T17:35:25+00:00",
-  "pending": {},
+  "checked_at": "2026-11-11T09:35:20+00:00",
+  "pending": {
+    "286": {
+      "seen": 1,
+      "state": {
+        "chance": 75,
+        "news": "Hamstring injury - 75% chance of playing",
+        "status": "d"
+      }
+    },
+    "418": {
+      "seen": 1,
+      "state": {
+        "chance": 75,
+        "news": "Back injury - 75% chance of playing",
+        "status": "d"
+      }
+    }
+  },
   "players": {
     "1": {
       "chance": null,
