@@ -186,7 +186,10 @@ def run(force: bool = False, window: str | None = None, update: bool = False) ->
         if message_id is None:
             for r in rises + falls:
                 log.info("  %s %.1f%%", r["label"], r["percent"])
-            message_id = telegram.send_message(text).get("message_id")
+            # Bu post tunda bir necha marta tahrirlanadi, shuning uchun
+            # javob kelmasa qayta urinamiz: takror nusxa xavfi bor, lekin
+            # kechqurungi postning butunlay yo'qolishi battarroq.
+            message_id = telegram.send_message(text, retry=True).get("message_id")
             seen = {r["id"] for r in rises + falls}
             log.info("Narx bashorati posti yuborildi (id=%s)", message_id)
         elif text != last_text:

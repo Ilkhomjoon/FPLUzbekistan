@@ -181,8 +181,10 @@ def _send_or_edit(message_id, text_builder):
     """Yuborish/tahrirlashda HTML xatosi chiqsa, yig'ishni o'chirib qayta urinamiz."""
     text = text_builder()
     try:
+        # Jonli xabar har daqiqada tahrirlanadi — yo'qolib qolgani
+        # takrorlanganidan ko'ra yomonroq
         return (telegram.edit_message(message_id, text) if message_id
-                else telegram.send_message(text)), text
+                else telegram.send_message(text, retry=True)), text
     except telegram.TelegramError as exc:
         if not (config.COLLAPSE_FINISHED and _parse_error(exc)):
             raise
@@ -193,8 +195,10 @@ def _send_or_edit(message_id, text_builder):
         )
         config.COLLAPSE_FINISHED = False
         text = text_builder()
+        # Jonli xabar har daqiqada tahrirlanadi — yo'qolib qolgani
+        # takrorlanganidan ko'ra yomonroq
         return (telegram.edit_message(message_id, text) if message_id
-                else telegram.send_message(text)), text
+                else telegram.send_message(text, retry=True)), text
 
 
 def retire_previous(previous: dict, all_fixtures: list[dict],

@@ -52,6 +52,9 @@ CHANNEL_ID = os.getenv("TELEGRAM_CHANNEL_ID", "").strip()  # @FPLUzbekistan yoki
 ADMIN_CHAT_ID = os.getenv("TELEGRAM_ADMIN_CHAT_ID", "").strip()  # xatolik xabarlari uchun
 
 # --- Umumiy ---
+# Telegram javobini shuncha soniya kutamiz. 60 kamlik qilgan edi:
+# 14-noyabrda narx bashorati posti aynan shu chegarada yiqildi.
+TELEGRAM_TIMEOUT = _int("TELEGRAM_TIMEOUT", 120)
 ERROR_ALERT_AFTER = _int("ERROR_ALERT_AFTER", 3)  # necha marta ketma-ket xatodan keyin xabar berilsin
 DRY_RUN = _bool("DRY_RUN", False)          # True bo'lsa Telegramga yubormaydi, terminalga chiqaradi
 CHANNEL_TAG = os.getenv("CHANNEL_TAG", "@FPLUzbekistan")

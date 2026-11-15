@@ -228,7 +228,9 @@ Har bir workflow shu tamoyilda ishlaydi:
 
 **Jamoa yangiliklari — tur ketayotganda jim turadi.** Deadline o'tgach tarkiblar qotadi: o'sha paytdagi jarohat xabari hech narsani o'zgartira olmaydi. Shuning uchun deadline'dan turning ochkolari yakunlanishigacha (oxirgi o'yindan keyingi kun, Britaniya vaqti bilan 09:00) post chiqmaydi. O'sha davrdagi o'zgarishlar yo'qolmaydi — taqqoslash nuqtasi joyida qoladi va tur yopilgach hammasi birdan chiqadi.
 
-**Javobi kelmagan post qayta yuborilmaydi.** 6-noyabrda deadline statistikasi kanalga ikki marta chiqdi. Sabab: `sendMessage` Telegramga yetib bordi, javob esa taymautga uchradi, va qayta urinish ikkinchi nusxani yaratdi. Endi xatoning turi ajratiladi — ulanib bo'lmagan bo'lsa so'rov serverga yetmagan, qayta urinsa bo'ladi; ulanib, javob kutayotganda uzilsa, xabar chiqqan bo'lishi mumkin va qayta urinilmaydi. Bunday holatda tur "chiqarilgan" deb belgilanadi (keyingi cron takrorlamasligi uchun) va adminga tekshirish haqida xabar boradi. Ustiga oxirgi himoya qo'shildi: bitta jarayon aynan bir xil matnni ikki marta yubormaydi.
+**Javobi kelmagan post — post turiga qarab.** 6-noyabrda deadline statistikasi ikki marta chiqdi: `sendMessage` Telegramga yetib bordi, javob esa taymautga uchradi, va qayta urinish ikkinchi nusxani yaratdi. Buni to'xtatgandim, lekin 14-noyabrda teskarisi bo'ldi — narx bashorati posti javobsiz qoldi va umuman chiqmadi. Endi qoida ikkiga bo'lingan. Ulanib bo'lmagan bo'lsa (so'rov serverga yetmagan) — qayta urinish har doim xavfsiz. Ulanib, javob kelmasa — faqat keyin **tahrirlanadigan** postlar bir marta qayta urinadi: narx bashorati tunda baribir yangilanadi, jonli xabar har daqiqada. Bir martalik postlar (tur sharhi, deadline statistikasi, differentiallar, chartlar) qayta urinmaydi — ularda takror nusxa battarroq. Telegram javobini kutish muddati 60 dan 120 soniyaga uzaytirildi: 60 kamlik qilgan edi.
+
+**Nosozlik ko'rinadigan bo'ldi.** Avval Telegram ishlamay qolsa, adminga ogohlantirish ham yetib bormasdi va hamma narsa jimgina o'tib ketardi — 14-noyabrda aynan shunday bo'ldi. Endi har bir ogohlantirish GitHub Actions sahifasining tepasida qizil yozuv bo'lib ham chiqadi, ya'ni logni ochmasdan ko'rinadi.
 
 **Tur sharhi — alohida holat.** 2026/27 dan FPL ochkolarni turning oxirgi o'yinidan keyingi kuni **Britaniya vaqti bilan 09:00** da yakuniy qiladi ("lockdown"). Toshkentda bu yozda 13:00, qishda 14:00 — ya'ni aniq soatni cron'ga yozib bo'lmaydi. Shuning uchun uyg'onib, har 3 daqiqada tekshiramiz va tayyor bo'lishi bilan chiqaramiz (`GW_REVIEW_UNTIL` gacha). Post oynasi `09:00-23:00` — tashqi cron 12:30 ga ham, 19:00 ga ham qo'yilsa ishlaydi. Tasdiq kelib, oyna yopiq bo'lsa, bot jim o'tib ketmaydi — adminga xabar yuboradi.
 
@@ -411,6 +413,7 @@ Barcha sozlamalar `.env` yoki GitHub Secrets/Variables orqali:
 | `NEWS_INTERVAL` | `300` | Intensiv rejimdagi tekshiruv oralig'i (soniya) |
 | `NEWS_CONFIRM` | `2` | O'zgarish shuncha marta ketma-ket tasdiqlansagina chiqadi |
 | `NEWS_MAX_ROWS` | `12` | Bitta postdagi maksimal qator |
+| `TELEGRAM_TIMEOUT` | `120` | Telegram javobini shuncha soniya kutadi |
 | `ERROR_ALERT_AFTER` | `3` | Necha marta ketma-ket xatodan keyin ogohlantirsin |
 | `CRON_ALERT_MINUTES` | `20` (workflow'da `90`) | Cron kechikishi haqida ogohlantirish chegarasi |
 | `GW_REVIEW_UNTIL` | `22:00` | FPL tasdig'ini shu vaqtgacha kutadi |

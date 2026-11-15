@@ -4,6 +4,7 @@ from __future__ import annotations
 import html
 import json
 import logging
+import os
 import time
 
 import requests
@@ -56,6 +57,10 @@ class TelegramUncertain(TelegramError):
 # chiqmadi" degani emas. Qolganlari (edit, get) xavfsiz: qayta chaqirilsa
 # natija o'zgarmaydi.
 WRITE_METHODS = {"sendMessage", "sendPhoto", "sendPoll"}
+# Javobsiz qolgan yuborishni qayta urinish — faqat `retry=True` so'ralganda.
+# Ikkitadan ko'p urinmaymiz: har bir urinish takror post xavfini oshiradi.
+WRITE_ATTEMPTS = 2
+WRITE_PAUSE = 30
 # Bitta jarayon ichida bir xil matnni takror yubormaslik uchun
 _recent: dict[tuple[str, str], float] = {}
 DEDUPE_SECONDS = 1800
@@ -66,17 +71,33 @@ def esc(text: str) -> str:
     return html.escape(str(text), quote=False)
 
 
-def _call(method: str, **payload) -> dict:
+def annotate(message: str) -> None:
+    """GitHub Actions sahifasida qizil yozuv.
+
+    Telegram ishlamay qolsa, ogohlantirish ham yetib bormaydi va nosozlik
+    jimgina o'tib ketadi. Bu yozuv run sahifasining tepasida turadi —
+    130 qatorlik logni ochib o'tirish shart emas.
+    """
+    if os.getenv("GITHUB_ACTIONS", "").lower() != "true":
+        return
+    clean = " ".join(str(message).split())[:400]
+    print(f"::error::{clean}", flush=True)
+
+
+def _call(method: str, retry: bool = False, **payload) -> dict:
     if not config.BOT_TOKEN:
         raise TelegramError("TELEGRAM_BOT_TOKEN o'rnatilmagan")
     global LAST_CALL_SECONDS
     url = API.format(token=config.BOT_TOKEN, method=method)
+    write = method in WRITE_METHODS
+    silent_tries = 0          # "ulandi, javob kelmadi" turidagi urinishlar
     last_err: Exception | None = None
     started = time.monotonic()
     for attempt in range(4):
         try:
             # (ulanish, o'qish) taymauti — sekin tarmoqda osilib qolmaslik uchun
-            r = session().post(url, json=payload, timeout=(10, 60))
+            r = session().post(url, json=payload,
+                               timeout=(10, config.TELEGRAM_TIMEOUT))
             data = r.json()
             LAST_CALL_SECONDS = time.monotonic() - started
             if LAST_CALL_SECONDS > 5:
@@ -89,15 +110,25 @@ def _call(method: str, **payload) -> dict:
             # bo'ladi. Ulanib, javobni kutayotganda uzilsa — Telegram xabarni
             # qabul qilgan bo'lishi mumkin; sendMessage'ni qayta yuborsak
             # kanalda ikkita bir xil post paydo bo'ladi.
+            # Ulanib bo'lmagan bo'lsa — so'rov serverga yetmagan, qayta urinish
+            # xavfsiz. Ulanib, javob kutayotganda uzilsa — Telegram xabarni
+            # qabul qilgan bo'lishi mumkin, va qayta yuborish takror post
+            # yaratadi. Shuning uchun ikkinchi tur urinishlar alohida sanaladi.
             reached = not isinstance(exc, requests.exceptions.ConnectionError)
-            if reached and method in WRITE_METHODS:
-                log.error("%s: so'rov yuborildi, javob kelmadi — qayta urinmaymiz "
-                          "(xabar chiqqan bo'lishi mumkin): %s", method, exc)
-                raise TelegramUncertain(
-                    f"{method}: javob kelmadi, xabar chiqqan bo'lishi mumkin ({exc})"
-                ) from exc
-            log.warning("%s tarmoq xatosi (%d-urinish): %s", method, attempt + 1, exc)
-            time.sleep(2 * (attempt + 1))
+            pause = 2 * (attempt + 1)
+            if write and reached:
+                silent_tries += 1
+                allowed = WRITE_ATTEMPTS if retry else 1
+                if silent_tries >= allowed:
+                    log.error("%s: so'rov yuborildi, javob kelmadi (%d-urinish) — "
+                              "to'xtaymiz: %s", method, silent_tries, exc)
+                    raise TelegramUncertain(
+                        f"{method}: javob kelmadi, xabar chiqqan bo'lishi mumkin ({exc})"
+                    ) from exc
+                pause = WRITE_PAUSE
+            log.warning("%s tarmoq xatosi (%d-urinish), %d soniyadan keyin qayta "
+                        "urinamiz: %s", method, attempt + 1, pause, exc)
+            time.sleep(pause)
             continue
         if data.get("ok"):
             return data["result"]
@@ -117,23 +148,33 @@ def _call(method: str, **payload) -> dict:
 
 
 def _is_repeat(chat_id: str, text: str) -> bool:
-    """Shu jarayon yaqinda aynan shu matnni yuborganmi?
+    """Shu jarayon yaqinda aynan shu matnni YUBORGANMI?
 
     Oxirgi himoya chizig'i: kodda xato bo'lsa ham, bitta ishga tushishda
-    bir xil post ikki marta chiqib ketmaydi.
+    bir xil post ikki marta chiqib ketmaydi. Faqat muvaffaqiyatli
+    yuborishlar eslab qolinadi — yiqilgan urinishdan keyin qayta yuborish
+    yo'li yopilib qolmasligi kerak.
     """
-    key = (chat_id, text)
     now = time.monotonic()
     for old, when in list(_recent.items()):
         if now - when > DEDUPE_SECONDS:
             _recent.pop(old, None)
-    if key in _recent:
-        return True
-    _recent[key] = now
-    return False
+    return (chat_id, text) in _recent
 
 
-def send_message(text: str, chat_id: str | None = None, silent: bool = False) -> dict:
+def _remember(chat_id: str, text: str) -> None:
+    _recent[(chat_id, text)] = time.monotonic()
+
+
+def send_message(text: str, chat_id: str | None = None, silent: bool = False,
+                 retry: bool = False) -> dict:
+    """Kanalga matn yuboradi.
+
+    `retry=True` — javob kelmasa bir marta qayta urinadi. Buni faqat keyin
+    TAHRIRLANADIGAN postlar ishlatadi (narx bashorati, jonli bonus): ularda
+    takror nusxa xavfi bor, lekin postning butunlay yo'qolishi battarroq.
+    Bir martalik postlar (tur sharhi, deadline statistikasi) qayta urinmaydi.
+    """
     chat_id = chat_id or config.CHANNEL_ID
     if not config.DRY_RUN and _is_repeat(chat_id, text):
         log.warning("Aynan shu matn yaqinda yuborilgan — takrori o'tkazib yuborildi.")
@@ -145,14 +186,17 @@ def send_message(text: str, chat_id: str | None = None, silent: bool = False) ->
         print(text)
         print("=" * 48 + "\n")
         return {"message_id": 0, "dry_run": True}
-    return _call(
+    result = _call(
         "sendMessage",
+        retry=retry,
         chat_id=chat_id,
         text=text,
         parse_mode="HTML",
         disable_web_page_preview=True,
         disable_notification=silent,
     )
+    _remember(chat_id, text)
+    return result
 
 
 def edit_message(message_id: int, text: str, chat_id: str | None = None) -> dict:
@@ -343,8 +387,11 @@ def notify_admin(text: str) -> None:
         log.debug("Bir xil ogohlantirish yaqinda yuborilgan, o'tkazib yuboramiz")
         return
     _last_alert[key] = now
+    annotate(text)        # Telegram ishlamasa ham, run sahifasida ko'rinadi
     try:
-        send_message(text, chat_id=config.ADMIN_CHAT_ID, silent=False)
+        # Shaxsiy chatdagi takror ogohlantirish zarar qilmaydi — yetib
+        # bormagani esa qimmatga tushadi, shuning uchun qayta urinamiz.
+        send_message(text, chat_id=config.ADMIN_CHAT_ID, silent=False, retry=True)
     except Exception as exc:  # ogohlantirish yuborilmasa ham dastur to'xtamasin
         log.error("Adminga xabar yuborilmadi: %s", exc)
 

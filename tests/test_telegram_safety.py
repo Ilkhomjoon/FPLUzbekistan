@@ -56,6 +56,80 @@ class RetryTest(unittest.TestCase):
         self.assertEqual(session.return_value.post.call_count, 2)
 
 
+class RetryFlagTest(unittest.TestCase):
+    """Tahrirlanadigan postlar qayta urinadi, bir martaliklari — yo'q."""
+
+    def setUp(self):
+        p = patch.object(config, "BOT_TOKEN", "test-token")
+        p.start()
+        self.addCleanup(p.stop)
+        telegram._recent.clear()
+
+    def test_retry_true_tries_once_more(self):
+        with patch.object(telegram, "session") as session, \
+             patch.object(telegram.time, "sleep"):
+            session.return_value.post.side_effect = [
+                requests.exceptions.ReadTimeout("kech"), _Response()]
+            result = telegram._call("sendMessage", retry=True, chat_id="@x", text="a")
+        self.assertEqual(result, {"message_id": 1})
+        self.assertEqual(session.return_value.post.call_count, 2)
+
+    def test_retry_true_gives_up_after_two(self):
+        """Ikkitadan ko'p urinmaymiz — har urinish takror xavfini oshiradi."""
+        with patch.object(telegram, "session") as session, \
+             patch.object(telegram.time, "sleep"):
+            session.return_value.post.side_effect = requests.exceptions.ReadTimeout("kech")
+            with self.assertRaises(telegram.TelegramUncertain):
+                telegram._call("sendMessage", retry=True, chat_id="@x", text="a")
+        self.assertEqual(session.return_value.post.call_count, 2)
+
+    def test_retry_false_still_stops_at_one(self):
+        with patch.object(telegram, "session") as session, \
+             patch.object(telegram.time, "sleep"):
+            session.return_value.post.side_effect = requests.exceptions.ReadTimeout("kech")
+            with self.assertRaises(telegram.TelegramUncertain):
+                telegram._call("sendMessage", chat_id="@x", text="a")
+        self.assertEqual(session.return_value.post.call_count, 1)
+
+    def test_connection_errors_keep_their_own_budget(self):
+        """Serverga yetmagan so'rov — qayta urinish xavfsiz, bayroqqa bog'liq emas."""
+        with patch.object(telegram, "session") as session, \
+             patch.object(telegram.time, "sleep"):
+            session.return_value.post.side_effect = [
+                requests.exceptions.ConnectionError("yo'q"),
+                requests.exceptions.ConnectionError("yo'q"),
+                _Response()]
+            telegram._call("sendMessage", chat_id="@x", text="a")
+        self.assertEqual(session.return_value.post.call_count, 3)
+
+    def test_the_timeout_comes_from_the_setting(self):
+        with patch.object(telegram, "session") as session, \
+             patch.object(config, "TELEGRAM_TIMEOUT", 120):
+            session.return_value.post.return_value = _Response()
+            telegram._call("sendMessage", chat_id="@x", text="a")
+        self.assertEqual(session.return_value.post.call_args.kwargs["timeout"], (10, 120))
+
+
+class AnnotateTest(unittest.TestCase):
+    """Telegram ishlamasa ham, nosozlik GitHub sahifasida ko'rinsin."""
+
+    def test_nothing_is_printed_outside_actions(self):
+        import io, contextlib
+        buf = io.StringIO()
+        with patch.dict("os.environ", {"GITHUB_ACTIONS": ""}, clear=False), \
+             contextlib.redirect_stdout(buf):
+            telegram.annotate("xatolik")
+        self.assertEqual(buf.getvalue(), "")
+
+    def test_an_error_annotation_in_actions(self):
+        import io, contextlib
+        buf = io.StringIO()
+        with patch.dict("os.environ", {"GITHUB_ACTIONS": "true"}, clear=False), \
+             contextlib.redirect_stdout(buf):
+            telegram.annotate("narx bashorati\nyiqildi")
+        self.assertEqual(buf.getvalue().strip(), "::error::narx bashorati yiqildi")
+
+
 class DedupeTest(unittest.TestCase):
     """Oxirgi himoya: bitta jarayon bir xil matnni ikki marta yubormaydi."""
 
@@ -65,6 +139,17 @@ class DedupeTest(unittest.TestCase):
             p = patch.object(config, name, value)
             p.start()
             self.addCleanup(p.stop)
+
+    def test_a_failed_send_can_be_tried_again(self):
+        """Yiqilgan urinish "yuborilgan" deb belgilanmasligi kerak."""
+        with patch.object(telegram, "_call",
+                          side_effect=[telegram.TelegramUncertain("yo'q"),
+                                       {"message_id": 7}]) as call:
+            with self.assertRaises(telegram.TelegramUncertain):
+                telegram.send_message("matn", chat_id="@x")
+            self.assertEqual(telegram.send_message("matn", chat_id="@x"),
+                             {"message_id": 7})
+        self.assertEqual(call.call_count, 2)
 
     def test_the_second_identical_message_is_dropped(self):
         with patch.object(telegram, "_call", return_value={"message_id": 7}) as call:
