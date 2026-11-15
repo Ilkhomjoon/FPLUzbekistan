@@ -1,6 +1,15 @@
 {
-  "checked_at": "2026-11-15T09:35:23+00:00",
-  "pending": {},
+  "checked_at": "2026-11-15T10:35:22+00:00",
+  "pending": {
+    "32": {
+      "seen": 1,
+      "state": {
+        "chance": 75,
+        "news": "Concussion - 75% chance of playing",
+        "status": "d"
+      }
+    }
+  },
   "players": {
     "1": {
       "chance": null,
