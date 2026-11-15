@@ -72,7 +72,7 @@
       "team": "COV"
     },
     "111": {
-      "cost": 40,
+      "cost": 39,
       "name": "Steele",
       "team": "BHA"
     },
@@ -1172,7 +1172,7 @@
       "team": "IPS"
     },
     "31": {
-      "cost": 48,
+      "cost": 49,
       "name": "Konsa",
       "team": "ARS"
     },
@@ -1432,7 +1432,7 @@
       "team": "LIV"
     },
     "357": {
-      "cost": 52,
+      "cost": 51,
       "name": "Frimpong",
       "team": "LIV"
     },
@@ -3362,5 +3362,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-14T01:00:00+00:00"
+  "taken_at": "2026-11-15T01:00:00+00:00"
 }
