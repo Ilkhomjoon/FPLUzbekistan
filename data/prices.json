@@ -602,7 +602,7 @@
       "team": "CRY"
     },
     "207": {
-      "cost": 43,
+      "cost": 42,
       "name": "Mingueza",
       "team": "CRY"
     },
@@ -1862,7 +1862,7 @@
       "team": "MUN"
     },
     "434": {
-      "cost": 49,
+      "cost": 48,
       "name": "J.Fletcher",
       "team": "MUN"
     },
@@ -3207,7 +3207,7 @@
       "team": "BOU"
     },
     "71": {
-      "cost": 50,
+      "cost": 49,
       "name": "Cook",
       "team": "BOU"
     },
@@ -3362,5 +3362,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-16T01:00:00+00:00"
+  "taken_at": "2026-11-17T01:00:00+00:00"
 }
