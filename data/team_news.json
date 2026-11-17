@@ -1,23 +1,6 @@
 {
-  "checked_at": "2026-11-17T09:35:26+00:00",
-  "pending": {
-    "469": {
-      "seen": 1,
-      "state": {
-        "chance": 75,
-        "news": "Ankle injury - 75% chance of playing",
-        "status": "d"
-      }
-    },
-    "586": {
-      "seen": 1,
-      "state": {
-        "chance": 75,
-        "news": "Knee injury - 75% chance of playing",
-        "status": "d"
-      }
-    }
-  },
+  "checked_at": "2026-11-17T10:35:24+00:00",
+  "pending": {},
   "players": {
     "1": {
       "chance": null,
@@ -400,9 +383,9 @@
       "status": "a"
     },
     "469": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Ankle injury - 75% chance of playing",
+      "status": "d"
     },
     "480": {
       "chance": 100,
@@ -490,9 +473,9 @@
       "status": "a"
     },
     "586": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Knee injury - 75% chance of playing",
+      "status": "d"
     },
     "597": {
       "chance": null,
