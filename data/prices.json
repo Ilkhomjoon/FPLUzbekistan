@@ -147,7 +147,7 @@
       "team": "BHA"
     },
     "125": {
-      "cost": 53,
+      "cost": 52,
       "name": "Georginio",
       "team": "BHA"
     },
@@ -157,7 +157,7 @@
       "team": "BHA"
     },
     "127": {
-      "cost": 50,
+      "cost": 51,
       "name": "Gomez",
       "team": "BHA"
     },
@@ -1547,7 +1547,7 @@
       "team": "LIV"
     },
     "378": {
-      "cost": 44,
+      "cost": 43,
       "name": "McConnell",
       "team": "LIV"
     },
@@ -1947,7 +1947,7 @@
       "team": "NEW"
     },
     "45": {
-      "cost": 54,
+      "cost": 55,
       "name": "McGinn",
       "team": "AVL"
     },
@@ -2607,7 +2607,7 @@
       "team": "CHE"
     },
     "569": {
-      "cost": 59,
+      "cost": 58,
       "name": "Gonzalo",
       "team": "FUL"
     },
@@ -2762,7 +2762,7 @@
       "team": "AVL"
     },
     "597": {
-      "cost": 50,
+      "cost": 51,
       "name": "Suzuki",
       "team": "AVL"
     },
@@ -3362,5 +3362,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-18T01:00:00+00:00"
+  "taken_at": "2026-11-19T01:00:00+00:00"
 }
