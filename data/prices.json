@@ -372,7 +372,7 @@
       "team": "CHE"
     },
     "166": {
-      "cost": 71,
+      "cost": 72,
       "name": "N.Jackson",
       "team": "AVL"
     },
@@ -587,7 +587,7 @@
       "team": "CRY"
     },
     "204": {
-      "cost": 45,
+      "cost": 44,
       "name": "Mitchell",
       "team": "CRY"
     },
@@ -1237,7 +1237,7 @@
       "team": "IPS"
     },
     "321": {
-      "cost": 45,
+      "cost": 44,
       "name": "Walle Egeli",
       "team": "IPS"
     },
@@ -2617,7 +2617,7 @@
       "team": "BOU"
     },
     "570": {
-      "cost": 53,
+      "cost": 52,
       "name": "Palacios",
       "team": "FUL"
     },
@@ -3362,5 +3362,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-19T01:00:00+00:00"
+  "taken_at": "2026-11-20T01:00:00+00:00"
 }
