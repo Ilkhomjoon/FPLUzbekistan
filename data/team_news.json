@@ -1,6 +1,15 @@
 {
-  "checked_at": "2026-11-20T16:35:26+00:00",
-  "pending": {},
+  "checked_at": "2026-11-20T17:35:26+00:00",
+  "pending": {
+    "388": {
+      "seen": 1,
+      "state": {
+        "chance": 75,
+        "news": "Hip injury - 75% chance of playing",
+        "status": "d"
+      }
+    }
+  },
   "players": {
     "1": {
       "chance": null,
@@ -419,6 +428,11 @@
     },
     "53": {
       "chance": 100,
+      "news": "",
+      "status": "a"
+    },
+    "542": {
+      "chance": null,
       "news": "",
       "status": "a"
     },
