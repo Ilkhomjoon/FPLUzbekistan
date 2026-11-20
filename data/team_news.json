@@ -1,15 +1,6 @@
 {
-  "checked_at": "2026-11-20T10:35:27+00:00",
-  "pending": {
-    "12": {
-      "seen": 1,
-      "state": {
-        "chance": 0,
-        "news": "Thigh injury - Expected back 20 Dec",
-        "status": "i"
-      }
-    }
-  },
+  "checked_at": "2026-11-20T11:35:25+00:00",
+  "pending": {},
   "players": {
     "1": {
       "chance": null,
@@ -48,7 +39,7 @@
     },
     "12": {
       "chance": 0,
-      "news": "Thigh injury - Unknown return date",
+      "news": "Thigh injury - Expected back 20 Dec",
       "status": "i"
     },
     "124": {
