@@ -1,6 +1,63 @@
 {
-  "checked_at": "2026-11-20T14:35:37+00:00",
-  "pending": {},
+  "checked_at": "2026-11-20T15:35:26+00:00",
+  "pending": {
+    "28": {
+      "seen": 1,
+      "state": {
+        "chance": 100,
+        "news": "",
+        "status": "a"
+      }
+    },
+    "286": {
+      "seen": 1,
+      "state": {
+        "chance": 100,
+        "news": "",
+        "status": "a"
+      }
+    },
+    "32": {
+      "seen": 1,
+      "state": {
+        "chance": 0,
+        "news": "Concussion - Expected back 28 Nov",
+        "status": "i"
+      }
+    },
+    "356": {
+      "seen": 1,
+      "state": {
+        "chance": 100,
+        "news": "",
+        "status": "a"
+      }
+    },
+    "391": {
+      "seen": 1,
+      "state": {
+        "chance": 100,
+        "news": "",
+        "status": "a"
+      }
+    },
+    "53": {
+      "seen": 1,
+      "state": {
+        "chance": 100,
+        "news": "",
+        "status": "a"
+      }
+    },
+    "586": {
+      "seen": 1,
+      "state": {
+        "chance": 100,
+        "news": "",
+        "status": "a"
+      }
+    }
+  },
   "players": {
     "1": {
       "chance": null,
