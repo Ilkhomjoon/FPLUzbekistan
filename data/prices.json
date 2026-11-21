@@ -2,7 +2,7 @@
   "event": 10,
   "players": {
     "1": {
-      "cost": 62,
+      "cost": 63,
       "name": "Raya",
       "team": "ARS"
     },
@@ -532,7 +532,7 @@
       "team": "COV"
     },
     "195": {
-      "cost": 49,
+      "cost": 48,
       "name": "Simms",
       "team": "COV"
     },
@@ -562,7 +562,7 @@
       "team": "ARS"
     },
     "20": {
-      "cost": 53,
+      "cost": 52,
       "name": "Dowman",
       "team": "ARS"
     },
@@ -937,7 +937,7 @@
       "team": "IPS"
     },
     "268": {
-      "cost": 55,
+      "cost": 54,
       "name": "King",
       "team": "FUL"
     },
@@ -1482,7 +1482,7 @@
       "team": "LIV"
     },
     "366": {
-      "cost": 72,
+      "cost": 73,
       "name": "Wirtz",
       "team": "LIV"
     },
@@ -1602,7 +1602,7 @@
       "team": "MCI"
     },
     "388": {
-      "cost": 60,
+      "cost": 59,
       "name": "Guéhi",
       "team": "MCI"
     },
@@ -1822,7 +1822,7 @@
       "team": "MUN"
     },
     "427": {
-      "cost": 79,
+      "cost": 78,
       "name": "Mbeumo",
       "team": "MUN"
     },
@@ -1882,7 +1882,7 @@
       "team": "MUN"
     },
     "438": {
-      "cost": 44,
+      "cost": 43,
       "name": "Fletcher",
       "team": "MUN"
     },
@@ -2002,7 +2002,7 @@
       "team": "NEW"
     },
     "46": {
-      "cost": 50,
+      "cost": 49,
       "name": "Barkley",
       "team": "AVL"
     },
@@ -2207,7 +2207,7 @@
       "team": "TOT"
     },
     "497": {
-      "cost": 40,
+      "cost": 39,
       "name": "Dubravka",
       "team": "TOT"
     },
@@ -2637,7 +2637,7 @@
       "team": "BOU"
     },
     "574": {
-      "cost": 48,
+      "cost": 47,
       "name": "Hjertø-Dahl",
       "team": "HUL"
     },
@@ -3362,5 +3362,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-20T01:00:00+00:00"
+  "taken_at": "2026-11-21T01:00:00+00:00"
 }
