@@ -1,15 +1,6 @@
 {
-  "checked_at": "2026-11-20T17:35:26+00:00",
-  "pending": {
-    "388": {
-      "seen": 1,
-      "state": {
-        "chance": 75,
-        "news": "Hip injury - 75% chance of playing",
-        "status": "d"
-      }
-    }
-  },
+  "checked_at": "2026-11-21T10:30:29+00:00",
+  "pending": {},
   "players": {
     "1": {
       "chance": null,
@@ -176,11 +167,6 @@
       "news": "",
       "status": "a"
     },
-    "268": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
-    },
     "272": {
       "chance": null,
       "news": "",
@@ -298,7 +284,7 @@
     },
     "388": {
       "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
+      "news": "Hip injury - 75% chance of playing",
       "status": "d"
     },
     "391": {
