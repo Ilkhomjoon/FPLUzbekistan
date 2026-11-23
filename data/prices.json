@@ -7,7 +7,7 @@
       "team": "ARS"
     },
     "10": {
-      "cost": 54,
+      "cost": 53,
       "name": "White",
       "team": "ARS"
     },
@@ -217,7 +217,7 @@
       "team": "BHA"
     },
     "138": {
-      "cost": 58,
+      "cost": 57,
       "name": "Kostoulas",
       "team": "BHA"
     },
@@ -272,7 +272,7 @@
       "team": "TOT"
     },
     "148": {
-      "cost": 45,
+      "cost": 44,
       "name": "Hato",
       "team": "CHE"
     },
@@ -372,7 +372,7 @@
       "team": "CHE"
     },
     "166": {
-      "cost": 72,
+      "cost": 73,
       "name": "N.Jackson",
       "team": "AVL"
     },
@@ -1127,7 +1127,7 @@
       "team": "IPS"
     },
     "301": {
-      "cost": 40,
+      "cost": 39,
       "name": "Palmer",
       "team": "IPS"
     },
@@ -1472,7 +1472,7 @@
       "team": "LIV"
     },
     "364": {
-      "cost": 49,
+      "cost": 48,
       "name": "Tsimikas",
       "team": "LIV"
     },
@@ -1482,7 +1482,7 @@
       "team": "LIV"
     },
     "366": {
-      "cost": 73,
+      "cost": 74,
       "name": "Wirtz",
       "team": "LIV"
     },
@@ -1622,7 +1622,7 @@
       "team": "MCI"
     },
     "391": {
-      "cost": 56,
+      "cost": 55,
       "name": "Gvardiol",
       "team": "MCI"
     },
@@ -1662,7 +1662,7 @@
       "team": "MCI"
     },
     "399": {
-      "cost": 79,
+      "cost": 78,
       "name": "Cherki",
       "team": "MCI"
     },
@@ -1727,7 +1727,7 @@
       "team": "MCI"
     },
     "41": {
-      "cost": 59,
+      "cost": 58,
       "name": "Buendía",
       "team": "AVL"
     },
@@ -1772,7 +1772,7 @@
       "team": "MUN"
     },
     "418": {
-      "cost": 46,
+      "cost": 45,
       "name": "Maguire",
       "team": "MUN"
     },
@@ -1792,7 +1792,7 @@
       "team": "MUN"
     },
     "421": {
-      "cost": 43,
+      "cost": 42,
       "name": "Heaven",
       "team": "MUN"
     },
@@ -2052,7 +2052,7 @@
       "team": "NFO"
     },
     "469": {
-      "cost": 49,
+      "cost": 48,
       "name": "N.Williams",
       "team": "NFO"
     },
@@ -2572,7 +2572,7 @@
       "team": "CHE"
     },
     "562": {
-      "cost": 53,
+      "cost": 52,
       "name": "Maeda",
       "team": "IPS"
     },
@@ -2752,7 +2752,7 @@
       "team": "BHA"
     },
     "595": {
-      "cost": 49,
+      "cost": 48,
       "name": "Gozo",
       "team": "CRY"
     },
@@ -3352,7 +3352,7 @@
       "team": "BRE"
     },
     "96": {
-      "cost": 53,
+      "cost": 52,
       "name": "Damsgaard",
       "team": "BRE"
     },
@@ -3372,5 +3372,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-22T01:00:00+00:00"
+  "taken_at": "2026-11-23T01:00:00+00:00"
 }
