@@ -467,7 +467,7 @@
       "team": "COV"
     },
     "183": {
-      "cost": 49,
+      "cost": 50,
       "name": "Rudoni",
       "team": "COV"
     },
@@ -987,7 +987,7 @@
       "team": "HUL"
     },
     "277": {
-      "cost": 41,
+      "cost": 40,
       "name": "Egan",
       "team": "HUL"
     },
@@ -1407,7 +1407,7 @@
       "team": "LIV"
     },
     "352": {
-      "cost": 40,
+      "cost": 39,
       "name": "Woodman",
       "team": "LIV"
     },
@@ -2172,7 +2172,7 @@
       "team": "AVL"
     },
     "490": {
-      "cost": 57,
+      "cost": 56,
       "name": "Wood",
       "team": "NFO"
     },
@@ -3197,7 +3197,7 @@
       "team": "FUL"
     },
     "68": {
-      "cost": 67,
+      "cost": 68,
       "name": "Tavernier",
       "team": "BOU"
     },
@@ -3372,5 +3372,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-23T01:00:00+00:00"
+  "taken_at": "2026-11-24T01:00:00+00:00"
 }
