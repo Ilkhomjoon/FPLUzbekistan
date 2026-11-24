@@ -454,6 +454,414 @@
       "source": "live",
       "survivors": 586
     },
+    "11": {
+      "at": "2026-11-24T15:00:03+00:00",
+      "cohort": 11,
+      "players": {
+        "1": {
+          "elite": 64.7,
+          "name": "Raya",
+          "owned": 45.8
+        },
+        "109": {
+          "elite": 39.2,
+          "name": "Verbruggen",
+          "owned": 24.7
+        },
+        "111": {
+          "elite": 2.4,
+          "name": "Steele",
+          "owned": 3.4
+        },
+        "112": {
+          "elite": 68.7,
+          "name": "Van Hecke",
+          "owned": 19.3
+        },
+        "115": {
+          "elite": 77.9,
+          "name": "De Cuyper",
+          "owned": 50.1
+        },
+        "124": {
+          "elite": 92.7,
+          "name": "Groß",
+          "owned": 49.5
+        },
+        "127": {
+          "elite": 4.6,
+          "name": "Gomez",
+          "owned": 4.6
+        },
+        "13": {
+          "elite": 1.1,
+          "name": "Rice",
+          "owned": 13.7
+        },
+        "15": {
+          "elite": 10.4,
+          "name": "Ødegaard",
+          "owned": 16.7
+        },
+        "154": {
+          "elite": 59.9,
+          "name": "Palmer",
+          "owned": 27.4
+        },
+        "156": {
+          "elite": 1.2,
+          "name": "Neto",
+          "owned": 4.6
+        },
+        "165": {
+          "elite": 3.4,
+          "name": "João Pedro",
+          "owned": 27.7
+        },
+        "166": {
+          "elite": 78.8,
+          "name": "N.Jackson",
+          "owned": 36.5
+        },
+        "173": {
+          "elite": 7.4,
+          "name": "Thomas",
+          "owned": 6.8
+        },
+        "175": {
+          "elite": 1.3,
+          "name": "van Ewijk",
+          "owned": 6.8
+        },
+        "183": {
+          "elite": 10.3,
+          "name": "Rudoni",
+          "owned": 1.8
+        },
+        "229": {
+          "elite": 4.8,
+          "name": "Tarkowski",
+          "owned": 18.0
+        },
+        "233": {
+          "elite": 3.2,
+          "name": "Mykolenko",
+          "owned": 2.5
+        },
+        "236": {
+          "elite": 13.3,
+          "name": "Dewsbury-Hall",
+          "owned": 7.1
+        },
+        "237": {
+          "elite": 2.1,
+          "name": "Ndiaye",
+          "owned": 5.1
+        },
+        "249": {
+          "elite": 40.8,
+          "name": "Barry",
+          "owned": 11.5
+        },
+        "250": {
+          "elite": 2.8,
+          "name": "Leno",
+          "owned": 4.2
+        },
+        "251": {
+          "elite": 2.3,
+          "name": "Lecomte",
+          "owned": 1.0
+        },
+        "259": {
+          "elite": 3.0,
+          "name": "Diop",
+          "owned": 9.5
+        },
+        "268": {
+          "elite": 3.1,
+          "name": "King",
+          "owned": 2.8
+        },
+        "277": {
+          "elite": 5.1,
+          "name": "Egan",
+          "owned": 6.2
+        },
+        "286": {
+          "elite": 4.2,
+          "name": "Belloumi",
+          "owned": 8.9
+        },
+        "290": {
+          "elite": 5.3,
+          "name": "Slater",
+          "owned": 4.1
+        },
+        "301": {
+          "elite": 3.8,
+          "name": "Palmer",
+          "owned": 3.3
+        },
+        "302": {
+          "elite": 3.6,
+          "name": "Button",
+          "owned": 0.5
+        },
+        "304": {
+          "elite": 3.1,
+          "name": "O'Shea",
+          "owned": 2.6
+        },
+        "305": {
+          "elite": 1.9,
+          "name": "Davis",
+          "owned": 6.1
+        },
+        "31": {
+          "elite": 69.9,
+          "name": "Konsa",
+          "owned": 25.4
+        },
+        "330": {
+          "elite": 3.8,
+          "name": "Bogle",
+          "owned": 11.8
+        },
+        "332": {
+          "elite": 1.2,
+          "name": "Justin",
+          "owned": 2.6
+        },
+        "334": {
+          "elite": 43.0,
+          "name": "Muharemović",
+          "owned": 7.3
+        },
+        "346": {
+          "elite": 11.9,
+          "name": "Calvert-Lewin",
+          "owned": 17.2
+        },
+        "362": {
+          "elite": 3.0,
+          "name": "Jacquet",
+          "owned": 4.9
+        },
+        "366": {
+          "elite": 11.9,
+          "name": "Wirtz",
+          "owned": 9.7
+        },
+        "367": {
+          "elite": 1.4,
+          "name": "Gakpo",
+          "owned": 6.6
+        },
+        "368": {
+          "elite": 3.0,
+          "name": "Szoboszlai",
+          "owned": 13.8
+        },
+        "379": {
+          "elite": 25.1,
+          "name": "Isak",
+          "owned": 26.9
+        },
+        "385": {
+          "elite": 6.9,
+          "name": "Trafford",
+          "owned": 7.8
+        },
+        "391": {
+          "elite": 3.0,
+          "name": "Gvardiol",
+          "owned": 19.5
+        },
+        "399": {
+          "elite": 9.9,
+          "name": "Cherki",
+          "owned": 31.9
+        },
+        "4": {
+          "elite": 32.5,
+          "name": "Gabriel",
+          "owned": 26.8
+        },
+        "40": {
+          "elite": 88.4,
+          "name": "Rogers",
+          "owned": 54.6
+        },
+        "400": {
+          "elite": 1.9,
+          "name": "Doku",
+          "owned": 4.2
+        },
+        "411": {
+          "elite": 99.0,
+          "name": "Haaland",
+          "owned": 77.7
+        },
+        "426": {
+          "elite": 1.7,
+          "name": "B.Fernandes",
+          "owned": 19.9
+        },
+        "427": {
+          "elite": 11.2,
+          "name": "Mbeumo",
+          "owned": 17.5
+        },
+        "449": {
+          "elite": 7.9,
+          "name": "Hall",
+          "owned": 16.2
+        },
+        "45": {
+          "elite": 3.8,
+          "name": "McGinn",
+          "owned": 4.9
+        },
+        "453": {
+          "elite": 7.6,
+          "name": "Barnes",
+          "owned": 5.6
+        },
+        "480": {
+          "elite": 11.1,
+          "name": "Gibbs-White",
+          "owned": 8.8
+        },
+        "496": {
+          "elite": 32.6,
+          "name": "Kinsky",
+          "owned": 16.2
+        },
+        "497": {
+          "elite": 14.3,
+          "name": "Dubravka",
+          "owned": 14.7
+        },
+        "499": {
+          "elite": 1.4,
+          "name": "Pedro Porro",
+          "owned": 5.2
+        },
+        "502": {
+          "elite": 1.4,
+          "name": "Robertson",
+          "owned": 2.8
+        },
+        "504": {
+          "elite": 30.6,
+          "name": "Vuskovic",
+          "owned": 11.6
+        },
+        "512": {
+          "elite": 4.3,
+          "name": "Kudus",
+          "owned": 2.5
+        },
+        "53": {
+          "elite": 29.4,
+          "name": "Manzambi",
+          "owned": 8.7
+        },
+        "542": {
+          "elite": 2.7,
+          "name": "E.Le Fée",
+          "owned": 3.1
+        },
+        "565": {
+          "elite": 1.5,
+          "name": "M.Sangaré",
+          "owned": 5.5
+        },
+        "566": {
+          "elite": 33.2,
+          "name": "Silva",
+          "owned": 4.1
+        },
+        "57": {
+          "elite": 3.2,
+          "name": "Petrović",
+          "owned": 3.3
+        },
+        "572": {
+          "elite": 2.5,
+          "name": "Tzolakis",
+          "owned": 13.6
+        },
+        "58": {
+          "elite": 1.8,
+          "name": "Forster",
+          "owned": 3.3
+        },
+        "586": {
+          "elite": 2.6,
+          "name": "Mendy",
+          "owned": 4.4
+        },
+        "597": {
+          "elite": 2.3,
+          "name": "Suzuki",
+          "owned": 3.7
+        },
+        "60": {
+          "elite": 9.0,
+          "name": "Hill",
+          "owned": 4.3
+        },
+        "623": {
+          "elite": 8.3,
+          "name": "Bentley",
+          "owned": 1.0
+        },
+        "627": {
+          "elite": 2.6,
+          "name": "Barcola",
+          "owned": 4.4
+        },
+        "629": {
+          "elite": 1.4,
+          "name": "Zetterer",
+          "owned": 0.7
+        },
+        "67": {
+          "elite": 1.8,
+          "name": "Rayan",
+          "owned": 2.4
+        },
+        "68": {
+          "elite": 76.1,
+          "name": "Tavernier",
+          "owned": 33.5
+        },
+        "79": {
+          "elite": 37.7,
+          "name": "Evanilson",
+          "owned": 27.3
+        },
+        "8": {
+          "elite": 63.4,
+          "name": "Calafiori",
+          "owned": 48.3
+        },
+        "87": {
+          "elite": 4.9,
+          "name": "Ajer",
+          "owned": 3.9
+        },
+        "94": {
+          "elite": 10.5,
+          "name": "Schade",
+          "owned": 11.7
+        }
+      },
+      "scanned": 1000,
+      "source": "live"
+    },
     "7": {
       "at": "2026-11-05T08:18:23+00:00",
       "cohort": 9,
@@ -1919,5 +2327,5 @@
       "source": "live"
     }
   },
-  "updated_at": "2026-11-09T15:00:32+00:00"
+  "updated_at": "2026-11-24T15:00:03+00:00"
 }
