@@ -1,6 +1,87 @@
 {
-  "checked_at": "2026-11-21T10:56:30+00:00",
-  "pending": {},
+  "checked_at": "2026-11-24T09:35:24+00:00",
+  "pending": {
+    "1": {
+      "seen": 1,
+      "state": {
+        "chance": 50,
+        "news": "Shoulder injury - 50% chance of playing",
+        "status": "d"
+      }
+    },
+    "173": {
+      "seen": 1,
+      "state": {
+        "chance": 100,
+        "news": "",
+        "status": "a"
+      }
+    },
+    "229": {
+      "seen": 1,
+      "state": {
+        "chance": 0,
+        "news": "Suspended until 13 Dec",
+        "status": "s"
+      }
+    },
+    "305": {
+      "seen": 1,
+      "state": {
+        "chance": 75,
+        "news": "Calf injury - 75% chance of playing",
+        "status": "d"
+      }
+    },
+    "32": {
+      "seen": 1,
+      "state": {
+        "chance": 75,
+        "news": "Concussion - 75% chance of playing",
+        "status": "d"
+      }
+    },
+    "367": {
+      "seen": 1,
+      "state": {
+        "chance": 75,
+        "news": "Calf injury - 75% chance of playing",
+        "status": "d"
+      }
+    },
+    "388": {
+      "seen": 1,
+      "state": {
+        "chance": 100,
+        "news": "",
+        "status": "a"
+      }
+    },
+    "418": {
+      "seen": 1,
+      "state": {
+        "chance": 100,
+        "news": "",
+        "status": "a"
+      }
+    },
+    "449": {
+      "seen": 1,
+      "state": {
+        "chance": 75,
+        "news": "Unspecified injury - 75% chance of playing",
+        "status": "d"
+      }
+    },
+    "469": {
+      "seen": 1,
+      "state": {
+        "chance": 100,
+        "news": "",
+        "status": "a"
+      }
+    }
+  },
   "players": {
     "1": {
       "chance": null,
