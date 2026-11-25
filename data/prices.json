@@ -352,7 +352,7 @@
       "team": "CHE"
     },
     "162": {
-      "cost": 47,
+      "cost": 46,
       "name": "Andrey Santos",
       "team": "MUN"
     },
@@ -392,7 +392,7 @@
       "team": "CHE"
     },
     "17": {
-      "cost": 57,
+      "cost": 56,
       "name": "Merino",
       "team": "ARS"
     },
@@ -472,7 +472,7 @@
       "team": "COV"
     },
     "184": {
-      "cost": 48,
+      "cost": 47,
       "name": "Grimes",
       "team": "COV"
     },
@@ -2547,7 +2547,7 @@
       "team": "ARS"
     },
     "558": {
-      "cost": 50,
+      "cost": 49,
       "name": "Schlager",
       "team": "NFO"
     },
@@ -2782,7 +2782,7 @@
       "team": "ARS"
     },
     "60": {
-      "cost": 56,
+      "cost": 57,
       "name": "Hill",
       "team": "BOU"
     },
@@ -3312,7 +3312,7 @@
       "team": "BRE"
     },
     "89": {
-      "cost": 44,
+      "cost": 43,
       "name": "Henry",
       "team": "BRE"
     },
@@ -3372,5 +3372,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-24T01:00:00+00:00"
+  "taken_at": "2026-11-25T01:00:00+00:00"
 }
