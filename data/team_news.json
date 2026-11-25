@@ -1,6 +1,15 @@
 {
-  "checked_at": "2026-11-25T11:35:24+00:00",
-  "pending": {},
+  "checked_at": "2026-11-25T12:35:28+00:00",
+  "pending": {
+    "367": {
+      "seen": 1,
+      "state": {
+        "chance": 0,
+        "news": "Calf injury - Expected back 2 Dec",
+        "status": "i"
+      }
+    }
+  },
   "players": {
     "1": {
       "chance": 50,
