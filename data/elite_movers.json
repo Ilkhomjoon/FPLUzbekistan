@@ -1,19 +1,19 @@
 {
-  "cohort": 9,
-  "event": 10,
-  "message_id": 4177,
+  "cohort": 11,
+  "event": 11,
+  "message_id": 4262,
   "players": [
-    "N.Jackson",
-    "Van Hecke",
-    "Evanilson",
-    "Tavernier",
-    "Silva"
+    "De Cuyper",
+    "Groß",
+    "Isak",
+    "Vuskovic",
+    "Calafiori"
   ],
-  "posted_at": "2026-11-10T14:40:01+00:00",
-  "survivors": 586,
+  "posted_at": "2026-11-25T14:40:21+00:00",
+  "survivors": null,
   "window": [
-    8,
     9,
-    10
+    10,
+    11
   ]
 }
