@@ -2,7 +2,7 @@
   "event": 11,
   "players": {
     "1": {
-      "cost": 63,
+      "cost": 62,
       "name": "Raya",
       "team": "ARS"
     },
@@ -582,7 +582,7 @@
       "team": "CRY"
     },
     "203": {
-      "cost": 48,
+      "cost": 47,
       "name": "Canvot",
       "team": "CRY"
     },
@@ -967,7 +967,7 @@
       "team": "FUL"
     },
     "273": {
-      "cost": 40,
+      "cost": 39,
       "name": "Phillips",
       "team": "HUL"
     },
@@ -1257,7 +1257,7 @@
       "team": "IPS"
     },
     "325": {
-      "cost": 45,
+      "cost": 44,
       "name": "Darlow",
       "team": "MUN"
     },
@@ -1552,7 +1552,7 @@
       "team": "LIV"
     },
     "379": {
-      "cost": 93,
+      "cost": 94,
       "name": "Isak",
       "team": "LIV"
     },
@@ -3022,7 +3022,7 @@
       "team": "HUL"
     },
     "643": {
-      "cost": 44,
+      "cost": 43,
       "name": "Chilwell",
       "team": "CRY"
     },
@@ -3372,5 +3372,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-25T01:00:00+00:00"
+  "taken_at": "2026-11-26T01:00:00+00:00"
 }
