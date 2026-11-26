@@ -1,15 +1,6 @@
 {
-  "checked_at": "2026-11-26T09:35:27+00:00",
-  "pending": {
-    "423": {
-      "seen": 1,
-      "state": {
-        "chance": 100,
-        "news": "",
-        "status": "a"
-      }
-    }
-  },
+  "checked_at": "2026-11-26T10:35:27+00:00",
+  "pending": {},
   "players": {
     "1": {
       "chance": 50,
@@ -342,9 +333,9 @@
       "status": "a"
     },
     "423": {
-      "chance": 75,
-      "news": "Unspecified injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "426": {
       "chance": null,
