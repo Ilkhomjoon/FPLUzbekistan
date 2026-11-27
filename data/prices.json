@@ -42,7 +42,7 @@
       "team": "BRE"
     },
     "106": {
-      "cost": 78,
+      "cost": 77,
       "name": "Thiago",
       "team": "BRE"
     },
@@ -92,7 +92,7 @@
       "team": "BHA"
     },
     "115": {
-      "cost": 55,
+      "cost": 56,
       "name": "De Cuyper",
       "team": "BHA"
     },
@@ -1307,7 +1307,7 @@
       "team": "LEE"
     },
     "334": {
-      "cost": 51,
+      "cost": 52,
       "name": "Muharemović",
       "team": "LEE"
     },
@@ -1317,7 +1317,7 @@
       "team": "LEE"
     },
     "336": {
-      "cost": 57,
+      "cost": 58,
       "name": "Okafor",
       "team": "LEE"
     },
@@ -1482,7 +1482,7 @@
       "team": "LIV"
     },
     "366": {
-      "cost": 74,
+      "cost": 75,
       "name": "Wirtz",
       "team": "LIV"
     },
@@ -1737,7 +1737,7 @@
       "team": "MCI"
     },
     "411": {
-      "cost": 158,
+      "cost": 157,
       "name": "Haaland",
       "team": "MCI"
     },
@@ -2202,7 +2202,7 @@
       "team": "TOT"
     },
     "496": {
-      "cost": 44,
+      "cost": 45,
       "name": "Kinsky",
       "team": "TOT"
     },
@@ -2282,7 +2282,7 @@
       "team": "TOT"
     },
     "51": {
-      "cost": 44,
+      "cost": 43,
       "name": "George Hemmings",
       "team": "AVL"
     },
@@ -2417,7 +2417,7 @@
       "team": "SUN"
     },
     "534": {
-      "cost": 42,
+      "cost": 41,
       "name": "Hume",
       "team": "SUN"
     },
@@ -2517,7 +2517,7 @@
       "team": "SUN"
     },
     "552": {
-      "cost": 57,
+      "cost": 56,
       "name": "Brobbey",
       "team": "SUN"
     },
@@ -3372,5 +3372,5 @@
       "team": "BRE"
     }
   },
-  "taken_at": "2026-11-26T01:00:00+00:00"
+  "taken_at": "2026-11-27T01:00:00+00:00"
 }
