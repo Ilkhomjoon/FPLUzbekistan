@@ -1,10 +1,10 @@
 {
-  "checked_at": "2026-11-27T11:35:25+00:00",
+  "checked_at": "2026-11-27T17:30:29+00:00",
   "pending": {},
   "players": {
     "1": {
-      "chance": 50,
-      "news": "Shoulder injury - 50% chance of playing",
+      "chance": 75,
+      "news": "Shoulder injury - 75% chance of playing",
       "status": "d"
     },
     "10": {
@@ -203,9 +203,9 @@
       "status": "a"
     },
     "305": {
-      "chance": 75,
-      "news": "Calf injury - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "31": {
       "chance": 100,
@@ -213,11 +213,16 @@
       "status": "a"
     },
     "32": {
-      "chance": 75,
-      "news": "Concussion - 75% chance of playing",
-      "status": "d"
+      "chance": 100,
+      "news": "",
+      "status": "a"
     },
     "330": {
+      "chance": null,
+      "news": "",
+      "status": "a"
+    },
+    "332": {
       "chance": null,
       "news": "",
       "status": "a"
@@ -294,7 +299,7 @@
     },
     "397": {
       "chance": 0,
-      "news": "Knee injury - Unknown return date",
+      "news": "Knee injury - Expected back 2 Dec",
       "status": "i"
     },
     "399": {
@@ -333,9 +338,9 @@
       "status": "a"
     },
     "426": {
-      "chance": null,
-      "news": "",
-      "status": "a"
+      "chance": 75,
+      "news": "Illness - 75% chance of playing",
+      "status": "d"
     },
     "427": {
       "chance": null,
