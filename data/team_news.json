@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-26T17:35:27+00:00",
+  "checked_at": "2026-11-27T09:35:27+00:00",
   "pending": {},
   "players": {
     "1": {
@@ -332,11 +332,6 @@
       "news": "",
       "status": "a"
     },
-    "423": {
-      "chance": 100,
-      "news": "",
-      "status": "a"
-    },
     "426": {
       "chance": null,
       "news": "",
@@ -438,11 +433,6 @@
       "status": "a"
     },
     "566": {
-      "chance": null,
-      "news": "",
-      "status": "a"
-    },
-    "569": {
       "chance": null,
       "news": "",
       "status": "a"
